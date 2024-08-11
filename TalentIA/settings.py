@@ -56,7 +56,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            os.path.join(BASE_DIR,'react-talentia/build')
+            os.path.join(BASE_DIR,'talentia-react/build')
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -78,8 +78,12 @@ WSGI_APPLICATION = 'TalentIA.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'HOST': 'localhost',
+        'PORT': 5432 ,
+        'NAME': 'TalentIA_DB',
+        'USER': 'postgres',
+        'PASSWORD' : '14789632',
     }
 }
 
@@ -121,7 +125,7 @@ USE_TZ = True
 STATIC_URL = 'static/'
 
 STATICFILES_DIR = [
-            os.path.join(BASE_DIR,'react-talentia/build/static')
+            os.path.join(BASE_DIR,'talentia-react/build/static')
 
 ]
 
