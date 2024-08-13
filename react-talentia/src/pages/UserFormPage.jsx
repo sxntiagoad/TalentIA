@@ -1,9 +1,11 @@
 import { useForm } from "react-hook-form";
 import { CreateUser } from "../api/User.api";
+import { useNavigate} from "react-router-dom"
 
 export function UserFormPage() {
   const { register, handleSubmit, formState: { errors } } = useForm();
 
+  const navigate = useNavigate();
   const onSubmit = async (data) => {
     try {
       const response = await CreateUser(data);
@@ -11,6 +13,7 @@ export function UserFormPage() {
     } catch (error) {
       console.error("Error creating user:", error);
     }
+    navigate("/")
   };
 
   return (
