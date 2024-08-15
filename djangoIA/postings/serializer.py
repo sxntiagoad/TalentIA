@@ -17,6 +17,7 @@ class SubcategorySerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class ServiceSerializer(serializers.ModelSerializer):
+    user_name = serializers.CharField(source='user.name', read_only=True)
     class Meta:
         model = Service
         fields = '__all__'
