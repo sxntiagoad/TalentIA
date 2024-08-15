@@ -13,7 +13,7 @@ export function ServicesList() {
   }, []);
 
   return (
-    <div className ="grid grid-cols-3 gap-3 ">
+    <div className ="grid grid-cols-4 gap-4 ">
       {services.map(service => (
         <ServicePost key={service.id} service={service}/>
         
