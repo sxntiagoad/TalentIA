@@ -7,20 +7,27 @@ class User(models.Model):
     password = models.CharField(max_length=128)  # Consider using a larger max_length for hashed passwords
     role = models.CharField(max_length=100)
 
-    def __str__(self):
+    def _str_(self):
         return self.name
 
 class Category(models.Model):
     name = models.CharField(max_length=255, unique=True)
 
-    def __str__(self):
+    def _str_(self):
         return self.name
 
 class Subcategory(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='subcategories')
     name = models.CharField(max_length=255)
 
-    def __str__(self):
+    def _str_(self):
+        return self.name
+    
+class NestedCategory(models.Model):
+    subcategory = models.ForeignKey(Subcategory, on_delete=models.CASCADE, related_name='nestedcategories', default=1)  # Ajusta el valor predeterminado según sea necesario
+    name = models.CharField(max_length=255)
+
+    def _str_(self):
         return self.name
     
 class Service(models.Model):
@@ -33,6 +40,7 @@ class Service(models.Model):
     image = models.ImageField(upload_to='services/', null=True, blank=True)
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True)
     subcategory = models.ForeignKey(Subcategory, on_delete=models.SET_NULL, null=True)
+    nestedcategory = models.ForeignKey(NestedCategory, on_delete=models.SET_NULL, null=True)
 
-    def __str__(self):
+    def _str_(self):
         return self.title
