@@ -53,9 +53,9 @@ export function Navigation() {
         <button className="border-purple-500 border-2 text-purple-500 font-bold py-2 px-4 rounded transition-colors duration-300 hover:bg-purple-500 hover:text-white">
           Iniciar Sesión
         </button>
-        <button className="border-purple-500 border-2 text-purple-500 font-bold py-2 px-4 rounded transition-colors duration-300 hover:bg-purple-500 hover:text-white">
+        <a  href="/user-form" className="border-purple-500 border-2 text-purple-500 font-bold py-2 px-4 rounded transition-colors duration-300 hover:bg-purple-500 hover:text-white">
           Regístrate
-        </button>
+        </a>
       </div>
     </div>
   );

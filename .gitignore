@@ -1,11 +1,2 @@
-# General git ignore
-.DS_Store
-node_modules/
-*.swp
-*.tmp
-
-# Python
-__pycache__/
-.pytest_cache/
-.venv/
-requirements.txt
+*.pyc
+/venv/*

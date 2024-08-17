@@ -5,29 +5,34 @@ class User(models.Model):
     lastname = models.CharField(max_length=50)
     email = models.EmailField(unique=True)
     password = models.CharField(max_length=128)  # Consider using a larger max_length for hashed passwords
-    role = models.CharField(max_length=100)
+    role = models.CharField(max_length=100,blank=True)
+    phone = models.CharField(max_length=15, blank=True) 
+    information = models.TextField(max_length=500, blank=True)  
+    image = models.ImageField(upload_to='users/', null=True, blank=True)
+    interests = models.ManyToManyField('Category', related_name='users', blank=True)
 
-    def _str_(self):
+
+    def __str__(self):
         return self.name
 
 class Category(models.Model):
     name = models.CharField(max_length=255, unique=True)
 
-    def _str_(self):
+    def __str__(self):
         return self.name
 
 class Subcategory(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='subcategories')
     name = models.CharField(max_length=255)
 
-    def _str_(self):
+    def __str__(self):
         return self.name
     
 class NestedCategory(models.Model):
     subcategory = models.ForeignKey(Subcategory, on_delete=models.CASCADE, related_name='nestedcategories', default=1)  # Ajusta el valor predeterminado según sea necesario
     name = models.CharField(max_length=255)
 
-    def _str_(self):
+    def __str__(self):
         return self.name
     
 class Service(models.Model):
@@ -42,5 +47,5 @@ class Service(models.Model):
     subcategory = models.ForeignKey(Subcategory, on_delete=models.SET_NULL, null=True)
     nestedcategory = models.ForeignKey(NestedCategory, on_delete=models.SET_NULL, null=True)
 
-    def _str_(self):
+    def __str__(self):
         return self.title
