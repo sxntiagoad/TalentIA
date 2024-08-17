@@ -26,3 +26,12 @@ class NestedCategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Subcategory
         fields = '__all__'
+class JobSerializer(serializers.ModelSerializer):
+    user_name = serializers.CharField(source='user.name', read_only=True) #Dudas con esto ' se utiliza para mostrar el nombre del usuario asociado con el trabajo'
+    class Meta:
+        model = Job
+        fields = '__all__'
+class CompanySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Company
+        fields = '__all__'
