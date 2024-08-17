@@ -1,12 +1,13 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
+
 export function ServicePost({ service }) {
   const navigate = useNavigate();
 
   return (
     <div
-      className="bg-white p-4 rounded-lg shadow-lg max-w-sm mx-auto mt-64 hover:bg-gray-20 transition-colors duration-300 cursor-pointer"
+      className="bg-white p-4 rounded-lg shadow-lg max-w-sm mt-5 mx-auto hover:bg-gray-20 transition-colors duration-300 cursor-pointer"
       onClick={() => navigate(`/services/${service.id}`)}
     >
       {/* Header Image */}
