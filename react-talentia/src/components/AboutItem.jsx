@@ -1,5 +1,6 @@
 import React from "react";
 
+
 export function AboutItem({ item, isService }) {
   if (!item) {
     return <div>Loading...</div>;
@@ -7,7 +8,7 @@ export function AboutItem({ item, isService }) {
 
   return (
     <div className="max-w-2xl mx-auto bg-white p-6 rounded-lg shadow-lg mt-8">
-      {/* Service Description */}
+      {/* Description */}
       <h2 className="text-2xl font-bold text-gray-700 mb-2">
         {isService ? item.service_title : item.job_title}
       </h2>
@@ -43,9 +44,6 @@ export function AboutItem({ item, isService }) {
         </p>
         <p className="text-gray-700 mb-2">
           <strong>Ubicación:</strong> {item.service_location}
-        </p>
-        <p className="text-gray-700 mb-2">
-          <strong>Contacto:</strong> {item.contact}
         </p>
       </div>
     </div>

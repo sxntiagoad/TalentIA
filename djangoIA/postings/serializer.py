@@ -17,7 +17,9 @@ class SubcategorySerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class ServiceSerializer(serializers.ModelSerializer):
+    user_avatar = serializers.ImageField(source='user.user_avatar', read_only=True)
     user_name = serializers.CharField(source='user.name', read_only=True)
+    user_location = serializers.CharField(source='user.user_location', read_only=True)
     user_lastname = serializers.CharField(source='user.lastname', read_only=True)
     service_title = serializers.CharField(source='title', read_only=True)
     service_description = serializers.CharField(source='description', read_only=True)

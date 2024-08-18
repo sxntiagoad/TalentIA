@@ -8,6 +8,8 @@ class User(models.Model):
     role = models.CharField(max_length=100, blank=True)
     phone = models.CharField(max_length=15, blank=True)
     information = models.TextField(max_length=500, blank=True)
+    user_avatar = models.ImageField(upload_to='users/', null=True, blank=True)
+    user_location = models.CharField(max_length=100, blank=True)  
     image = models.ImageField(upload_to='users/', null=True, blank=True)
     interests = models.ManyToManyField('Category', related_name='users', blank=True)
 
@@ -40,7 +42,7 @@ class Service(models.Model):
     description = models.TextField()
     price = models.FloatField()
     availability = models.BooleanField(default=True) 
-    location = models.CharField(max_length=100)  # Increased max_length for location
+    location = models.CharField(max_length=100) #pensar como lo vamos a usar porque el usuario y va adar su propia obicacion
     image = models.ImageField(upload_to='services/', null=True, blank=True)
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True)
     subcategory = models.ForeignKey(Subcategory, on_delete=models.SET_NULL, null=True)
