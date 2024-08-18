@@ -48,23 +48,7 @@ class Service(models.Model):
 
     def __str__(self):
         return self.title
-
-class Job(models.Model):
-    title = models.CharField(max_length=50)
-    description = models.TextField()
-    requirements = models.TextField()
-    salary = models.FloatField()
-    company = models.ForeignKey('Company', on_delete=models.CASCADE)
-    availability = models.BooleanField(default=True)  # Corrected spelling
-    location = models.CharField(max_length=100)  # Increased max_length for location
-    image = models.ImageField(upload_to='jobs/', null=True, blank=True)
-    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True)
-    subcategory = models.ForeignKey(Subcategory, on_delete=models.SET_NULL, null=True)
-    nestedcategory = models.ForeignKey(NestedCategory, on_delete=models.SET_NULL, null=True)
-
-    def __str__(self):
-        return self.title
-
+    
 class Company(models.Model):
     name = models.CharField(max_length=50)
     email = models.EmailField(unique=True)
@@ -76,3 +60,21 @@ class Company(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class Job(models.Model):
+    title = models.CharField(max_length=50)
+    description = models.TextField()
+    requirements = models.TextField()
+    salary = models.FloatField()
+    company = models.ForeignKey(Company, on_delete=models.CASCADE)
+    availability = models.BooleanField(default=True)  # Corrected spelling
+    location = models.CharField(max_length=100)  # Increased max_length for location
+    image = models.ImageField(upload_to='jobs/', null=True, blank=True)
+    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True)
+    subcategory = models.ForeignKey(Subcategory, on_delete=models.SET_NULL, null=True)
+    nestedcategory = models.ForeignKey(NestedCategory, on_delete=models.SET_NULL, null=True)
+
+    def __str__(self):
+        return self.title
+
