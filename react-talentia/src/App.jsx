@@ -12,8 +12,8 @@ function App() {
       <Banner/>
       <Routes>
         <Route path="/" element={<HomePage />} />
-        <Route path="/services/:id" element={<ItemDetailsPage />} />
-        <Route path="/jobs/:id" element={<ItemDetailsPage />} />
+        <Route path="/services/:id" element={<ItemDetailsPage isService={true} />} />
+        <Route path="/jobs/:id" element={<ItemDetailsPage isService={false}/>} />
         <Route path="/user-form" element={<UserFormPage />} />
       </Routes>
     </Router>
