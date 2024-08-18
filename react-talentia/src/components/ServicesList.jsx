@@ -1,18 +1,18 @@
 import { useEffect, useState } from "react";
-import { getAllServices } from "../api/Services.api";
-import { ServicePost } from "./ServicePost";
+import { getAllJobs, getAllServices } from "../api/Services.api";
+import { PostItem } from "./PostItem";
 import Slider from "react-slick";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 
-export function ServicesList() {
-  const [services, setServices] = useState([]);
+export function ServicesList({ isService = true }) {
+  const [items, setItems] = useState([]);
 
   useEffect(() => {
-    async function loadServices() {
-      const services = await getAllServices();
-      setServices(services.data);
+    async function loadItems() {
+      const response = isService ? await getAllServices() : await getAllJobs()
+      setItems(response.data);
     }
-    loadServices();
+    loadItems();
   }, []);
 
   const NextArrow = ({ onClick }) => (
@@ -72,10 +72,10 @@ export function ServicesList() {
   return (
     <div className="relative flex justify-center items-center">
       <Slider {...settings} className="w-full">
-        {services.map((service) => (
-          <div key={service.id} className="px-0"> {/* Eliminar padding horizontal */}
+        {items.map((item) => (
+          <div key={item.id} className="px-0"> {/* Eliminar padding horizontal */}
             <div className="flex justify-center">
-              <ServicePost service={service} />
+            <PostItem item={item} isService={isService} /> {/* Usar isService */}
             </div>
           </div>
         ))}

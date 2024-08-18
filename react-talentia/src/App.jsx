@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { ServicesPage } from "./pages/ServicesPage";
+import { HomePage } from "./pages/HomePage";
 import { ServiceDetailsPage } from "./pages/ServiceDetailsPage";
 import { UserFormPage } from "./pages/UserFormPage";
 import { Navigation } from "./components/Navigation";
@@ -11,7 +11,7 @@ function App() {
       <Navigation />
       <Banner/>
       <Routes>
-        <Route path="/" element={<ServicesPage />} />
+        <Route path="/" element={<HomePage />} />
         <Route path="/services/:id" element={<ServiceDetailsPage />} />
         <Route path="/user-form" element={<UserFormPage />} />
       </Routes>

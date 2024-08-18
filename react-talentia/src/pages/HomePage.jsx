@@ -1,8 +1,9 @@
 import { ServicesList } from "../components/ServicesList"
 
-export function ServicesPage() {
+export function HomePage() {
   return (
-    <ServicesList/>
+    
+    <ServicesList isService={true}/>
     
   )
 }
