@@ -1,10 +1,15 @@
+@import "slick-carousel/slick/slick.css";
+@import "slick-carousel/slick/slick-theme.css";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-body{
+
+body {
   background: #ffffff;
-  color:rgb(0, 0, 0)
+  color: rgb(0, 0, 0);
 }
+
 .glass {
   backdrop-filter: blur(10px);
   background-color: rgba(255, 255, 255, 0.1);
