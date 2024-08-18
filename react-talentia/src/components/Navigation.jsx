@@ -13,7 +13,7 @@ import logo from "../assets/logo.png";
 
 export function Navigation() {
   return (
-    <div className="flex justify-between items-center p-4 glass">
+    <div className="flex justify-between items-center p-4">
       <div className="flex items-center space-x-2">
         {/* Logo */}
         <img src={logo} alt="Logo" className="w-12 h-12" />
