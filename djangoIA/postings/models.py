@@ -39,7 +39,7 @@ class Service(models.Model):
     title = models.CharField(max_length=50)
     description = models.TextField()
     price = models.FloatField()
-    availability = models.BooleanField(default=True)  # Corrected spelling
+    availability = models.BooleanField(default=True) 
     location = models.CharField(max_length=100)  # Increased max_length for location
     image = models.ImageField(upload_to='services/', null=True, blank=True)
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True)

@@ -18,6 +18,9 @@ class SubcategorySerializer(serializers.ModelSerializer):
 
 class ServiceSerializer(serializers.ModelSerializer):
     user_name = serializers.CharField(source='user.name', read_only=True)
+    user_lastname = serializers.CharField(source='user.lastname', read_only=True)
+    service_title = serializers.CharField(source='title', read_only=True)
+    service_description = serializers.CharField(source='description', read_only=True)
     class Meta:
         model = Service
         fields = '__all__'
@@ -28,6 +31,8 @@ class NestedCategorySerializer(serializers.ModelSerializer):
         fields = '__all__'
 class JobSerializer(serializers.ModelSerializer):
     company_name = serializers.CharField(source='company.name', read_only=True)  # Ajuste aquí
+    job_title = serializers.CharField(source='title', read_only=True)
+    job_description = serializers.CharField(source='description', read_only=True)
     class Meta:
         model = Job
         fields = '__all__'
