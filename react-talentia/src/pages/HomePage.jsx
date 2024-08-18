@@ -1,9 +1,10 @@
-import { ServicesList } from "../components/ServicesList"
+import { ItemsList } from "../components/ItemsList"
 
 export function HomePage() {
   return (
-    
-    <ServicesList isService={true}/>
-    
+    <div>
+    <ItemsList isService={true} title={'Servicios'}/>
+    <ItemsList isService={false} title={"Trabajos"}/>
+    </div>
   )
 }
