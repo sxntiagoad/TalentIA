@@ -25,7 +25,7 @@ export function Navigation() {
         <ul className="flex space-x-6">
           <li>
             <Link
-              to="/inicio"
+              to="/"
               className="hover:text-purple-500 transition-colors duration-300"
             >
               Inicio
@@ -50,6 +50,9 @@ export function Navigation() {
         </ul>
       </nav>
       <div className="flex space-x-4">
+        <a href="/create-service" className="border-purple-500 border-2 text-purple-500 font-bold py-2 px-4 rounded transition-colors duration-300 hover:bg-purple-500 hover:text-white">
+          Crear Servicio
+          </a>
         <button className="border-purple-500 border-2 text-purple-500 font-bold py-2 px-4 rounded transition-colors duration-300 hover:bg-purple-500 hover:text-white">
           Iniciar Sesión
         </button>

@@ -9,9 +9,18 @@ class User(models.Model):
     phone = models.CharField(max_length=15, blank=True)
     information = models.TextField(max_length=500, blank=True)
     user_avatar = models.ImageField(upload_to='users/', null=True, blank=True)
-    user_location = models.CharField(max_length=100, blank=True)  
+    user_location = models.CharField(max_length=100, blank=True)
+    LANGUAGE_CHOICES = [
+        ('es', 'Español'),
+        ('en', 'English'),
+        ('fr', 'Français'),
+        ('de', 'Deutsch'),
+        # Agrega más idiomas según sea necesario
+    ]
+    user_language = models.CharField(max_length=50, choices=LANGUAGE_CHOICES, blank=True, default='es')
     image = models.ImageField(upload_to='users/', null=True, blank=True)
     interests = models.ManyToManyField('Category', related_name='users', blank=True)
+    
 
     def __str__(self):
         return f"{self.name} {self.lastname}"
@@ -39,7 +48,7 @@ class NestedCategory(models.Model):
 class Service(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=50)
-    description = models.TextField()
+    description = models.TextField() #pensar en short description y detail description
     price = models.FloatField()
     availability = models.BooleanField(default=True) 
     location = models.CharField(max_length=100) #pensar como lo vamos a usar porque el usuario y va adar su propia obicacion
@@ -59,6 +68,16 @@ class Company(models.Model):
     information = models.TextField(max_length=500, blank=True)
     image = models.ImageField(upload_to='companies/', null=True, blank=True)
     interests = models.ManyToManyField('Category', related_name='companies', blank=True)
+    company_avatar = models.ImageField(upload_to='companies/', null=True, blank=True)
+    company_location = models.CharField(max_length=100, blank=True)
+    LANGUAGE_CHOICES = [
+        ('es', 'Español'),
+        ('en', 'English'),
+        ('fr', 'Français'),
+        ('de', 'Deutsch'),
+        # Agrega más idiomas según sea necesario
+    ]
+    company_language = models.CharField(max_length=50, choices=LANGUAGE_CHOICES, blank=True, default='es')
 
     def __str__(self):
         return self.name

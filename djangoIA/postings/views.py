@@ -1,6 +1,6 @@
 from rest_framework import viewsets
 from .models import User, Category, Subcategory, Service, NestedCategory, Job, Company
-from .serializer import NestedCategorySerializer, UserSerializer, CategorySerializer, SubcategorySerializer, ServiceSerializer, JobSerializer, CompanySerializer
+from .serializer import NestedcategorySerializer, UserSerializer, CategorySerializer, SubcategorySerializer, ServiceSerializer, JobSerializer, CompanySerializer
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
@@ -19,7 +19,7 @@ class ServiceViewSet(viewsets.ModelViewSet):
 
 class NestedCategoryViewSet(viewsets.ModelViewSet):
     queryset = NestedCategory.objects.all()
-    serializer_class = NestedCategorySerializer
+    serializer_class = NestedcategorySerializer
 
 class JobViewSet(viewsets.ModelViewSet):
     queryset = Job.objects.all()
