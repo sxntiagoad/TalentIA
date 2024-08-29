@@ -3,7 +3,7 @@ import { HomePage } from "./pages/HomePage";
 import { ItemDetailsPage } from "./pages/ItemsDetailsPage";
 import { UserFormPage } from "./pages/UserFormPage";
 
-import { Navigation } from "./components/Navigation";
+import { Navigation } from "./components/general/Navigation";
 
 function App() {
   return (

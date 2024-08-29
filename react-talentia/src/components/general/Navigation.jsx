@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import React from "react";
-import '../index.css'
+import '../../index.css'
 import {
   Navbar,
   MobileNav,
@@ -9,7 +9,7 @@ import {
   IconButton,
   Card,
 } from "@material-tailwind/react";
-import logo from "../assets/logo.png"; 
+import logo from "../../assets/logo.png"; 
 
 export function Navigation() {
   return (

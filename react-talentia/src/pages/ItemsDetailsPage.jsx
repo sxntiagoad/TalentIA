@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getServiceById, getJobById } from "../api/Services.api";
-import { AboutItem } from "../components/AboutItem"; // Asegúrate que esto es correcto
+import { AboutItem } from "../components/categories/AboutItem"; // Asegúrate que esto es correcto
 
 export function ItemDetailsPage({ isService = true }) {
   const { id } = useParams();

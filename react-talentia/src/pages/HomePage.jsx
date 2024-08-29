@@ -1,5 +1,5 @@
-import { ItemsList } from "../components/ItemsList";
-import { Banner } from "../components/Banner"; // Importa el Banner
+import { ItemsList } from "../components/home/ItemsList";
+import { Banner } from "../components/home/Banner"; // Importa el Banner
 
 export function HomePage() {
   return (
