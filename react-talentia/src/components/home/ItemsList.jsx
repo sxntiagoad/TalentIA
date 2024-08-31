@@ -49,8 +49,9 @@ export function ItemsList({ isService = true, title = "Servicios" }) {
       {/* Contenedor Principal */}
       <div className="w-full mx-auto px-10"> {/* Remueve max-w-6xl y reduce px */}
         {/* Subcontenedor más ancho y centrado */}
-        <h2 className="text-3xl font-semibold ml-7" style={{ fontFamily: 'Poppins, sans-serif' }}>{title}</h2>
-
+        <h2 className="text-3xl font-semibold text-center" style={{ fontFamily: 'Poppins, sans-serif' }}>
+          {title}
+        </h2>
         <div className="relative">
           <AliceCarousel
             mouseTracking
