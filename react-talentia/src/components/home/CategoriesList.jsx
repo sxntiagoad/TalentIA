@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom'; // Asegúrate de importar Link
 import { getAllCategories, getAllSubCategories, getSubCategoryById } from '../../api/Categories.api';
 
 export function CategoriesList() {
@@ -65,21 +66,14 @@ export function CategoriesList() {
             <div className="mt-6">
               {filteredSubcategories.map(subcategory => (
                 <div key={subcategory.id} className="mb-4">
-                  <h3 
-                    onClick={() => handleSubcategoryClick(subcategory.id)}
-                    className="text-lg font-bold cursor-pointer"
-                  >
-                    {subcategory.name}
-                  </h3>
-                  {nestedCategories[subcategory.id] && nestedCategories[subcategory.id].length > 0 && (
-                    <ul className="ml-4 list-disc">
-                      {nestedCategories[subcategory.id].map(nestedCategory => (
-                        <li key={nestedCategory.id} className="text-md">
-                          {nestedCategory.name}
-                        </li>
-                      ))}
-                    </ul>
-                  )}
+                  <Link to={`/subcategory/${subcategory.name}`}>
+                    <h3 
+                      onClick={() => handleSubcategoryClick(subcategory.id)}
+                      className="text-lg font-bold cursor-pointer"
+                    >
+                      {subcategory.name}
+                    </h3>
+                  </Link>
                 </div>
               ))}
             </div>
