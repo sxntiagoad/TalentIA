@@ -7,7 +7,7 @@ import { Navigation } from "../components/general/Navigation"; // Importa el com
 export function HomePage() {
   return (
     <div>
-      <Navigation/>
+      <Navigation isAuthenticated={true}/>
       <Banner />  {/* Añade el Banner aquí */}
       <ItemsList isService={true} title={'Servicios'} />
       <ItemsList isService={false} title={"Trabajos"} />
