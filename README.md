@@ -1,4 +1,4 @@
-# TalentIA
+# TalentIA 🚀
 
 Este es el repositorio del proyecto TalentIA, una aplicación web construida con React. TalentIA se enfoca en conectar freelancers con oportunidades laborales sin necesidad de títulos profesionales, mejorando la satisfacción y el compromiso de los usuarios a través de AI.
 
@@ -20,3 +20,4 @@ Abre tu terminal y ejecuta el siguiente comando para clonar el repositorio:
 ```sh
 git clone https://github.com/tu-usuario/talentia.git
 
+### 2. Clonar el Repositorio
