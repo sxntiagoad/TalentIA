@@ -18,7 +18,7 @@ Sigue estos pasos para clonar el repositorio y configurar el proyecto en tu máq
 Abre tu terminal y ejecuta el siguiente comando para clonar el repositorio:
 
 ```sh
-git clone https://github.com/tu-usuario/talentia.git
+git clone [https://github.com/tu-usuario/talentia.git](https://github.com/sxntiagoad/TalentIA.git)
 ```
 ### 2. Instalar Dependencias
 
