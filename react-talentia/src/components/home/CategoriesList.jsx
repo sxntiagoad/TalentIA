@@ -52,7 +52,7 @@ export function CategoriesList() {
           {/* Contenedor de Flex para Categorías y Subcategorías */}
           <div className="flex flex-col mx-16 gap-4 justify-center items-center">
             {/* Contenedor de Categorías */}
-            <div className="flex flex-wrap gap-4">
+            <div className="grid grid-cols-1 lg:grid-cols-5 gap-4">
               {categories.map(category => (
                 <motion.div
                   key={category.id}
