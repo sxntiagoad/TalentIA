@@ -1,19 +1,26 @@
-import { Link } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import React, { useState } from "react";
-import { FaBell, FaEnvelope, FaUserCircle, FaBars, FaTimes } from "react-icons/fa";
-import '../../index.css'
-import {
-  Navbar,
-  MobileNav,
-  Typography,
-  Button,
-  IconButton,
-  Card,
-} from "@material-tailwind/react";
-import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
+import { FaBell, FaEnvelope, FaUserCircle, FaBars, FaTimes, FaSearch } from "react-icons/fa";
+import '../../index.css';
 import logo from "../../assets/logo.png";
+import { searchItems } from '../../api/Search.api';
 
-export function Navigation({ isAuthenticated = false }) {
+
+export function Navbar({ isAuthenticated = false }) {
+  const [query, setQuery] = useState("");
+  const navigate = useNavigate();
+
+  const handleSearch = async () => {
+    if (query.trim()) {
+      try {
+        const response = await searchItems(query);
+        navigate('/search', { state: { results: response.data } });
+      } catch (error) {
+        console.error("Error en la búsqueda:", error);
+      }
+    }
+  };
+
   return (
     <div className="p-4 flex justify-between items-center bg-white">
       <div className="flex items-center space-x-2">
@@ -26,18 +33,26 @@ export function Navigation({ isAuthenticated = false }) {
 
       {/* Desktop Menu or Search Bar */}
       {isAuthenticated ? (
-        <div className="flex items-center justify-between w-full">
+        <div className="flex items-center justify-between w-full ml-64">
           {/* Centered Search Bar */}
-          <div className="flex justify-center w-full">
+          <div className="relative w-2/3">
             <input
               type="text"
-              placeholder="Buscar..."
-              className="border border-gray-300 rounded-md px-4 py-2 w-1/2" // Extended width for centering
+              placeholder="Busca servicios y empleos"
+              className="border border-gray-300 rounded-full px-4 py-2 w-full pr-16" 
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
             />
+            <button
+              className="absolute right-0 top-0 bottom-0 px-4 bg-purple-500 text-white rounded-full"
+              onClick={handleSearch}
+            >
+              <FaSearch />
+            </button>
           </div>
 
           {/* Icons aligned to the far right */}
-          <div className="flex space-x-4 items-center">
+          <div className="flex space-x-6 items-center">
             <FaBell className="text-black w-6 h-6 cursor-pointer" />
             <FaEnvelope className="text-black w-6 h-6 cursor-pointer" />
             <FaUserCircle className="text-black w-6 h-6 cursor-pointer" />
@@ -98,4 +113,4 @@ export function Navigation({ isAuthenticated = false }) {
   );
 }
 
-export default Navigation;
+export default Navbar;
