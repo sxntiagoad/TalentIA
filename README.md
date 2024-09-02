@@ -18,6 +18,18 @@ Sigue estos pasos para clonar el repositorio y configurar el proyecto en tu máq
 Abre tu terminal y ejecuta el siguiente comando para clonar el repositorio:
 
 ```sh
-git clone https://github.com/tu-usuario/talentia.git
+git clone [https://github.com/tu-usuario/talentia.git](https://github.com/sxntiagoad/TalentIA.git)
+```
+### 2. Instalar Dependencias
 
-### 2. Clonar el Repositorio
+#### 2.1 Dependencias de Django
+Abrir una terminal y ejecutar el comando:
+```sh
+pip install -r requirements.txt
+```
+#### 2.2 Dependencias de React
+Abrir una terminal y ejecutar el comando:
+```sh
+npm install
+```
+### 3. Correr los servidores
