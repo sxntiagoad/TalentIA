@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import { getAllJobs, getAllServices } from "../../api/Services.api";
-import { PostItem } from "./PostItem";
+import { PostItem } from "../general/PostItem";
 import 'react-alice-carousel/lib/alice-carousel.css';
 import AliceCarousel from 'react-alice-carousel';
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
