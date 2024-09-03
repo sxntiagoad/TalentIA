@@ -21,4 +21,7 @@ body {
   .title-poppins {
     @apply text-3xl font-semibold text-center font-poppins;
   }
+  .title-poppins-start {
+    @apply text-2xl font-semibold text-start font-poppins;
+  }
 }
