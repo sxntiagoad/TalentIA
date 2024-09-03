@@ -22,7 +22,8 @@ class NestedcategorySerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class ServiceSerializer(serializers.ModelSerializer):
-    user_avatar = serializers.ImageField(source='user.user_avatar', read_only=True)
+    user_avatar = serializers.SerializerMethodField()
+    service_image = serializers.SerializerMethodField()
     user_name = serializers.CharField(source='user.name', read_only=True)
     user_location = serializers.CharField(source='user.user_location', read_only=True)
     user_lastname = serializers.CharField(source='user.lastname', read_only=True)
@@ -33,24 +34,39 @@ class ServiceSerializer(serializers.ModelSerializer):
     service_category = serializers.CharField(source='category.name', read_only=True)
     service_subcategory = serializers.CharField(source='subcategory.name', read_only=True)
     service_nestedcategory = serializers.CharField(source='nestedcategory.name', read_only=True)
-    service_image = serializers.ImageField(source='image', read_only=True)
+
+    def get_user_avatar(self, obj):
+        request = self.context.get('request')
+        return request.build_absolute_uri(obj.user.user_avatar.url)
+
+    def get_service_image(self, obj):
+        request = self.context.get('request')
+        return request.build_absolute_uri(obj.image.url)
 
     class Meta:
         model = Service
         fields = '__all__'
 
-
 class JobSerializer(serializers.ModelSerializer):
-    company_name = serializers.CharField(source='company.name', read_only=True)  # Ajuste aquí
+    company_avatar = serializers.SerializerMethodField()
+    job_image = serializers.SerializerMethodField()
+    company_name = serializers.CharField(source='company.name', read_only=True)
     job_title = serializers.CharField(source='title', read_only=True)
     job_description = serializers.CharField(source='description', read_only=True)
-    company_avatar = serializers.ImageField(source='company.company_avatar', read_only=True)
     company_language = serializers.CharField(source='company.company_language', read_only=True)
     company_location = serializers.CharField(source='company.company_location', read_only=True)
     job_category = serializers.CharField(source='category.name', read_only=True)
     job_subcategory = serializers.CharField(source='subcategory.name', read_only=True)
     job_nestedcategory = serializers.CharField(source='nestedcategory.name', read_only=True)
-    job_image = serializers.ImageField(source='image', read_only=True)
+
+    def get_company_avatar(self, obj):
+        request = self.context.get('request')
+        return request.build_absolute_uri(obj.company.company_avatar.url)
+
+    def get_job_image(self, obj):
+        request = self.context.get('request')
+        return request.build_absolute_uri(obj.image.url)
+
     class Meta:
         model = Job
         fields = '__all__'

@@ -75,8 +75,9 @@ def search_items(request):
                         if nestedcategories.exists():
                             jobs_response = Job.objects.filter(nestedcategory__in=nestedcategories)
 
-        services_serializer = ServiceSerializer(services_response, many=True)
-        jobs_serializer = JobSerializer(jobs_response, many=True)
+        # Serializa los datos con el contexto del request para obtener URLs completas
+        services_serializer = ServiceSerializer(services_response, many=True, context={'request': request})
+        jobs_serializer = JobSerializer(jobs_response, many=True, context={'request': request})
 
         return Response({'services': services_serializer.data, 'jobs': jobs_serializer.data})
     except Exception as e:

@@ -14,6 +14,7 @@ export function Navbar({ isAuthenticated = false }) {
     if (query.trim()) {
       try {
         const response = await searchItems(query);
+        console.log("Resultados de búsqueda:", response.data);
         navigate('/search', { state: { results: response.data } });
       } catch (error) {
         console.error("Error en la búsqueda:", error);
