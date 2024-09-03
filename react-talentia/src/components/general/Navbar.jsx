@@ -14,11 +14,21 @@ export function Navbar({ isAuthenticated = false }) {
     if (query.trim()) {
       try {
         const response = await searchItems(query);
-        console.log("Resultados de búsqueda:", response.data);
-        navigate('/search', { state: { results: response.data } });
+        navigate('/search', { 
+          state: { 
+            results: {
+              services: response.data.services,
+              jobs: response.data.jobs
+            },
+            originalQuery: query,
+            suggestedQuery: response.data.suggested_query 
+          } 
+        });
       } catch (error) {
         console.error("Error en la búsqueda:", error);
       }
+    } else {
+      alert("Por favor, ingresa una consulta de búsqueda.");
     }
   };
 

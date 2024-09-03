@@ -40,24 +40,19 @@ export function CategoriesList() {
       .catch(error => console.error('Error al obtener categorías anidadas:', error));
   };
 
-  const filteredSubcategories = subcategories.filter(subcategory => subcategory.category === selectedCategory);
-
   return (
     <div className="py-8">
       <div className="w-full mx-auto px-10">
-        <h2 className="text-3xl font-semibold text-center" style={{ fontFamily: 'Poppins, sans-serif' }}>
+        <h2 className="text-3xl font-semibold text-center mb-6" style={{ fontFamily: 'Poppins, sans-serif' }}>
           Categorías
         </h2>
-        <div className="mt-8">
-          {/* Contenedor de Flex para Categorías y Subcategorías */}
-          <div className="flex flex-col mx-16 gap-4 justify-center items-center">
-            {/* Contenedor de Categorías */}
-            <div className="grid grid-cols-1 lg:grid-cols-5 gap-4">
-              {categories.map(category => (
+        <div className="flex justify-center">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
+            {categories.map(category => (
+              <div key={category.id} className="flex flex-col items-center">
                 <motion.div
-                  key={category.id}
                   onClick={() => handleCategoryClick(category.id)}
-                  className="text-3xl font-semibold bg-purple-900 p-4 cursor-pointer rounded-lg shadow-md hover:bg-purple-900 w-full h-48 lg:w-64 flex items-center justify-center"
+                  className="text-2xl font-semibold bg-purple-900 p-3 cursor-pointer rounded-lg shadow-md hover:bg-purple-900 w-full h-40 flex items-center justify-center text-center"
                   style={{ fontFamily: 'Poppins, sans-serif' }}
                   initial={{ scale: 1 }}
                   whileHover={{ scale: 1.05 }}
@@ -65,35 +60,34 @@ export function CategoriesList() {
                 >
                   {category.name}
                 </motion.div>
-              ))}
-            </div>
-
-            {/* Contenedor de Subcategorías */}
-            <AnimatePresence>
-              {selectedCategory && showSubcategories && filteredSubcategories.length > 0 && (
-                <motion.div
-                  className="flex flex-col gap-4"
-                  initial={{ opacity: 0, y: -20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  transition={{ duration: 0.3 }}
-                  style={{ marginLeft: '0px' }} // Ajuste de alineación para subcategorías
-                >
-                  {filteredSubcategories.map(subcategory => (
-                    <div key={subcategory.id}>
-                      <Link to={`/subcategory/${subcategory.name}`}>
-                        <h3 
-                          onClick={() => handleSubcategoryClick(subcategory.id)}
-                          className="text-lg font-bold cursor-pointer"
-                        >
-                          {subcategory.name}
-                        </h3>
-                      </Link>
-                    </div>
-                  ))}
-                </motion.div>
-              )}
-            </AnimatePresence>
+                
+                <AnimatePresence>
+                  {selectedCategory === category.id && showSubcategories && (
+                    <motion.div
+                      className="mt-2 flex flex-col items-center gap-1"
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: 'auto' }}
+                      exit={{ opacity: 0, height: 0 }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      {subcategories
+                        .filter(subcategory => subcategory.category === category.id)
+                        .map(subcategory => (
+                          <Link key={subcategory.id} to={`/subcategory/${subcategory.name}`} className="text-center">
+                            <motion.div
+                              onClick={() => handleSubcategoryClick(subcategory.id)}
+                              className="text-base font-semibold cursor-pointer text-black hover:text-purple-900"
+                              whileHover={{ scale: 1.03 }}
+                            >
+                              {subcategory.name}
+                            </motion.div>
+                          </Link>
+                        ))}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            ))}
           </div>
         </div>
       </div>
