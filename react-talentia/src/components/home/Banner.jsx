@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 export function Banner() {
   const [text, setText] = useState("");
   const [chatText, setChatText] = useState("");
-  const fullText = "Descubre el poder de la inteligencia artificial en tu negocio";
+  const fullText = "Descubre el poder de la inteligencia artificial en tu vida laboral.";
   const chatFullText = "Hola, soy el asistente virtual de TalentIA. ¿En qué puedo ayudarte hoy?";
 
   useEffect(() => {
@@ -53,7 +53,7 @@ export function Banner() {
         }}
       >
         <div className="w-3/5 pr-8 flex flex-col justify-center">
-          <h1 className="title-poppins-start mb-4 text-4xl">Bienvenido a TalentIA</h1>
+          <h1 className="title-poppins-start mb-4 text-4xl">Bienvenido a TalentIA 🚀</h1>
           <p className="title-poppins-start text-purple-200 mb-10">TalentIA te permite mostrar tu talento y ofrecer tus servicios, 
             conectándote con oportunidades reales gracias a la inteligencia artificial. ¡Destaca y crece en el mercado laboral con TalentIA!</p>
           <motion.p 
