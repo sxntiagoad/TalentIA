@@ -24,7 +24,7 @@ const SearchPage = () => {
         {hasSuggestedQuery && (
           <p className="mb-4">
             No se encontraron resultados exactos para "{originalQuery}". 
-            Mostrando resultados para "{suggestedQuery}":
+            Tal vez quieres decir "{suggestedQuery}":
           </p>
         )}
 

@@ -1,5 +1,6 @@
 from multiprocessing import process
 from rest_framework import viewsets
+from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from django.db import models
@@ -22,6 +23,9 @@ class ServiceViewSet(viewsets.ModelViewSet):
     queryset = Service.objects.all()
     serializer_class = ServiceSerializer
 
+    def get_serializer_context(self):
+        return {'request': self.request}
+
 class NestedCategoryViewSet(viewsets.ModelViewSet):
     queryset = NestedCategory.objects.all()
     serializer_class = NestedcategorySerializer
@@ -29,11 +33,21 @@ class NestedCategoryViewSet(viewsets.ModelViewSet):
 class JobViewSet(viewsets.ModelViewSet):
     queryset = Job.objects.all()
     serializer_class = JobSerializer
+
+    def get_serializer_context(self):
+        return {'request': self.request}
     
 class CompanyViewSet(viewsets.ModelViewSet):
     queryset = Company.objects.all()
     serializer_class = CompanySerializer
 
+@api_view(['GET'])
+def services_by_subcategory(request, subcategory_id):
+    services = Service.objects.filter(subcategory_id=subcategory_id)
+    serializer = ServiceSerializer(services, many=True, context={'request': request})
+    return Response(serializer.data)
+
+        
 def levenshtein_distance(s1, s2):
     if len(s1) < len(s2):
         return levenshtein_distance(s2, s1)

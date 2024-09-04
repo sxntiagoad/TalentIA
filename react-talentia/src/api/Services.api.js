@@ -11,3 +11,6 @@ export const getAllJobs = () => {
 export const getJobById = (id) => {
     return axios.get(`http://localhost:8000/postings/api/v1/jobs/${id}/`)
 }
+export const getServicesBySubcategory = (subcategoryId) => {
+    return axios.get(`http://localhost:8000/postings/api/v1/services/subcategory/${subcategoryId}/`)
+}

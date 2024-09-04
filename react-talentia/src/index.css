@@ -16,6 +16,13 @@ body {
   border-radius: 10px;
 }
 
+.small-container {
+  max-width: 600px; /* Ajusta el ancho máximo según tus necesidades */
+  max-height: 400px; /* Ajusta la altura máxima según tus necesidades */
+  margin: auto; /* Centra el contenedor horizontalmente */
+  padding: 1rem; /* Ajusta el padding según tus necesidades */
+  overflow-y: auto; /* Asegura que el contenido sea desplazable verticalmente */
+}
 
 @layer components {
   .title-poppins {

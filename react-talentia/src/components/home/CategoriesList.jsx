@@ -73,7 +73,7 @@ export function CategoriesList() {
                       {subcategories
                         .filter(subcategory => subcategory.category === category.id)
                         .map(subcategory => (
-                          <Link key={subcategory.id} to={`/subcategory/${subcategory.name}`} className="text-center">
+                          <Link key={subcategory.id} to={`/subcategory/${subcategory.id}`} className="text-center">
                             <motion.div
                               onClick={() => handleSubcategoryClick(subcategory.id)}
                               className="text-base font-semibold cursor-pointer text-black hover:text-purple-900"

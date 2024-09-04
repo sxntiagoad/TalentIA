@@ -37,15 +37,36 @@ class ServiceSerializer(serializers.ModelSerializer):
 
     def get_user_avatar(self, obj):
         request = self.context.get('request')
-        return request.build_absolute_uri(obj.user.user_avatar.url)
+        if request and obj.user.user_avatar:
+            return request.build_absolute_uri(obj.user.user_avatar.url)
+        return None
 
     def get_service_image(self, obj):
         request = self.context.get('request')
-        return request.build_absolute_uri(obj.image.url)
+        if request and obj.image:
+            return request.build_absolute_uri(obj.image.url)
+        return None
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        request = self.context.get('request')
+
+        if request:
+            for field in ['image', 'user_avatar', 'service_image']:
+                if representation.get(field):
+                    representation[field] = request.build_absolute_uri(representation[field])
+
+        return representation
 
     class Meta:
         model = Service
-        fields = '__all__'
+        fields = [
+            'id', 'user', 'category', 'subcategory', 'nestedcategory', 'title', 'description', 
+            'price', 'image', 'user_avatar', 'service_image', 
+            'user_name', 'user_location', 'user_lastname', 'user_language', 'service_title', 
+            'service_description', 'service_price', 'service_category', 'service_subcategory', 
+            'service_nestedcategory'
+        ]
 
 class JobSerializer(serializers.ModelSerializer):
     company_avatar = serializers.SerializerMethodField()
@@ -61,11 +82,26 @@ class JobSerializer(serializers.ModelSerializer):
 
     def get_company_avatar(self, obj):
         request = self.context.get('request')
-        return request.build_absolute_uri(obj.company.company_avatar.url)
+        if request and obj.company.company_avatar:
+            return request.build_absolute_uri(obj.company.company_avatar.url)
+        return None
 
     def get_job_image(self, obj):
         request = self.context.get('request')
-        return request.build_absolute_uri(obj.image.url)
+        if request and obj.image:
+            return request.build_absolute_uri(obj.image.url)
+        return None
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        request = self.context.get('request')
+
+        if request:
+            for field in ['image', 'company_avatar', 'job_image']:
+                if representation.get(field):
+                    representation[field] = request.build_absolute_uri(representation[field])
+
+        return representation
 
     class Meta:
         model = Job

@@ -1,7 +1,7 @@
 import React from 'react'
 import { PostItem } from './PostItem'
 
-export function ResultsGrid({ items, isService = true, title }) {
+export function ResultsGrid({ items=[], isService = true, title }) {
     return (
       <div className="w-full mx-auto px-10 py-4">
         {title && <h2 className="title-poppins mb-4">{title}</h2>}

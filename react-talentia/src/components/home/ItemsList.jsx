@@ -14,6 +14,7 @@ export function ItemsList({ isService = true, title = "Servicios" }) {
     async function loadItems() {
       const response = isService ? await getAllServices() : await getAllJobs();
       setItems(response.data);
+      console.log(response.data);
     }
     loadItems();
   }, []);
