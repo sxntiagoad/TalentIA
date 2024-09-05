@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { FaMapMarkerAlt, FaCommentAlt, FaHome } from "react-icons/fa"; // Importamos los iconos de react-icons
 
 export function AboutItem({ item, isService }) {
@@ -8,46 +9,53 @@ export function AboutItem({ item, isService }) {
 
   return (
     <div className="max-w-5xl mx-auto">
-      {/* Categoria, subcategoria, dentro de subcategoria*/}
+      {/* Ruta de navegación: Categoría, Subcategoría, Categoría Anidada */}
       <div className="flex items-center space-x-2 text-sm text-gray-500">
-        <a href="/" className="hover:underline">
+        {/* Inicio */}
+        <Link to="/" className="hover:underline">
           <FaHome />
-        </a>
-        <a href="/category" className="hover:underline">
+        </Link>
+        {/* Categoría */}
+        <Link to={`/category/${isService ? item.service_category : item.job_category}`} className="hover:underline">
           <span>{isService ? item.service_category : item.job_category}</span>
-        </a>
+        </Link>
         <span>/</span>
-        <a href="/subcategory" className="hover:underline">
+        {/* Subcategoría */}
+        <Link to={`/subcategory/${isService ? item.service_subcategory : item.job_subcategory}`} className="hover:underline">
           <span>{isService ? item.service_subcategory : item.job_subcategory}</span>
-        </a>
+        </Link>
         <span>/</span>
-        <a href="/nestedcategory" className="hover:underline">
+        {/* Categoría Anidada */}
+        <Link to={`/nestedcategory/${isService ? item.service_nestedcategory : item.job_nestedcategory}`} className="hover:underline">
           <span>{isService ? item.service_nestedcategory : item.job_nestedcategory}</span>
-        </a>
+        </Link>
       </div>
 
-      {/* Título y descripción */}
+      {/* Título del servicio o trabajo */}
       <h2 className="text-3xl font-bold text-gray-800 mb-4">
         {isService ? item.service_title : item.job_title}
       </h2>
+      
+      {/* Descripción */}
       <p className="text-gray-600 text-lg mb-4">
         {isService ? item.service_description : item.job_description}
       </p>
 
-      {/* Información del usuario/empresa */}
+      {/* Información del usuario o empresa */}
       <div className="flex items-center space-x-6 mt-6">
+        {/* Imagen de avatar */}
         <img
-          src={isService ? item.user_avatar : item.company_avatar} // Avatar condicional
-          alt={`Avatar de ${isService ? item.user_name : item.company_name}`} // Alt condicional
+          src={isService ? item.user_avatar : item.company_avatar} // Mostrar avatar del usuario o de la empresa
+          alt={`Avatar de ${isService ? item.user_name : item.company_name}`} // Texto alternativo condicional
           className="w-24 h-24 object-cover rounded-full border border-gray-300"
         />
         <div>
-          {/* Nombre y enlace del usuario/empresa */}
-          <a href={`/user/${item.user_id}`} className="text-lg font-bold text-gray-800 hover:underline">
+          {/* Nombre del usuario o empresa */}
+          <Link to={`/user/${item.user_id}`} className="text-lg font-bold text-gray-800 hover:underline">
             {isService ? item.user_name : item.company_name} {item.user_lastname && ` ${item.user_lastname}`}
-          </a>
+          </Link>
+          {/* Ubicación y lenguaje */}
           <div className="flex items-center space-x-6 mt-2 text-sm text-gray-500">
-            {/* Ubicación y lenguaje */}
             <div className="flex items-center">
               <FaMapMarkerAlt className="mr-1" />
               {isService ? item.user_location : item.company_location}
@@ -60,13 +68,16 @@ export function AboutItem({ item, isService }) {
         </div>
       </div>
 
-      {/* Imágenes */}
+      {/* Imagen del servicio o trabajo */}
       {item.service_image && (
-      <img
-        src={item.image}
-        className="w-[270x] h-[350px] "
-      />
-    )}
+        <img
+          src={item.service_image} // Imagen del servicio
+          alt={`Imagen de ${isService ? item.service_title : item.job_title}`}
+          className="w-[400px] h-[500px]"
+        />
+      )}
     </div>
   );
 }
+
+export default AboutItem;

@@ -32,3 +32,30 @@ body {
     @apply text-2xl font-semibold text-start font-poppins;
   }
 }
+.main-category-page {
+  display: flex;
+  align-items: flex-start; /* Alinea al inicio verticalmente */
+  justify-content: center; /* Centra horizontalmente */
+  height: 100vh; /* Altura del viewport */
+  background-color: #f0f0f0;
+  padding-top: 2cm; /* Añade un padding superior de 3 cm */
+}
+
+.category-container {
+  background-size: cover;
+  background-position: center;
+  width: 60%;   /* Reduce el ancho del rectángulo */
+  height: 30%;  /* Reduce la altura del rectángulo */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.category-title {
+  font-size: 2rem; /* Reduce el tamaño del texto */
+  font-weight: bold;
+  text-align: center;
+}

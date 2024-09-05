@@ -9,9 +9,9 @@ export function HomePage() {
     <div>
       <Navbar isAuthenticated={true}/>
       <Banner />  {/* Añade el Banner aquí */}
+      <CategoriesList />  
       <ItemsList isService={true} title={'Servicios'} />
       <ItemsList isService={false} title={"Trabajos"} />
-      <CategoriesList />  
     </div>
   );
 }
