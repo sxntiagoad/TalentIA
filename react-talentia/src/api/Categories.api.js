@@ -17,3 +17,7 @@ export const getAllNestedCategories = () => {
 export const getNestedCategoryById = (id) => {
     return axios.get(`http://localhost:8000/postings/api/v1/nestedcategories/${id}/`)
 }   // Obtiene una categoría anidada por ID
+
+export const getAllSubCategoriesByCategory = (category) => {
+    return axios.get(`http://localhost:8000/postings/api/v1/subcategories/?category=${category}`)
+}   // Obtiene todas las subcategorías por nombre de categoría

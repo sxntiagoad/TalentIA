@@ -41,6 +41,7 @@ class CompanyViewSet(viewsets.ModelViewSet):
     queryset = Company.objects.all()
     serializer_class = CompanySerializer
 
+
 @api_view(['GET'])
 def services_by_subcategory(request, subcategory_id):
     services = Service.objects.filter(subcategory_id=subcategory_id)

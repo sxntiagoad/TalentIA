@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { getAllCategories } from '../../api/Categories.api';
 import { motion } from 'framer-motion';
 
-export function CategoriesList() {
+export function CategoriesList( { isSubCategoryPage=false } ) {
   const [categories, setCategories] = useState([]);
 
   useEffect(() => {
