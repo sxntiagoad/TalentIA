@@ -10,7 +10,8 @@ from .views import (
     JobViewSet, 
     CompanyViewSet,
     search_items,
-    services_by_subcategory
+    services_by_subcategory,
+    subcategories_by_category,
 )
 
 router = routers.DefaultRouter()
@@ -26,4 +27,5 @@ urlpatterns = [
     path('api/v1/', include(router.urls)),
     path('api/v1/search/', search_items, name='search_items'),
     path('api/v1/services/subcategory/<int:subcategory_id>/', services_by_subcategory, name='services-by-subcategory'),
+    path('api/v1/subcategories/category/<int:category_id>/', subcategories_by_category, name='subcategories-by-category'),
 ]

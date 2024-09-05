@@ -1,17 +1,21 @@
+import React from 'react';
+import { Navbar } from "../components/general/Navbar";
+import { Banner } from "../components/home/Banner";
+import { CategoriesList } from "../components/home/CategoriesList";
 import { ItemsList } from "../components/home/ItemsList";
-import { Banner } from "../components/home/Banner"; // Importa el Banner
-import { CategoriesList } from "../components/home/CategoriesList"; // Importa el componente CategoriesList
-import { Navbar } from "../components/general/Navbar"; // Importa el componente Navigation
-
+import { Footer } from "../components/general/footer"; // Asegúrate de usar la ruta correcta
 
 export function HomePage() {
   return (
     <div>
-      <Navbar isAuthenticated={true}/>
-      <Banner />  {/* Añade el Banner aquí */}
-      <CategoriesList />  
+      <Navbar isAuthenticated={true} />
+      <Banner />
+      <CategoriesList />
       <ItemsList isService={true} title={'Servicios'} />
       <ItemsList isService={false} title={"Trabajos"} />
+      <Footer />
     </div>
   );
 }
+
+export default HomePage;

@@ -1,67 +1,62 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { FaMapMarkerAlt, FaCommentAlt, FaHome } from "react-icons/fa"; // Importamos los iconos de react-icons
+import { FaMapMarkerAlt, FaCommentAlt, FaHome, FaChevronRight } from "react-icons/fa";
 
 export function AboutItem({ item, isService }) {
   if (!item) {
-    return <div>Loading...</div>;
+    return <div className="text-center py-8">Cargando...</div>;
   }
 
   return (
-    <div className="max-w-5xl mx-auto">
-      {/* Ruta de navegación: Categoría, Subcategoría, Categoría Anidada */}
-      <div className="flex items-center space-x-2 text-sm text-gray-500">
-        {/* Inicio */}
-        <Link to="/" className="hover:underline">
-          <FaHome />
+    <div className="max-w-5xl mx-auto px-4 py-8">
+      {/* Ruta de navegación */}
+      <nav className="flex items-center space-x-2 text-sm text-gray-500 mb-6">
+        <Link to="/" className="hover:text-purple-600 transition-colors duration-200">
+          <FaHome className="inline-block mr-1" />
+          <span className="hidden sm:inline">Inicio</span>
         </Link>
-        {/* Categoría */}
-        <Link to={`/category/${isService ? item.service_category : item.job_category}`} className="hover:underline">
-          <span>{isService ? item.service_category : item.job_category}</span>
-        </Link>
-        <span>/</span>
-        {/* Subcategoría */}
-        <Link to={`/subcategory/${isService ? item.service_subcategory : item.job_subcategory}`} className="hover:underline">
-          <span>{isService ? item.service_subcategory : item.job_subcategory}</span>
-        </Link>
-        <span>/</span>
-        {/* Categoría Anidada */}
-        <Link to={`/nestedcategory/${isService ? item.service_nestedcategory : item.job_nestedcategory}`} className="hover:underline">
-          <span>{isService ? item.service_nestedcategory : item.job_nestedcategory}</span>
-        </Link>
+        {[
+          isService ? item.service_category : item.job_category,
+          isService ? item.service_subcategory : item.job_subcategory,
+          isService ? item.service_nestedcategory : item.job_nestedcategory
+        ].map((category, index) => (
+          <React.Fragment key={index}>
+            <FaChevronRight className="text-gray-400" />
+            <Link to={`/${['category', 'subcategory', 'nestedcategory'][index]}/${category}`} className="hover:text-purple-600 transition-colors duration-200">
+              {category}
+            </Link>
+          </React.Fragment>
+        ))}
+      </nav>
+
+      {/* Título y descripción */}
+      <div className="mb-8">
+        <h1 className="text-4xl font-bold text-gray-800 mb-4">
+          {isService ? item.service_title : item.job_title}
+        </h1>
+        <p className="text-gray-600 text-lg leading-relaxed">
+          {isService ? item.service_description : item.job_description}
+        </p>
       </div>
 
-      {/* Título del servicio o trabajo */}
-      <h2 className="text-3xl font-bold text-gray-800 mb-4">
-        {isService ? item.service_title : item.job_title}
-      </h2>
-      
-      {/* Descripción */}
-      <p className="text-gray-600 text-lg mb-4">
-        {isService ? item.service_description : item.job_description}
-      </p>
-
       {/* Información del usuario o empresa */}
-      <div className="flex items-center space-x-6 mt-6">
-        {/* Imagen de avatar */}
+      <div className="flex flex-col sm:flex-row items-center sm:items-start space-y-4 sm:space-y-0 sm:space-x-6 bg-gray-50 p-6 rounded-lg shadow-sm mb-8">
         <img
-          src={isService ? item.user_avatar : item.company_avatar} // Mostrar avatar del usuario o de la empresa
-          alt={`Avatar de ${isService ? item.user_name : item.company_name}`} // Texto alternativo condicional
-          className="w-24 h-24 object-cover rounded-full border border-gray-300"
+          src={isService ? item.user_avatar : item.company_avatar}
+          alt={`Avatar de ${isService ? item.user_name : item.company_name}`}
+          className="w-24 h-24 object-cover rounded-full border-4 border-white shadow-md"
         />
         <div>
-          {/* Nombre del usuario o empresa */}
-          <Link to={`/user/${item.user_id}`} className="text-lg font-bold text-gray-800 hover:underline">
+          <Link to={`/user/${item.user_id}`} className="text-xl font-bold text-gray-800 hover:text-purple-600 transition-colors duration-200">
             {isService ? item.user_name : item.company_name} {item.user_lastname && ` ${item.user_lastname}`}
           </Link>
-          {/* Ubicación y lenguaje */}
-          <div className="flex items-center space-x-6 mt-2 text-sm text-gray-500">
-            <div className="flex items-center">
-              <FaMapMarkerAlt className="mr-1" />
+          <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-6 mt-2 text-sm text-gray-600">
+            <div className="flex items-center mt-2 sm:mt-0">
+              <FaMapMarkerAlt className="mr-2 text-purple-500" />
               {isService ? item.user_location : item.company_location}
             </div>
-            <div className="flex items-center">
-              <FaCommentAlt className="mr-1" />
+            <div className="flex items-center mt-2 sm:mt-0">
+              <FaCommentAlt className="mr-2 text-purple-500" />
               {isService ? item.user_language : item.company_language}
             </div>
           </div>
@@ -70,11 +65,13 @@ export function AboutItem({ item, isService }) {
 
       {/* Imagen del servicio o trabajo */}
       {item.service_image && (
-        <img
-          src={item.service_image} // Imagen del servicio
-          alt={`Imagen de ${isService ? item.service_title : item.job_title}`}
-          className="w-[400px] h-[500px]"
-        />
+        <div className="rounded-lg overflow-hidden shadow-lg">
+          <img
+            src={item.service_image}
+            alt={`Imagen de ${isService ? item.service_title : item.job_title}`}
+            className="w-full h-auto object-cover"
+          />
+        </div>
       )}
     </div>
   );

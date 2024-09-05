@@ -32,6 +32,12 @@ export function Navbar({ isAuthenticated = false }) {
     }
   };
 
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      handleSearch();
+    }
+  };
+
   return (
     <div className="p-4 flex justify-between items-center bg-white">
       <div className="flex items-center space-x-2">
@@ -53,6 +59,7 @@ export function Navbar({ isAuthenticated = false }) {
               className="border border-gray-300 rounded-full px-4 py-2 w-full pr-16" 
               value={query}
               onChange={(e) => setQuery(e.target.value)}
+              onKeyPress={handleKeyPress}
             />
             <button
               className="absolute right-0 top-0 bottom-0 px-4 bg-purple-500 text-white rounded-full"

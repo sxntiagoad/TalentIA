@@ -33,8 +33,7 @@ body {
   }
 }
 .main-category-page {
-  display: flex;
-  align-items: flex-start; /* Alinea al inicio verticalmente */
+  display: flex-wrap;
   justify-content: center; /* Centra horizontalmente */
   height: 100vh; /* Altura del viewport */
   background-color: white;
@@ -59,3 +58,4 @@ body {
   font-weight: bold;
   text-align: center;
 }
+

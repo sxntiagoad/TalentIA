@@ -17,7 +17,7 @@ function App() {
         <Route path="/user-form" element={<UserFormPage />} />
         <Route path="/subcategory/:id" element={<SubcategoryPage />} />
         <Route path="/search" element={<SearchPage />} /> {/* Ruta para resultados de búsqueda */}
-        <Route path="/category/:name" element={<MainCategoryPage />} />
+        <Route path="/category/:id" element={<MainCategoryPage />} />
       </Routes>
     </Router>
   );
