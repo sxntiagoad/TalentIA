@@ -1,8 +1,32 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { getAllCategories } from '../../api/Categories.api';
 import { Link } from "react-router-dom";
 import { FaMapMarkerAlt, FaCommentAlt, FaHome, FaChevronRight } from "react-icons/fa";
 
 export function AboutItem({ item, isService }) {
+  const [categories, setCategories] = useState([]);
+  const [categoryLookup, setCategoryLookup] = useState({});
+
+  useEffect(() => {
+    // Cargar las categorías desde la API
+    getAllCategories()
+      .then(response => {
+        const categoriesData = response.data || [];
+        setCategories(categoriesData);
+        
+        // Crear el objeto de búsqueda de categorías
+        const lookup = {};
+        categoriesData.forEach(category => {
+          lookup[category.name] = category.id;
+        });
+        setCategoryLookup(lookup);
+      })
+      .catch(error => {
+        console.error('Error al obtener categorías:', error);
+        setCategories([]); // Manejo de errores, inicializa categories como vacío
+      });
+  }, []);
+
   if (!item) {
     return <div className="text-center py-8">Cargando...</div>;
   }
@@ -10,24 +34,28 @@ export function AboutItem({ item, isService }) {
   return (
     <div className="max-w-5xl mx-auto px-4 py-8">
       {/* Ruta de navegación */}
-      <nav className="flex items-center space-x-2 text-sm text-gray-500 mb-6">
-        <Link to="/" className="hover:text-purple-600 transition-colors duration-200">
-          <FaHome className="inline-block mr-1" />
-          <span className="hidden sm:inline">Inicio</span>
-        </Link>
-        {[
-          isService ? item.service_category : item.job_category,
-          isService ? item.service_subcategory : item.job_subcategory,
-          isService ? item.service_nestedcategory : item.job_nestedcategory
-        ].map((category, index) => (
-          <React.Fragment key={index}>
-            <FaChevronRight className="text-gray-400" />
-            <Link to={`/${['category', 'subcategory', 'nestedcategory'][index]}/${category}`} className="hover:text-purple-600 transition-colors duration-200">
-              {category}
-            </Link>
-          </React.Fragment>
-        ))}
-      </nav>
+      {categories.length > 0 && (
+        <nav className="flex items-center space-x-2 text-sm text-gray-500 mb-6">
+          <Link to="/" className="hover:text-purple-600 transition-colors duration-200">
+            <FaHome className="text-gray-400 mr-1" />
+          </Link>
+          {[
+            isService ? item.service_category : item.job_category,
+            isService ? item.service_subcategory : item.job_subcategory,
+            isService ? item.service_nestedcategory : item.job_nestedcategory,
+          ].filter(Boolean).map((category, index) => (
+            <React.Fragment key={index}>
+              <FaChevronRight className="text-gray-400" />
+              <Link
+                to={`/category/${categoryLookup[category] || '#'}`}
+                className="hover:text-purple-600 transition-colors duration-200"
+              >
+                {category}
+              </Link>
+            </React.Fragment>
+          ))}
+        </nav>
+      )}
 
       {/* Título y descripción */}
       <div className="mb-8">
