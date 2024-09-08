@@ -3,7 +3,8 @@ import { Navbar } from "../components/general/Navbar";
 import { Banner } from "../components/home/Banner";
 import { CategoriesList } from "../components/home/CategoriesList";
 import { ItemsList } from "../components/home/ItemsList";
-import { Footer } from "../components/general/footer"; // Asegúrate de usar la ruta correcta
+import { Footer } from "../components/general/footer";
+import ChatBot from '../pages/ChatBot'; // Importamos el componente ChatBot
 
 export function HomePage() {
   return (

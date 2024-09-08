@@ -8,6 +8,7 @@ import { searchItems } from '../../api/Search.api';
 
 export function Navbar({ isAuthenticated = false }) {
   const [query, setQuery] = useState("");
+  const [showError, setShowError] = useState(false);
   const navigate = useNavigate();
 
   const handleSearch = async () => {
@@ -28,7 +29,8 @@ export function Navbar({ isAuthenticated = false }) {
         console.error("Error en la búsqueda:", error);
       }
     } else {
-      alert("Por favor, ingresa una consulta de búsqueda.");
+      setShowError(true);
+      setTimeout(() => setShowError(false), 3000);
     }
   };
 
@@ -56,7 +58,7 @@ export function Navbar({ isAuthenticated = false }) {
             <input
               type="text"
               placeholder="Busca servicios y empleos"
-              className="border border-gray-300 rounded-full px-4 py-2 w-full pr-16" 
+              className={`border ${showError ? 'border-red-500 animate-shake' : 'border-gray-300'} rounded-full px-4 py-2 w-full pr-16`}
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               onKeyPress={handleKeyPress}
@@ -67,6 +69,9 @@ export function Navbar({ isAuthenticated = false }) {
             >
               <FaSearch />
             </button>
+            {showError && (
+              <p className="absolute text-red-500 text-xs mt-1">Por favor, ingresa una consulta de búsqueda.</p>
+            )}
           </div>
 
           {/* Icons aligned to the far right */}

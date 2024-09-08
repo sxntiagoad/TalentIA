@@ -1,39 +1,46 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import ResultsGrid from '../components/general/ResultsGrid';
-import { getServicesBySubcategory } from '../api/Services.api';
+import { getServicesBySubcategory, getJobsBySubcategory } from '../api/Services.api';
+import { Navbar } from "../components/general/Navbar";
 
 function SubcategoryPage() {
   const { id } = useParams();
   const [services, setServices] = useState([]);
+  const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const loadServices = async () => {
+    const loadData = async () => {
       try {
         setLoading(true);
-        const response = await getServicesBySubcategory(id);
-        console.log(response)
-        setServices(response.data);
+        const [servicesResponse, jobsResponse] = await Promise.all([
+          getServicesBySubcategory(id),
+          getJobsBySubcategory(id)
+        ]);
+        setServices(servicesResponse.data);
+        setJobs(jobsResponse.data);
         setLoading(false);
       } catch (error) {
-        console.error('Error al cargar los servicios:', error);
-        setError('Hubo un problema al cargar los servicios. Por favor, intenta de nuevo más tarde.');
+        console.error('Error al cargar los datos:', error);
+        setError('Hubo un problema al cargar los datos. Por favor, intenta de nuevo más tarde.');
         setLoading(false);
       }
     };
 
-    loadServices();
+    loadData();
   }, [id]);
 
-  if (loading) return <div>Cargando servicios...</div>;
+  if (loading) return <div>Cargando datos...</div>;
   if (error) return <div>{error}</div>;
 
   return (
     <div>
-      <h1>Servicios en esta subcategoría</h1>
+      <Navbar isAuthenticated={true} />
+      <h1>Servicios y trabajos en esta subcategoría</h1>
       <ResultsGrid items={services} isService={true} title="Servicios disponibles" />
+      <ResultsGrid items={jobs} isService={false} title="Trabajos disponibles" />
     </div>
   );
 }

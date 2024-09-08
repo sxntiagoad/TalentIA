@@ -48,6 +48,12 @@ def services_by_subcategory(request, subcategory_id):
     return Response(serializer.data)
 
 @api_view(['GET'])
+def jobs_by_subcategory(request, subcategory_id):
+    jobs = Job.objects.filter(subcategory_id=subcategory_id)
+    serializer = JobSerializer(jobs, many=True, context={'request': request})
+    return Response(serializer.data)
+
+@api_view(['GET'])
 def subcategories_by_category(request, category_id):
     subcategories = Subcategory.objects.filter(category_id=category_id)
     serializer = SubcategorySerializer(subcategories, many=True)

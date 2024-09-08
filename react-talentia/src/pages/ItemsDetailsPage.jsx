@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getServiceById, getJobById } from "../api/Services.api";
-import { AboutItem } from "../components/categories/AboutItem"; // Asegúrate que esto es correcto
+import { AboutItem } from "../components/categories/AboutItem";
+import { Navbar } from "../components/general/Navbar"; // Importamos el componente Navbar
 
 export function ItemDetailsPage({ isService = true }) {
   const { id } = useParams();
@@ -14,7 +15,7 @@ export function ItemDetailsPage({ isService = true }) {
         const response = isService ? await getServiceById(id) : await getJobById(id);
         setItem(response.data);
       } catch (error) {
-        console.error("Error loading item:", error);
+        console.error("Error cargando el elemento:", error);
       } finally {
         setLoading(false);
       }
@@ -23,12 +24,17 @@ export function ItemDetailsPage({ isService = true }) {
   }, [id, isService]);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <div>Cargando...</div>;
   }
 
   if (!item) {
-    return <div>No item data available</div>;
+    return <div>No hay datos disponibles para este elemento</div>;
   }
 
-  return <AboutItem item={item} isService={isService} />;
+  return (
+    <>
+      <Navbar isAuthenticated={true} /> {/* Usamos el componente Navbar */}
+      <AboutItem item={item} isService={isService} />
+    </>
+  );
 }
