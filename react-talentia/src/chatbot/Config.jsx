@@ -1,4 +1,5 @@
 import { createChatBotMessage } from "react-chatbot-kit";
+import BotAvatar from "../chatbot/BotAvatar"; // Asegúrate de crear este componente
 
 const config = {
   botName: "TalentIA Assistant",
@@ -14,7 +15,7 @@ const config = {
     },
   },
   customComponents: {
-    // Aquí puedes personalizar los componentes visuales del chatbot si es necesario
+    botAvatar: (props) => <BotAvatar {...props} />,
   },
 };
 

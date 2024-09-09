@@ -112,7 +112,7 @@ export function Banner() {
         </motion.div>
       ) : (
         <motion.div
-          className="text-white z-10 p-8 rounded-lg w-4/5 h-4/5 flex flex-col justify-center items-center"
+          className="text-white z-10 p-8 rounded-lg w-4/5 h-4/5 flex flex-col justify-between"
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
@@ -124,23 +124,28 @@ export function Banner() {
             border: '1px solid rgba(167, 139, 250, 0.3)' // Borde morado claro
           }}
         >
-          <Chatbot
-            config={config}
-            messageParser={MessageParser}
-            actionProvider={ActionProvider}
-          />
-          <button
-            className="mt-4 p-2 rounded-lg text-purple-100 font-semibold transition-all duration-300 hover:text-white"
-            style={{
-              background: 'rgba(88, 28, 135, 0.6)',
-              backdropFilter: 'blur(5px)',
-              border: '1px solid rgba(167, 139, 250, 0.3)',
-              boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-            }}
-            onClick={toggleChatbot} // Vuelve a mostrar el banner
-          >
-            Volver
-          </button>
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-3xl font-bold text-purple-300">Asistente Virtual de TalentIA</h2>
+            <button
+              className="p-2 rounded-lg text-purple-100 font-semibold transition-all duration-300 hover:text-white"
+              style={{
+                background: 'rgba(88, 28, 135, 0.6)',
+                backdropFilter: 'blur(5px)',
+                border: '1px solid rgba(167, 139, 250, 0.3)',
+                boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+              }}
+              onClick={toggleChatbot}
+            >
+              Volver
+            </button>
+          </div>
+          <div className="flex-grow overflow-hidden">
+            <Chatbot
+              config={config}
+              messageParser={MessageParser}
+              actionProvider={ActionProvider}
+            />
+          </div>
         </motion.div>
       )}
     </div>
