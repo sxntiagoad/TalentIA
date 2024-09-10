@@ -1,31 +1,6 @@
 from django.db import models
 from django.utils.text import slugify
 
-class User(models.Model):
-    name = models.CharField(max_length=50)
-    lastname = models.CharField(max_length=50)
-    email = models.EmailField(unique=True)
-    password = models.CharField(max_length=128)  # Consider using a larger max_length for hashed passwords
-    role = models.CharField(max_length=100, blank=True)
-    phone = models.CharField(max_length=15, blank=True)
-    information = models.TextField(max_length=500, blank=True)
-    user_avatar = models.ImageField(upload_to='users/', null=True, blank=True)
-    user_location = models.CharField(max_length=100, blank=True)
-    LANGUAGE_CHOICES = [
-        ('es', 'Español'),
-        ('en', 'English'),
-        ('fr', 'Français'),
-        ('de', 'Deutsch'),
-        # Agrega más idiomas según sea necesario
-    ]
-    user_language = models.CharField(max_length=50, choices=LANGUAGE_CHOICES, blank=True, default='es')
-    image = models.ImageField(upload_to='users/', null=True, blank=True)
-    interests = models.ManyToManyField('Category', related_name='users', blank=True)
-    
-
-    def __str__(self):
-        return f"{self.name} {self.lastname}"
-
 class Category(models.Model):
     name = models.CharField(max_length=255, unique=True)
 
@@ -46,6 +21,54 @@ class NestedCategory(models.Model):
     def __str__(self):
         return self.name
 
+class User(models.Model):
+    LANGUAGE_CHOICES = [
+        ('es', 'Español'),
+        ('en', 'English'),
+        ('fr', 'Français'),
+        ('de', 'Deutsch'),
+        # Agrega más idiomas según sea necesario
+    ]
+
+    name = models.CharField(max_length=50)
+    lastname = models.CharField(max_length=50)
+    email = models.EmailField(unique=True)
+    password = models.CharField(max_length=128)  # Consider using a larger max_length for hashed passwords
+    role = models.CharField(max_length=100, blank=True)
+    phone = models.CharField(max_length=15, blank=True)
+    information = models.TextField(max_length=500, blank=True)
+    user_avatar = models.ImageField(upload_to='users/', null=True, blank=True)
+    user_location = models.CharField(max_length=100, blank=True)
+    user_language = models.CharField(max_length=50, choices=LANGUAGE_CHOICES, blank=True, default='es')
+    image = models.ImageField(upload_to='users/', null=True, blank=True)
+    interests = models.ManyToManyField(Category, related_name='users', blank=True)
+
+    def __str__(self):
+        return f"{self.name} {self.lastname}"
+
+class Company(models.Model):
+    LANGUAGE_CHOICES = [
+        ('es', 'Español'),
+        ('en', 'English'),
+        ('fr', 'Français'),
+        ('de', 'Deutsch'),
+        # Agrega más idiomas según sea necesario
+    ]
+
+    name = models.CharField(max_length=50)
+    email = models.EmailField(unique=True)
+    password = models.CharField(max_length=128)  # Consider using a larger max_length for hashed passwords
+    phone = models.CharField(max_length=15, blank=True)
+    information = models.TextField(max_length=500, blank=True)
+    image = models.ImageField(upload_to='companies/', null=True, blank=True)
+    interests = models.ManyToManyField(Category, related_name='companies', blank=True)
+    company_avatar = models.ImageField(upload_to='companies/', null=True, blank=True)
+    company_location = models.CharField(max_length=100, blank=True)
+    company_language = models.CharField(max_length=50, choices=LANGUAGE_CHOICES, blank=True, default='es')
+
+    def __str__(self):
+        return self.name
+
 class Service(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=50)
@@ -60,29 +83,6 @@ class Service(models.Model):
 
     def __str__(self):
         return self.title
-    
-class Company(models.Model):
-    name = models.CharField(max_length=50)
-    email = models.EmailField(unique=True)
-    password = models.CharField(max_length=128)  # Consider using a larger max_length for hashed passwords
-    phone = models.CharField(max_length=15, blank=True)
-    information = models.TextField(max_length=500, blank=True)
-    image = models.ImageField(upload_to='companies/', null=True, blank=True)
-    interests = models.ManyToManyField('Category', related_name='companies', blank=True)
-    company_avatar = models.ImageField(upload_to='companies/', null=True, blank=True)
-    company_location = models.CharField(max_length=100, blank=True)
-    LANGUAGE_CHOICES = [
-        ('es', 'Español'),
-        ('en', 'English'),
-        ('fr', 'Français'),
-        ('de', 'Deutsch'),
-        # Agrega más idiomas según sea necesario
-    ]
-    company_language = models.CharField(max_length=50, choices=LANGUAGE_CHOICES, blank=True, default='es')
-
-    def __str__(self):
-        return self.name
-
 
 class Job(models.Model):
     title = models.CharField(max_length=50)
@@ -99,4 +99,3 @@ class Job(models.Model):
 
     def __str__(self):
         return self.title
-

@@ -4,7 +4,7 @@ import BotAvatar from "../chatbot/BotAvatar"; // Asegúrate de crear este compon
 const config = {
   botName: "TalentIA Assistant",
   initialMessages: [
-    createChatBotMessage("¡Hola! ¿En qué puedo ayudarte hoy?"),
+    createChatBotMessage("¡Hola! Bienvenido al chatbot de TalentIa! ¿en qué puedo ayudarte hoy?"),
   ],
   customStyles: {
     botMessageBox: {

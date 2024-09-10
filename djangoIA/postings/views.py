@@ -7,6 +7,7 @@ from django.db import models
 from .models import User, Category, Subcategory, Service, NestedCategory, Job, Company
 from .serializer import NestedcategorySerializer, UserSerializer, CategorySerializer, SubcategorySerializer, ServiceSerializer, JobSerializer, CompanySerializer
 
+# ViewSets
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
@@ -41,24 +42,7 @@ class CompanyViewSet(viewsets.ModelViewSet):
     queryset = Company.objects.all()
     serializer_class = CompanySerializer
 
-@api_view(['GET'])
-def services_by_subcategory(request, subcategory_id):
-    services = Service.objects.filter(subcategory_id=subcategory_id)
-    serializer = ServiceSerializer(services, many=True, context={'request': request})
-    return Response(serializer.data)
-
-@api_view(['GET'])
-def jobs_by_subcategory(request, subcategory_id):
-    jobs = Job.objects.filter(subcategory_id=subcategory_id)
-    serializer = JobSerializer(jobs, many=True, context={'request': request})
-    return Response(serializer.data)
-
-@api_view(['GET'])
-def subcategories_by_category(request, category_id):
-    subcategories = Subcategory.objects.filter(category_id=category_id)
-    serializer = SubcategorySerializer(subcategories, many=True)
-    return Response(serializer.data)
-
+# Funciones de ayuda
 def levenshtein_distance(s1, s2):
     if len(s1) < len(s2):
         return levenshtein_distance(s2, s1)
@@ -89,6 +73,26 @@ def find_best_match(query, terms, max_distance=2):
             best_match = term
             best_distance = distance
     return best_match
+
+# Vistas de API
+@api_view(['GET'])
+def services_by_subcategory(request, subcategory_id):
+    services = Service.objects.filter(subcategory_id=subcategory_id)
+    serializer = ServiceSerializer(services, many=True, context={'request': request})
+    return Response(serializer.data)
+
+@api_view(['GET'])
+def jobs_by_subcategory(request, subcategory_id):
+    jobs = Job.objects.filter(subcategory_id=subcategory_id)
+    serializer = JobSerializer(jobs, many=True, context={'request': request})
+    return Response(serializer.data)
+
+@api_view(['GET'])
+def subcategories_by_category(request, category_id):
+    subcategories = Subcategory.objects.filter(category_id=category_id)
+    serializer = SubcategorySerializer(subcategories, many=True)
+    return Response(serializer.data)
+
 @api_view(['GET'])
 def search_items(request):
     query = request.GET.get('q', '').strip()
