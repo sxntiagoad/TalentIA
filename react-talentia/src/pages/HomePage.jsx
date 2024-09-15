@@ -10,10 +10,12 @@ export function HomePage() {
   return (
     <div>
       <Navbar isAuthenticated={true} />
-      <Banner />
-      <CategoriesList />
-      <ItemsList isService={true} title={'Servicios'} />
-      <ItemsList isService={false} title={"Trabajos"} />
+      <div className="pt-24">
+        <Banner />
+        <CategoriesList />
+        <ItemsList isService={true} title={'Servicios'} />
+        <ItemsList isService={false} title={"Trabajos"} />
+      </div>
       <Footer />
     </div>
   );

@@ -38,9 +38,11 @@ function SubcategoryPage() {
   return (
     <div>
       <Navbar isAuthenticated={true} />
-      <h1>Servicios y trabajos en esta subcategoría</h1>
-      <ResultsGrid items={services} isService={true} title="Servicios disponibles" />
-      <ResultsGrid items={jobs} isService={false} title="Trabajos disponibles" />
+      <div className="pt-16">
+        <h1>Servicios y trabajos en esta subcategoría</h1>
+        <ResultsGrid items={services} isService={true} title="Servicios disponibles" />
+        <ResultsGrid items={jobs} isService={false} title="Trabajos disponibles" />
+      </div>
     </div>
   );
 }
