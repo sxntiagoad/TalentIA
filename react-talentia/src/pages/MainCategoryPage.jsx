@@ -41,30 +41,32 @@ export function MainCategoryPage() {
   return (
     <>
       <Navbar isAuthenticated={true} />
-      <div className="main-category-page">
-        <div 
-          className="rounded-lg h-56 bg-cover bg-center flex items-center justify-center mx-auto max-w-4xl"
-          style={{ backgroundImage: `url(${backgroundImage})` }}
-        >
-          <h1 className="text-white text-4xl font-bold">{categoryName}</h1>
-        </div>
+      <div className="pt-16">
+        <div className="main-category-page">
+          <div 
+            className="rounded-lg h-56 bg-cover bg-center flex items-center justify-center mx-auto max-w-4xl"
+            style={{ backgroundImage: `url(${backgroundImage})` }}
+          >
+            <h1 className="text-white text-4xl font-bold">{categoryName}</h1>
+          </div>
 
-        <div className="mt-8 mx-auto max-w-6xl">
-          <h2 className="text-2xl font-semibold mb-4">Subcategorías</h2>
-          {subcategories.length ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-              {subcategories.map((subcategory) => (
-                <Link to={`/subcategory/${subcategory.id}`} key={subcategory.id} className="flex flex-col items-center hover:opacity-80 transition-opacity">
-                  <div className="w-32 h-32 bg-purple-500 rounded-lg mb-2 flex items-center justify-center">
-                    <span className="text-white text-4xl">{subcategory.name.charAt(0)}</span>
-                  </div>
-                  <span className="text-lg text-center">{subcategory.name}</span>
-                </Link>
-              ))}
-            </div>
-          ) : (
-            <p className="text-center text-gray-500">No se encontraron subcategorías para esta categoría.</p>
-          )}
+          <div className="mt-8 mx-auto max-w-6xl">
+            <h2 className="text-2xl font-semibold mb-4">Subcategorías</h2>
+            {subcategories.length ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                {subcategories.map((subcategory) => (
+                  <Link to={`/subcategory/${subcategory.id}`} key={subcategory.id} className="flex flex-col items-center hover:opacity-80 transition-opacity">
+                    <div className="w-32 h-32 bg-purple-500 rounded-lg mb-2 flex items-center justify-center">
+                      <span className="text-white text-4xl">{subcategory.name.charAt(0)}</span>
+                    </div>
+                    <span className="text-lg text-center">{subcategory.name}</span>
+                  </Link>
+                ))}
+              </div>
+            ) : (
+              <p className="text-center text-gray-500">No se encontraron subcategorías para esta categoría.</p>
+            )}
+          </div>
         </div>
       </div>
     </>

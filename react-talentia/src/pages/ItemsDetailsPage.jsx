@@ -33,8 +33,10 @@ export function ItemDetailsPage({ isService = true }) {
 
   return (
     <>
-      <Navbar isAuthenticated={true} /> {/* Usamos el componente Navbar */}
-      <AboutItem item={item} isService={isService} />
+      <Navbar isAuthenticated={true} />
+      <div className="pt-16">
+        <AboutItem item={item} isService={isService} />
+      </div>
     </>
   );
 }

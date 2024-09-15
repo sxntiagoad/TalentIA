@@ -1,10 +1,9 @@
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import React, { useState } from "react";
-import { FaBell, FaEnvelope, FaUserCircle, FaBars, FaTimes, FaSearch } from "react-icons/fa";
+import { FaBell, FaEnvelope, FaUserCircle, FaSearch } from "react-icons/fa";
 import '../../index.css';
 import logo from "../../assets/logo.png";
 import { searchItems } from '../../api/Search.api';
-
 
 export function Navbar({ isAuthenticated = false }) {
   const [query, setQuery] = useState("");
@@ -41,7 +40,7 @@ export function Navbar({ isAuthenticated = false }) {
   };
 
   return (
-    <div className="p-4 flex justify-between items-center bg-white">
+    <div className="fixed top-0 left-0 w-full p-4 flex justify-between items-center bg-white bg-opacity-30 backdrop-blur-md z-50">
       <div className="flex items-center space-x-2">
         {/* Logo */}
         <img src={logo} alt="Logo" className="w-12 h-12" />
