@@ -23,13 +23,20 @@ Abre tu terminal y ejecuta el siguiente comando para clonar el repositorio:
 git clone https://github.com/sxntiagoad/TalentIA.git
 ```
 ### 2. Instalar Dependencias
-
 #### 2.1 Dependencias de Django
+Correr entorno virtual
+```sh
+cd TalentIA
+
+python -m venv venv
+venv\Sripts\activate
+```
+#### 2.2 Dependencias de Django
 Abrir una terminal y ejecutar el comando:
 ```sh
 pip install -r requirements.txt
 ```
-#### 2.2 Dependencias de React
+#### 2.3 Dependencias de React
 Abrir una terminal y ejecutar el comando:
 ```sh
 npm install
