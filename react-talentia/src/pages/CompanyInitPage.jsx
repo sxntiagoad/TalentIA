@@ -2,11 +2,11 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Navbar } from '../components/general/Navbar';
 import { Link } from 'react-router-dom';
-import initImage from '../assets/init.jpg';
+import companyInitImage from '../assets/company-init.jpg'; // Asegúrate de tener esta imagen
 import Footer from '../components/general/footer';
 import ChatBot from './ChatBot';
 
-function InitPage() {
+function CompanyInitPage() {
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -14,27 +14,27 @@ function InitPage() {
       exit={{ opacity: 0 }}
       transition={{ duration: 0.3 }} // Cambiado de 0.5 a 0.3
     >
-      <Navbar isAuthenticated={false} />
+      <Navbar isAuthenticated={false} isCompanyMode={true} />
       <div 
         className="relative h-screen bg-cover bg-center pt-16" 
-        style={{ backgroundImage: `url(${initImage})` }}
+        style={{ backgroundImage: `url(${companyInitImage})` }}
       >
         <div className="absolute inset-0 bg-black opacity-40"></div>
         
         <div className="relative z-10 flex flex-col justify-center items-start p-8 h-full text-white max-w-3xl">
-          <h1 className="text-4xl md:text-6xl font-bold mb-4">Encuentra el talento ideal para tu negocio y el trabajo ideal para ti</h1>
+          <h1 className="text-4xl md:text-6xl font-bold mb-4">Encuentra el talento perfecto para tu empresa</h1>
           <p className="text-lg md:text-xl mb-6 max-w-2xl">
-            El mercado freelance más grande del mundo. Encuentra la persona ideal para cualquier trabajo.
+            Conecta con profesionales calificados y lleva tu negocio al siguiente nivel.
           </p>
           <div className="flex space-x-4">
-            <Link to="/services">
-              <button className="bg-purple-800 hover:bg-purple-700 text-white font-bold py-4 px-8 rounded transition duration-300 ease-in-out transform hover:scale-105">
-                Buscar Servicios
+            <Link to="/post-job">
+              <button className="bg-green-600 hover:bg-green-700 text-white font-bold py-4 px-8 rounded transition duration-300 ease-in-out transform hover:scale-105">
+                Publicar Trabajo
               </button>
             </Link>
-            <Link to="/jobs">
-              <button className="bg-purple-800 hover:bg-purple-700 text-white font-bold py-4 px-8 rounded transition duration-300 ease-in-out transform hover:scale-105">
-                Buscar Trabajos
+            <Link to="/browse-talent">
+              <button className="bg-green-600 hover:bg-green-700 text-white font-bold py-4 px-8 rounded transition duration-300 ease-in-out transform hover:scale-105">
+                Buscar Talento
               </button>
             </Link>
           </div>
@@ -48,4 +48,4 @@ function InitPage() {
   );
 }
 
-export default InitPage;
+export default CompanyInitPage;

@@ -9,6 +9,14 @@ export default {
       fontFamily: {
         poppins: ['Poppins', 'sans-serif'],
       },
+      colors: {
+        green: {
+          500: '#10B981', // Color verde para el modo empresa
+        },
+        purple: {
+          500: '#8B5CF6', // Asegúrate de que este sea el tono de morado que estás usando
+        },
+      },
     },
   },
   plugins: [],

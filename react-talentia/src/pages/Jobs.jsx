@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import ResultsGrid from '../components/general/ResultsGrid'; // Importa tu componente para mostrar los resultados en forma de cuadrícula
 import { getAllJobs } from '../api/Services.api'; // Importa la función de los endpoints
-import Navbar from '../components/general/Navbar'; // Importa el componente Navbar
+import { Navbar } from '../components/general/Navbar'; // Cambiamos la importación
 
 function Jobs() {
   const [jobs, setJobs] = useState([]); // Estado para almacenar los trabajos
@@ -26,8 +26,8 @@ function Jobs() {
 
   return (
     <>
-      <Navbar />
-      <div className="pt-16">
+      <Navbar isAuthenticated={true} /> {/* Actualizamos la Navbar */}
+      <div className="pt-24"> {/* Ajustamos el padding top */}
         <div className="jobs-page">
           {loading ? (
             <p className="text-center">Cargando trabajos...</p>

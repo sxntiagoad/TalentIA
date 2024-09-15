@@ -1,11 +1,11 @@
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import React, { useState } from "react";
-import { FaBell, FaEnvelope, FaUserCircle, FaSearch } from "react-icons/fa";
+import { FaBell, FaEnvelope, FaUserCircle, FaSearch, FaExchangeAlt } from "react-icons/fa";
 import '../../index.css';
 import logo from "../../assets/logo.png";
 import { searchItems } from '../../api/Search.api';
 
-export function Navbar({ isAuthenticated = false }) {
+export function Navbar({ isAuthenticated = false, isCompanyMode = false }) {
   const [query, setQuery] = useState("");
   const [showError, setShowError] = useState(false);
   const navigate = useNavigate();
@@ -39,31 +39,35 @@ export function Navbar({ isAuthenticated = false }) {
     }
   };
 
+  const toggleMode = () => {
+    const nextPath = isCompanyMode ? '/' : '/company';
+    navigate(nextPath, { replace: true });
+  };
+
+  const themeColor = isCompanyMode ? 'green' : 'purple';
+
   return (
     <div className="fixed top-0 left-0 w-full p-4 flex justify-between items-center bg-white bg-opacity-30 backdrop-blur-md z-50">
       <div className="flex items-center space-x-2">
-        {/* Logo */}
         <img src={logo} alt="Logo" className="w-12 h-12" />
         <h1 className="font-bold text-3xl text-black">
           <Link to="/">TalentIA</Link>
         </h1>
       </div>
 
-      {/* Desktop Menu or Search Bar */}
       {isAuthenticated ? (
         <div className="flex items-center justify-between w-full ml-64">
-          {/* Centered Search Bar */}
           <div className="relative w-2/3">
             <input
               type="text"
               placeholder="Busca servicios y empleos"
-              className={`border ${showError ? 'border-red-500 animate-shake' : 'border-gray-300'} rounded-full px-4 py-2 w-full pr-16`}
+              className={`border ${showError ? 'border-red-500 animate-shake' : 'border-gray-300'} rounded-full px-4 py-2 w-full pr-16 transition-colors duration-300`}
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               onKeyPress={handleKeyPress}
             />
             <button
-              className="absolute right-0 top-0 bottom-0 px-4 bg-purple-500 text-white rounded-full"
+              className={`absolute right-0 top-0 bottom-0 px-4 bg-${themeColor}-600 text-white rounded-full shadow-md hover:bg-${themeColor}-700 transition-colors duration-300`}
               onClick={handleSearch}
             >
               <FaSearch />
@@ -73,62 +77,43 @@ export function Navbar({ isAuthenticated = false }) {
             )}
           </div>
 
-          {/* Icons aligned to the far right */}
           <div className="flex space-x-6 items-center">
-            <FaBell className="text-black w-6 h-6 cursor-pointer" />
-            <FaEnvelope className="text-black w-6 h-6 cursor-pointer" />
-            <FaUserCircle className="text-black w-6 h-6 cursor-pointer" />
+            <FaBell className="text-black w-6 h-6 cursor-pointer hover:text-gray-600 transition-colors duration-300" />
+            <FaEnvelope className="text-black w-6 h-6 cursor-pointer hover:text-gray-600 transition-colors duration-300" />
+            <FaUserCircle className="text-black w-6 h-6 cursor-pointer hover:text-gray-600 transition-colors duration-300" />
           </div>
         </div>
       ) : (
         <nav className="flex space-x-6">
           <ul className="flex space-x-6">
-            <li>
-              <Link
-                to="/"
-                className="hover:text-purple-500 transition-colors duration-300"
-              >
-                Inicio
-              </Link>
-            </li>
-            <li>
-              <Link
-                to="/servicios"
-                className="hover:text-purple-500 transition-colors duration-300"
-              >
-                Servicios
-              </Link>
-            </li>
-            <li>
-              <Link
-                to="/contacto"
-                className="hover:text-purple-500 transition-colors duration-300"
-              >
-                Contacto
-              </Link>
-            </li>
           </ul>
         </nav>
       )}
 
-      {/* Desktop Buttons */}
       {!isAuthenticated && (
-        <div className="flex space-x-4">
+        <div className="flex space-x-4 items-center">
           <a
-            href="/create-service"
-            className="border-purple-500 border-2 text-purple-500 font-bold py-2 px-4 rounded transition-colors duration-300 hover:bg-purple-500 hover:text-white"
+            href={isCompanyMode ? "/post-job" : "/create-service"}
+            className={`border-${themeColor}-600 border-2 text-${themeColor}-600 font-bold py-2 px-4 rounded shadow-md transition-colors duration-300 hover:bg-${themeColor}-600 hover:text-white`}
           >
-            Crear Servicio
+            {isCompanyMode ? "Publicar Trabajo" : "Crear Servicio"}
           </a>
-          <button className="border-purple-500 border-2 text-purple-500 font-bold py-2 px-4 rounded transition-colors duration-300 hover:bg-purple-500 hover:text-white">
+          <button className={`border-${themeColor}-600 border-2 text-${themeColor}-600 font-bold py-2 px-4 rounded shadow-md transition-colors duration-300 hover:bg-${themeColor}-600 hover:text-white`}>
             Iniciar Sesión
           </button>
           <a
             href="/user-form"
-            className="border-purple-500 border-2 text-purple-500 font-bold py-2 px-4 rounded transition-colors duration-300 hover:bg-purple-500 hover:text-white"
+            className={`border-${themeColor}-600 border-2 text-${themeColor}-600 font-bold py-2 px-4 rounded shadow-md transition-colors duration-300 hover:bg-${themeColor}-600 hover:text-white`}
           >
             Regístrate
           </a>
+          <button
+            onClick={toggleMode}
+            className={`bg-${themeColor}-600 text-white font-bold py-2 px-4 rounded shadow-md transition-colors duration-300 hover:bg-${themeColor}-700 flex items-center`}
+          >
+            <FaExchangeAlt className="mr-2" />
+            {isCompanyMode ? 'Modo Freelancer' : 'Modo Empresa'}
+          </button>
         </div>
       )}
     </div>

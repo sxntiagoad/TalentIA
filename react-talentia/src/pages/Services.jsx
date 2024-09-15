@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import ResultsGrid from '../components/general/ResultsGrid'; // Importa tu componente para mostrar los resultados en forma de cuadrícula
 import { getAllServices } from '../api/Services.api'; // Importa la función de los endpoints
-import Navbar from '../components/general/Navbar'; // Importa el componente Navbar
+import { Navbar } from '../components/general/Navbar'; // Cambiamos la importación
 
 function Services() {
   const [services, setServices] = useState([]); // Estado para almacenar los servicios
@@ -26,16 +26,16 @@ function Services() {
 
   return (
     <>
-      <Navbar />
-      <div className="pt-16">
-      <div className="services-page">
-        {loading ? (
-          <p className="text-center">Cargando servicios...</p>
-        ) : (
-          <ResultsGrid items={services} isService={true} title="Servicios" />
-        )}
+      <Navbar isAuthenticated={true} /> {/* Actualizamos la Navbar */}
+      <div className="pt-24"> {/* Ajustamos el padding top */}
+        <div className="services-page">
+          {loading ? (
+            <p className="text-center">Cargando servicios...</p>
+          ) : (
+            <ResultsGrid items={services} isService={true} title="Servicios" />
+          )}
+        </div>
       </div>
-    </div>
     </>
   );
 }

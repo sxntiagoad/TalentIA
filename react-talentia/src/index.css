@@ -60,8 +60,8 @@ body {
 }
 
 .react-chatbot-kit-chat-container {
-  width: 100% !important;
-  height: 100% !important;
+  width: 450px !important;
+  height: 400px !important; 
   background-color: transparent !important;
   position: relative !important;
   z-index: 1 !important;
@@ -79,6 +79,7 @@ body {
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1) !important;
   z-index: 1 !important;
   overflow: hidden !important;
+  height: 100% !important; 
 }
 
 .react-chatbot-kit-chat-header {
@@ -93,6 +94,7 @@ body {
   z-index: 3 !important;
   scrollbar-width: thin !important;
   scrollbar-color: rgba(157, 78, 221, 0.6) transparent !important;
+  height: calc(100% - 60px) !important;
 }
 
 .react-chatbot-kit-chat-message-container::-webkit-scrollbar {
