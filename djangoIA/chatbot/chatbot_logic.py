@@ -1,87 +1,67 @@
 import requests
-from langchain_community.llms import Ollama
-from postings.models import Job, Service
-from langchain_core.messages import HumanMessage, AIMessage
-from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
+import json
 
-# Inicializar el modelo de Llama 3 a través de Ollama
-llm = Ollama(model="llama3")
-chat_history = []
+api_key = ""
+url = "https://api.segmind.com/v1/claude-3-haiku"
 
-prompt_template = ChatPromptTemplate.from_messages(
-    [
-        (
-            "system",
-            """Eres una IA llamada TalentIa chatbot, creada para ayudarte a encontrar empleo y servicios freelancer.
-            Además, para extraer información del usuario primero preguntale su nombre, le preguntarás sobre qué tipo de trabajo o servicio busca y, con respecto a eso,
-            le seguirás preguntando algunas características para poder encontrar lo que busca. No debes dar respuestas tan largas.""",
-        ),
-        MessagesPlaceholder(variable_name="chat_history"),
-        ("human", "{input}"),
-    ]
-)
-chain = prompt_template | llm
-
-# Funciones de búsqueda en la base de datos
-def search_jobs(keywords):
-    query = Job.objects.all()
-    for keyword in keywords:
-        query = query.filter(title__icontains=keyword)
-    return query
-
-def search_services(keywords):
-    query = Service.objects.all()
-    for keyword in keywords:
-        query = query.filter(title__icontains=keyword)
-    return query
-
-# Funciones para extraer palabras clave
-def extract_job_keywords(text):
-    job_keywords = ["trabajo", "empleo", "puesto", "vacante", "contratar"]
-    keywords_found = [word for word in job_keywords if word in text.lower()]
-    return keywords_found if keywords_found else None
-
-def extract_service_keywords(text):
-    service_keywords = ["servicio", "freelancer", "trabajo independiente", "proyecto", "ayuda"]
-    keywords_found = [word for word in service_keywords if word in text.lower()]
-    return keywords_found if keywords_found else None
-
-# Procesamiento del mensaje del usuario
-def process_user_message(message, new_conversation=False):
-    global chat_history
-    if new_conversation:
-        chat_history = []
+def process_user_message(mensaje, nueva_conversacion=False):
+    historial_chat = []
     
-    response = chain.invoke({"input": message, "chat_history": chat_history})
+    if not nueva_conversacion:
+        # Aquí podrías cargar el historial de chat previo si lo tienes almacenado
+        pass
     
-    if response is None:
+    datos = {
+        "instruction": "Eres TalentIa chatbot, diseñado para ayudar a encontrar empleo y servicios freelancer. Recopila información del usuario y mantén tus respuestas concisas.",
+        "temperature": 0.1,
+        "messages": historial_chat + [
+            {
+                "role": "user",
+                "content": mensaje
+            }
+        ]
+    }
+
+    try:
+        headers = {
+            'x-api-key': api_key,
+            'Content-Type': 'application/json'
+        }
+        respuesta = requests.post(url, data=json.dumps(datos), headers=headers)
+        respuesta.raise_for_status()  # Esto lanzará una excepción si el código de estado HTTP es 4xx o 5xx
+        respuesta_json = respuesta.json()
+        print(respuesta_json)  # Imprime la respuesta completa para depuración
+        
+        # Ajuste para manejar la nueva estructura de la respuesta
+        if 'content' in respuesta_json and len(respuesta_json['content']) > 0:
+            contenido_respuesta = respuesta_json['content'][0]['text']
+        else:
+            contenido_respuesta = "No se recibió contenido válido en la respuesta."
+        
+        historial_chat.extend([
+            {
+                "role": "user",
+                "content": mensaje
+            },
+            {
+                "role": "assistant",
+                "content": contenido_respuesta
+            }
+        ])
+        
         return {
             'type': 'general',
-            'response': "Lo siento, no pude procesar tu mensaje. ¿Podrías intentarlo de nuevo?"
+            'response': contenido_respuesta
         }
-    
-    chat_history.append(HumanMessage(content=message))
-    chat_history.append(AIMessage(content=response))
-    
-    job_keywords = extract_job_keywords(response)
-    service_keywords = extract_service_keywords(response)
-    
-    if job_keywords:
-        jobs = search_jobs(job_keywords)
+    except requests.exceptions.RequestException as error:
+        print(f'Error: {error}')
+        print(f'Respuesta del servidor: {respuesta.text}')  # Agrega esta línea para imprimir la respuesta del servidor
         return {
-            'type': 'job_search',
-            'response': response,
-            'results': [{'title': job.title, 'description': job.description} for job in jobs]
+            'type': 'error',
+            'response': "Lo siento, ocurrió un error al procesar tu mensaje. Por favor, inténtalo de nuevo más tarde."
         }
-    elif service_keywords:
-        services = search_services(service_keywords)
-        return {
-            'type': 'service_search',
-            'response': response,
-            'results': [{'title': service.title, 'description': service.description} for service in services]
-        }
-    else:
-        return {
-            'type': 'general',
-            'response': response
-        }
+
+# Ejemplo de uso
+if __name__ == "__main__":
+    respuesta = process_user_message("Hola, estoy buscando trabajo como desarrollador.")
+    print(respuesta)
