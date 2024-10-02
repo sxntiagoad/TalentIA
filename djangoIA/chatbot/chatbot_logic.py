@@ -17,7 +17,7 @@ try:
 except Exception as e:
     logger.error(f"Error al descargar recursos NLTK: {e}")
 
-api_key = "SG_df0ee4c4f6ac8733"
+api_key = ""
 url = "https://api.segmind.com/v1/claude-3-haiku"
 
 memoria_temporal = []
@@ -85,8 +85,8 @@ def process_user_message(mensaje):
         resumen_db = obtener_resumen_base_de_datos()
         
         datos = {
-            "instruction": f"Eres TalentIa chatbot, diseñado para ayudar a encontrar empleo y servicios freelancer. {resumen_db} Responde al usuario basándote en esta información: {info_trabajos_servicios} y además de eso tienes que dar respuestas consisas y no muy largas y enfocate en la experiencia del usuario",
-            "temperature": 0.1,
+            "instruction": f"Eres TalentIa chatbot, diseñado para ayudar a encontrar empleo, trabajos y servicios freelancer. {resumen_db} Responde al usuario basándote en esta información: {info_trabajos_servicios}. Da respuestas concisas y relevantes. Si no hay resultados específicos, sugiere alternativas o pide más detalles sobre el tipo de trabajo que busca el usuario.",
+            "temperature": 0.3,
             "messages": memoria_temporal
         }
 
@@ -100,7 +100,7 @@ def process_user_message(mensaje):
         if 'content' in respuesta_json and respuesta_json['content']:
             contenido_respuesta = respuesta_json['content'][0]['text']
         else:
-            contenido_respuesta = "Lo siento, no pude procesar tu solicitud. Por favor, intenta de nuevo."
+            contenido_respuesta = "Lo siento, no pude procesar tu solicitud. Por favor, intenta de nuevo con más detalles sobre el tipo de trabajo que buscas."
         
         memoria_temporal.append({"role": "assistant", "content": contenido_respuesta})
         
