@@ -24,6 +24,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('postings/', include('postings.urls')),  # Incluye las URLs de la app postings
     path('api/', include('chatbot.urls')),  # Incluye las URLs de la app chatbot
+    path('auth/', include('authentication.urls')),  # Incluye las URLs de la app authentication
     
 ]
 

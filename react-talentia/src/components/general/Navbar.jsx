@@ -102,7 +102,7 @@ export function Navbar({ isAuthenticated = false, isCompanyMode = false }) {
             Iniciar Sesión
           </button>
           <a
-            href="/user-form"
+            href="/register"
             className={`border-${themeColor}-600 border-2 text-${themeColor}-600 font-bold py-2 px-4 rounded shadow-md transition-colors duration-300 hover:bg-${themeColor}-600 hover:text-white`}
           >
             Regístrate
