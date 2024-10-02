@@ -17,7 +17,7 @@ try:
 except Exception as e:
     logger.error(f"Error al descargar recursos NLTK: {e}")
 
-api_key = "SG_df0ee4c4f6ac8733"
+api_key = ""
 url = "https://api.segmind.com/v1/claude-3-haiku"
 
 memoria_temporal = []
