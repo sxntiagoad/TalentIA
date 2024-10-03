@@ -103,18 +103,23 @@ export function Navbar({ isAuthenticated = false, isCompanyMode = false }) {
           </div>
 
           <div className="flex space-x-6 items-center">
-            <FaBell className="text-black w-6 h-6 cursor-pointer hover:text-gray-600 transition-colors duration-300" />
-            <FaEnvelope className="text-black w-6 h-6 cursor-pointer hover:text-gray-600 transition-colors duration-300" />
+            <FaBell className="text-black w-8 h-8 cursor-pointer hover:text-gray-600 transition-colors duration-300" />
+            <FaEnvelope className="text-black w-8 h-8 cursor-pointer hover:text-gray-600 transition-colors duration-300" />
             <div className="relative" ref={userMenuRef}>
               <FaUserCircle 
-                className="text-black w-6 h-6 cursor-pointer hover:text-gray-600 transition-colors duration-300" 
+                className="text-black w-8 h-8 cursor-pointer hover:text-gray-600 transition-colors duration-300" 
                 onClick={toggleUserMenu}
               />
               {showUserMenu && (
-                <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-10">
-                  <Link to="/profile" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Perfil</Link>
-                  <Link to="/settings" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Configuración</Link>
-                  <button onClick={() => {/* Lógica de cierre de sesión */}} className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Cerrar sesión</button>
+                <div className="absolute right-0 mt-2 w-72 bg-white rounded-lg shadow-xl py-2 z-10">
+                  <Link to="/profile" className="block px-6 py-3 text-base text-gray-700 hover:bg-gray-100 transition-colors duration-200">Perfil</Link>
+                  <Link to="/settings" className="block px-6 py-3 text-base text-gray-700 hover:bg-gray-100 transition-colors duration-200">Configuración</Link>
+                  <button 
+                    onClick={() => {/* Lógica de cierre de sesión */}} 
+                    className="block w-full text-left px-6 py-3 text-base text-gray-700 hover:bg-gray-100 transition-colors duration-200"
+                  >
+                    Cerrar sesión
+                  </button>
                 </div>
               )}
             </div>
