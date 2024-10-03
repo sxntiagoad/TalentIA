@@ -9,7 +9,7 @@ const ProtectedRoutes = () => {
     return <div>Cargando...</div>;
   }
 
-  return user ? <Outlet /> : <Navigate to="/" />;
+  return user ? <Outlet /> : <Navigate to="/login" />;
 };
 
 export default ProtectedRoutes;
