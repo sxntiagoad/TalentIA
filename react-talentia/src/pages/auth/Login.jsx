@@ -19,9 +19,12 @@ export function Login() {
     setError('');
     try {
       const response = await loginApi(email, password);
-      localStorage.setItem('token', response.data.token); // Aplicación de localStorage.setItem('token', response.data.token);
-      login(response.data.user);
-      navigate('/home');
+      if (response.data && response.data.token) {
+        login(response.data.user, response.data.token);
+        navigate('/home');
+      } else {
+        throw new Error('No se recibió un token válido');
+      }
     } catch (error) {
       console.error('Error de inicio de sesión:', error);
       setError('Credenciales inválidas. Por favor, intente de nuevo.');

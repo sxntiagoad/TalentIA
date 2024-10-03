@@ -8,30 +8,31 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      getProfile()
-        .then(response => {
-          setUser(response.data.user);
-        })
-        .catch(() => {
+    const verifyToken = async () => {
+      const token = localStorage.getItem('token');
+      if (token) {
+        try {
+          const response = await getProfile();
+          setUser(response.data);
+        } catch (error) {
+          console.error('Error al verificar el token:', error);
           localStorage.removeItem('token');
-        })
-        .finally(() => {
-          setLoading(false);
-        });
-    } else {
+        }
+      }
       setLoading(false);
-    }
+    };
+
+    verifyToken();
   }, []);
 
-  const login = (userData) => {
+  const login = (userData, token) => {
     setUser(userData);
+    localStorage.setItem('token', token);
   };
 
   const logout = () => {
-    localStorage.removeItem('token');
     setUser(null);
+    localStorage.removeItem('token');
   };
 
   return (

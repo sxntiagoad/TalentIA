@@ -51,9 +51,15 @@ def logout(request):
     request.auth.delete()
     return Response({'message': 'Sesión cerrada exitosamente'}, status=status.HTTP_200_OK)
 
-@api_view(['POST'])
+from rest_framework.decorators import api_view, permission_classes, authentication_classes
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.response import Response
+from .serializers import UserSerializer
+
+@api_view(['GET'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def profile(request):
-    print(request.user)
-    return Response({'Estás logueado como usuario': request.user.username}, status=status.HTTP_200_OK)
+    serializer = UserSerializer(request.user)
+    return Response(serializer.data)

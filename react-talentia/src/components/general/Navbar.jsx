@@ -1,9 +1,10 @@
 import { Link, useNavigate } from "react-router-dom";
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useContext } from "react";
 import { FaBell, FaEnvelope, FaUserCircle, FaSearch, FaExchangeAlt } from "react-icons/fa";
 import '../../index.css';
 import logo from "../../assets/logo.png";
 import { searchItems } from '../../api/Search.api';
+import { AuthContext } from '../../context/AuthContext'; // Importación del contexto de autenticación
 
 export function Navbar({ isAuthenticated = false, isCompanyMode = false }) {
   const [query, setQuery] = useState("");
@@ -11,6 +12,7 @@ export function Navbar({ isAuthenticated = false, isCompanyMode = false }) {
   const [showUserMenu, setShowUserMenu] = useState(false);
   const navigate = useNavigate();
   const userMenuRef = useRef(null);
+  const { logout } = useContext(AuthContext); // Importación de la función de cierre de sesión desde el contexto de autenticación
 
   const handleSearch = async () => {
     if (query.trim()) {
@@ -56,6 +58,15 @@ export function Navbar({ isAuthenticated = false, isCompanyMode = false }) {
 
   const toggleUserMenu = () => {
     setShowUserMenu(!showUserMenu);
+  };
+
+  const handleLogout = async () => {
+    try {
+      await logout(); // Llamada a la función de cierre de sesión desde el contexto de autenticación
+      navigate('/login', { replace: true }); // Redirigir al usuario a la página de inicio de sesión después de cerrar sesión
+    } catch (error) {
+      console.error("Error al cerrar sesión:", error);
+    }
   };
 
   useEffect(() => {
@@ -115,7 +126,7 @@ export function Navbar({ isAuthenticated = false, isCompanyMode = false }) {
                   <Link to="/profile" className="block px-6 py-3 text-base text-gray-700 hover:bg-gray-100 font-bold transition-colors duration-200">Perfil</Link>
                   <Link to="/settings" className="block px-6 py-3 text-base text-gray-700 hover:bg-gray-100 font-bold transition-colors duration-200">Configuración</Link>
                   <button 
-                    onClick={() => {/* Lógica de cierre de sesión */}} 
+                    onClick={handleLogout} // Asignación de la función de cierre de sesión al botón
                     className="block w-full text-left px-6 py-3 text-base text-gray-700 hover:bg-gray-100 font-bold transition-colors duration-200"
                   >
                     Cerrar sesión
