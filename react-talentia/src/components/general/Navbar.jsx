@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { FaBell, FaEnvelope, FaUserCircle, FaSearch, FaExchangeAlt } from "react-icons/fa";
 import '../../index.css';
 import logo from "../../assets/logo.png";
@@ -8,7 +8,9 @@ import { searchItems } from '../../api/Search.api';
 export function Navbar({ isAuthenticated = false, isCompanyMode = false }) {
   const [query, setQuery] = useState("");
   const [showError, setShowError] = useState(false);
+  const [showUserMenu, setShowUserMenu] = useState(false);
   const navigate = useNavigate();
+  const userMenuRef = useRef(null);
 
   const handleSearch = async () => {
     if (query.trim()) {
@@ -52,6 +54,23 @@ export function Navbar({ isAuthenticated = false, isCompanyMode = false }) {
     navigate(path);
   };
 
+  const toggleUserMenu = () => {
+    setShowUserMenu(!showUserMenu);
+  };
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (userMenuRef.current && !userMenuRef.current.contains(event.target)) {
+        setShowUserMenu(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [userMenuRef]);
+
   return (
     <div className="fixed top-0 left-0 w-full p-4 flex justify-between items-center bg-white bg-opacity-30 backdrop-blur-md z-50">
       <div className="flex items-center space-x-2">
@@ -86,7 +105,19 @@ export function Navbar({ isAuthenticated = false, isCompanyMode = false }) {
           <div className="flex space-x-6 items-center">
             <FaBell className="text-black w-6 h-6 cursor-pointer hover:text-gray-600 transition-colors duration-300" />
             <FaEnvelope className="text-black w-6 h-6 cursor-pointer hover:text-gray-600 transition-colors duration-300" />
-            <FaUserCircle className="text-black w-6 h-6 cursor-pointer hover:text-gray-600 transition-colors duration-300" />
+            <div className="relative" ref={userMenuRef}>
+              <FaUserCircle 
+                className="text-black w-6 h-6 cursor-pointer hover:text-gray-600 transition-colors duration-300" 
+                onClick={toggleUserMenu}
+              />
+              {showUserMenu && (
+                <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-10">
+                  <Link to="/profile" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Perfil</Link>
+                  <Link to="/settings" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Configuración</Link>
+                  <button onClick={() => {/* Lógica de cierre de sesión */}} className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Cerrar sesión</button>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       ) : (
