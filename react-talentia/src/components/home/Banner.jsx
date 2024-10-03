@@ -139,7 +139,7 @@ export function Banner() {
               Volver
             </button>
           </div>
-          <div className="flex-grow overflow-hidden">
+          <div className="flex-grow overflow-hidden" style={{ maxHeight: '400px', minHeight: '700px' }}>
             <Chatbot
               config={config}
               messageParser={MessageParser}

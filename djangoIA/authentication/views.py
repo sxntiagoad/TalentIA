@@ -15,9 +15,10 @@ from .models import CustomUser, Company, Freelancer
 
 @api_view(['POST'])
 def login(request):
-    user=get_object_or_404(User, username=request.data['username'])
+    
+    user = get_object_or_404(User, email=request.data['email'])  # Cambiado a email
     if not user.check_password(request.data['password']):
-        return Response({'message': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
+        return Response({'message': 'Credenciales inválidas'}, status=status.HTTP_401_UNAUTHORIZED)
     token, created = Token.objects.get_or_create(user=user)
     serializer = UserSerializer(instance=user)
 
@@ -48,11 +49,11 @@ def register(request):
 @permission_classes([IsAuthenticated])
 def logout(request):
     request.auth.delete()
-    return Response({'message': 'Successfully logged out'}, status=status.HTTP_200_OK)
+    return Response({'message': 'Sesión cerrada exitosamente'}, status=status.HTTP_200_OK)
 
 @api_view(['POST'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def profile(request):
     print(request.user)
-    return Response({'You are login with user': request.user.username}, status=status.HTTP_200_OK)
+    return Response({'Estás logueado como usuario': request.user.username}, status=status.HTTP_200_OK)

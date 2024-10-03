@@ -4,7 +4,6 @@ import { Navbar } from '../components/general/Navbar';
 import { Link } from 'react-router-dom';
 import companyInitImage from '../assets/company-init.jpg'; // Asegúrate de tener esta imagen
 import Footer from '../components/general/footer';
-import ChatBot from './ChatBot';
 
 function CompanyInitPage() {
   return (
@@ -39,9 +38,6 @@ function CompanyInitPage() {
             </Link>
           </div>
         </div>
-      </div>
-      <div className="fixed bottom-4 right-4 z-50">
-        <ChatBot />
       </div>
       <Footer />
     </motion.div>

@@ -2,8 +2,8 @@ import axios from 'axios';
 
 const API_URL = 'http://localhost:8000/auth/';
 
-export const login = (username, password) => {
-  return axios.post(API_URL + 'login', { username, password });
+export const login = (email, password) => {
+  return axios.post(API_URL + 'login', { email, password });
 };
 
 export const register = (registrationData) => {
@@ -21,4 +21,3 @@ export const getProfile = () => {
     headers: { Authorization: `Token ${localStorage.getItem('token')}` }
   });
 };
-

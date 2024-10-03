@@ -10,7 +10,7 @@ import { login as loginApi } from '../../api/Auth.api';
 export function Login() {
   const { login } = useContext(AuthContext);
   const navigate = useNavigate();
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
@@ -18,8 +18,8 @@ export function Login() {
     e.preventDefault();
     setError('');
     try {
-      const response = await loginApi(username, password);
-      localStorage.setItem('token', response.data.token);
+      const response = await loginApi(email, password);
+      localStorage.setItem('token', response.data.token); // Aplicación de localStorage.setItem('token', response.data.token);
       login(response.data.user);
       navigate('/home');
     } catch (error) {
@@ -54,10 +54,10 @@ export function Login() {
             <div>
               <div className="relative h-11 w-full">
                 <input
-                  type="text"
-                  placeholder="Nombre de usuario"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
+                  type="email"
+                  placeholder="Correo electrónico"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   className="peer h-full w-full rounded-md border border-blue-gray-200 bg-transparent px-3 py-3 text-sm text-blue-gray-700 outline-none transition-all focus:border-1 focus:border-gray-900"
                   required
                 />

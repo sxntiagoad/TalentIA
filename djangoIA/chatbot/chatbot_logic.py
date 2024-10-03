@@ -5,6 +5,11 @@ from postings.models import Job, Service, Category
 from django.db.models import Q
 import nltk
 from nltk.corpus import stopwords
+import os
+from dotenv import load_dotenv
+
+# Cargar variables de entorno
+load_dotenv()
 
 # Configuración de logging
 logging.basicConfig(level=logging.INFO)
@@ -17,7 +22,8 @@ try:
 except Exception as e:
     logger.error(f"Error al descargar recursos NLTK: {e}")
 
-api_key = ""
+# Obtener la API key del archivo .env
+api_key = os.getenv("API_KEY")
 url = "https://api.segmind.com/v1/claude-3-haiku"
 
 memoria_temporal = []

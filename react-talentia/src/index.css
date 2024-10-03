@@ -60,13 +60,14 @@ body {
 }
 
 .react-chatbot-kit-chat-container {
-  width: 450px !important;
-  height: 400px !important; 
+  width: 750px !important;
+  height: 370px !important; 
   background-color: transparent !important;
   position: relative !important;
   z-index: 1 !important;
   display: flex !important;
   flex-direction: column !important;
+  margin-left: 1cm; /* Mueve el chatbot 1 centímetro a la derecha */
 }
 
 .react-chatbot-kit-chat-inner-container {
