@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { UserForm } from '../../components/UserForm';
 import backgroundImage from '../../assets/init.jpg';
 import { motion } from 'framer-motion';
@@ -10,21 +10,33 @@ import { register } from '../../api/Auth.api';
 export function Register() {
   const { login } = useContext(AuthContext);
   const navigate = useNavigate();
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const userType = searchParams.get('type') || 'freelancer';
 
   const handleSubmit = async (data) => {
     try {
-      const response = await register(data.username, data.email, data.password);
+      const registrationData = {
+        username: data.username,
+        email: data.email,
+        password: data.password,
+        custom_user: {
+          type_user: userType
+        }
+      };
+      console.log('Datos de registro:', registrationData); // Para depuración
+      const response = await register(registrationData);
       localStorage.setItem('token', response.data.token);
       login(response.data.user);
       navigate('/home');
     } catch (error) {
-      console.error('Registration failed:', error);
+      console.error('Registration failed:', error.response?.data || error.message);
     }
   };
 
   return (
     <>
-      <Navbar isAuthenticated={false} />
+      <Navbar isAuthenticated={false} isCompanyMode={userType === 'company'} />
       <div className="min-h-screen flex items-center justify-center" 
            style={{backgroundImage: `url(${backgroundImage})`, backgroundSize: 'cover', backgroundPosition: 'center'}}>
         <motion.div 
@@ -33,7 +45,7 @@ export function Register() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <UserForm onSubmit={handleSubmit} />
+          <UserForm onSubmit={handleSubmit} userType={userType} />
         </motion.div>
       </div>
     </>

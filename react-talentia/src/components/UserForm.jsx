@@ -1,7 +1,13 @@
+import React from 'react';
 import { useForm } from "react-hook-form";
 import logo from "../assets/logo.png";
-export function UserForm({ onSubmit }) {
+
+export function UserForm({ onSubmit, userType }) {
 const { register, handleSubmit, formState: { errors } } = useForm();
+
+const handleFormSubmit = (data) => {
+onSubmit({ ...data, userType });
+};
 
 return (
 <div>
@@ -10,11 +16,13 @@ return (
         <img src={logo} alt="Logo" className="w-20 h-20" />
     </div>
     
-    <h4 className="text-2xl font-semibold text-blue-gray-900 mb-4 text-center">Registrarse</h4>
-    <p className="text-base text-gray-700 mb-6">
+    <h4 className="text-2xl font-semibold text-blue-gray-900 mb-4 text-center">
+      Registrarse como {userType === "company" ? "Compañía" : "Freelancer"}
+    </h4>
+    <p className="text-base text-white mb-3">
     Bienvenido al registro de usuario de TalentIA!
     </p>
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+    <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-6">
     <div>
         <div className="relative h-11 w-full">
         <input
@@ -65,7 +73,7 @@ return (
     </button>
     </form>
     <p className="text-sm text-center text-blue-gray-500 mt-4">
-    ¿Ya tienes una cuenta? <a href="/login" className="text-purple-900">Inicia sesión</a>
+    ¿Ya tienes una cuenta? <a href="/login" className="text-white">Inicia sesión</a>
     </p>
 </div>
 );

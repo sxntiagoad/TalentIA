@@ -9,6 +9,8 @@ from django.shortcuts import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import permission_classes, authentication_classes
 from rest_framework.authentication import TokenAuthentication
+from .serializers import UserSerializer, CompanySerializer, FreelancerSerializer
+from .models import CustomUser, Company, Freelancer
 # Create your views here.
 
 @api_view(['POST'])
@@ -24,19 +26,21 @@ def login(request):
 @api_view(['POST'])
 def register(request):
     serializer = UserSerializer(data=request.data)
-
     if serializer.is_valid():
         user = serializer.save()
-        user.set_password(serializer.validated_data['password'])
-        user.save()
-
         token = Token.objects.create(user=user)
-        print("user", user)
+        
+        # Crear Company o Freelancer según el type_user
+        custom_user = CustomUser.objects.get(user=user)
+        if custom_user.type_user == 'company':
+            Company.objects.create(user=custom_user)
+        elif custom_user.type_user == 'freelancer':
+            Freelancer.objects.create(user=custom_user)
+        print(user)
         return Response({
             'token': token.key, 
             'user': UserSerializer(user).data
         }, status=status.HTTP_201_CREATED)
-        
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['POST'])

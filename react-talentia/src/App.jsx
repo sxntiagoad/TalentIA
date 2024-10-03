@@ -15,6 +15,7 @@ import Services from "./pages/Services";
 import Jobs from "./pages/Jobs";
 import CompanyInitPage from './pages/CompanyInitPage';
 import Register from './pages/auth/Register';
+import Login from './pages/auth/Login';
 
 function App() {
   return (
@@ -24,6 +25,8 @@ function App() {
           <Routes>
             <Route path="/" element={<InitPage />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/company" element={<CompanyInitPage />} />
             <Route path="/services" element={<Services />} />
             <Route path="/jobs" element={<Jobs />} />
             <Route element={<ProtectedRoutes />}>
@@ -33,7 +36,6 @@ function App() {
               <Route path="/subcategory/:id" element={<SubcategoryPage />} />
               <Route path="/search" element={<SearchPage />} />
               <Route path="/category/:id" element={<MainCategoryPage />} />
-              <Route path="/company" element={<CompanyInitPage />} />
             </Route>
           </Routes>
         </AnimatePresence>

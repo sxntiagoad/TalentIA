@@ -46,6 +46,12 @@ export function Navbar({ isAuthenticated = false, isCompanyMode = false }) {
 
   const themeColor = isCompanyMode ? 'green' : 'purple';
 
+  const handleAuth = (action) => {
+    const userType = isCompanyMode ? 'company' : 'freelancer';
+    const path = `/${action}?type=${userType}`;
+    navigate(path);
+  };
+
   return (
     <div className="fixed top-0 left-0 w-full p-4 flex justify-between items-center bg-white bg-opacity-30 backdrop-blur-md z-50">
       <div className="flex items-center space-x-2">
@@ -92,21 +98,19 @@ export function Navbar({ isAuthenticated = false, isCompanyMode = false }) {
 
       {!isAuthenticated && (
         <div className="flex space-x-4 items-center">
-          <a
-            href={isCompanyMode ? "/post-job" : "/create-service"}
+          
+          <button 
+            onClick={() => handleAuth('login')}
             className={`border-${themeColor}-600 border-2 text-${themeColor}-600 font-bold py-2 px-4 rounded shadow-md transition-colors duration-300 hover:bg-${themeColor}-600 hover:text-white`}
           >
-            {isCompanyMode ? "Publicar Trabajo" : "Crear Servicio"}
-          </a>
-          <button className={`border-${themeColor}-600 border-2 text-${themeColor}-600 font-bold py-2 px-4 rounded shadow-md transition-colors duration-300 hover:bg-${themeColor}-600 hover:text-white`}>
             Iniciar Sesión
           </button>
-          <a
-            href="/register"
+          <button
+            onClick={() => handleAuth('register')}
             className={`border-${themeColor}-600 border-2 text-${themeColor}-600 font-bold py-2 px-4 rounded shadow-md transition-colors duration-300 hover:bg-${themeColor}-600 hover:text-white`}
           >
             Regístrate
-          </a>
+          </button>
           <button
             onClick={toggleMode}
             className={`bg-${themeColor}-600 text-white font-bold py-2 px-4 rounded shadow-md transition-colors duration-300 hover:bg-${themeColor}-700 flex items-center`}
