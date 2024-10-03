@@ -112,11 +112,11 @@ export function Navbar({ isAuthenticated = false, isCompanyMode = false }) {
               />
               {showUserMenu && (
                 <div className="absolute right-0 mt-2 w-72 bg-white rounded-lg shadow-xl py-2 z-10">
-                  <Link to="/profile" className="block px-6 py-3 text-base text-gray-700 hover:bg-gray-100 transition-colors duration-200">Perfil</Link>
-                  <Link to="/settings" className="block px-6 py-3 text-base text-gray-700 hover:bg-gray-100 transition-colors duration-200">Configuración</Link>
+                  <Link to="/profile" className="block px-6 py-3 text-base text-gray-700 hover:bg-gray-100 font-bold transition-colors duration-200">Perfil</Link>
+                  <Link to="/settings" className="block px-6 py-3 text-base text-gray-700 hover:bg-gray-100 font-bold transition-colors duration-200">Configuración</Link>
                   <button 
                     onClick={() => {/* Lógica de cierre de sesión */}} 
-                    className="block w-full text-left px-6 py-3 text-base text-gray-700 hover:bg-gray-100 transition-colors duration-200"
+                    className="block w-full text-left px-6 py-3 text-base text-gray-700 hover:bg-gray-100 font-bold transition-colors duration-200"
                   >
                     Cerrar sesión
                   </button>
