@@ -41,21 +41,12 @@ Abrir una terminal y ejecutar el comando:
 ```sh
 npm install
 ```
-### 3. Configuración de Ollama y Llama 3
+### 3. Configuración de la api key
+Solicitar el .env a los colaboradores del proyecto
+```sh
+.env
+```
 
-#### 3.1 Instalación de Ollama
-
-Sigue estos pasos para instalar Ollama:
-
-1. **Descarga e instala Ollama** desde el [sitio web de Ollama](https://ollama.com/). Sigue las instrucciones específicas para tu sistema operativo.
-2. **Configura Ollama** siguiendo la [documentación oficial de Ollama](https://ollama.com/docs).
-
-#### 3.2 Instalación de Llama 3
-
-Sigue estos pasos para instalar Llama 3:
-
-1. **Descarga Llama 3** desde el [repositorio oficial](https://www.llama3.org/) o la [página de descarga](https://www.llama3.org/download).
-2. **Instala Llama 3** siguiendo las instrucciones proporcionadas en la [documentación de Llama 3](https://www.llama3.org/docs).
 
 ### 4. Correr los Servidores
 
