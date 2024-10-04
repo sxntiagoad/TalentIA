@@ -17,3 +17,19 @@ export const getServicesBySubcategory = (subcategoryId) => {
 export const getJobsBySubcategory = (subcategoryId) => {
     return axios.get(`http://localhost:8000/postings/api/v1/jobs/subcategory/${subcategoryId}/`)
 }
+
+export const createService = (serviceData) => {
+    return axios.post('http://localhost:8000/postings/api/v1/services/', serviceData, {
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        }
+    });
+}
+
+export const createJob = (jobData) => {
+    return axios.post('http://localhost:8000/postings/api/v1/jobs/', jobData, {
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        }
+    });
+}
