@@ -9,6 +9,12 @@ const handleFormSubmit = (data) => {
 onSubmit({ ...data, userType });
 };
 
+const isCompany = userType === "company";
+const primaryColor = isCompany ? 'green' : 'purple';
+const textColor = isCompany ? 'text-green-100' : 'text-purple-100';
+const buttonColor = isCompany ? 'bg-green-700 hover:bg-green-600' : 'bg-purple-700 hover:bg-purple-600';
+const linkColor = isCompany ? 'text-green-300' : 'text-purple-300';
+
 return (
 <div>
 
@@ -16,20 +22,20 @@ return (
         <img src={logo} alt="Logo" className="w-20 h-20" />
     </div>
     
-    <h4 className="text-2xl font-semibold text-blue-gray-900 mb-4 text-center">
-      Registrarse como {userType === "company" ? "Compañía" : "Freelancer"}
+    <h4 className={`text-2xl font-semibold ${textColor} mb-4 text-center`}>
+      Registrarse como {isCompany ? "Compañía" : "Freelancer"}
     </h4>
-    <p className="text-base text-white mb-3">
-    Bienvenido al registro de usuario de TalentIA!
+    <p className={`text-base ${textColor} mb-3`}>
+    Bienvenido al registro de {isCompany ? "Compañía" : "Freelancer"} de TalentIA!
     </p>
     <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-6">
     <div>
         <div className="relative h-11 w-full">
         <input
             type="text"
-            placeholder="Username"
+            placeholder={isCompany ? "Nombre empresa" : "Username"}
             {...register("username", { required: true })}
-            className={`peer h-full w-full rounded-md border ${errors.username ? 'border-red-500' : 'border-blue-gray-200'} bg-transparent px-3 py-3 text-sm text-blue-gray-700 outline-none transition-all focus:border-1 focus:border-gray-900`}
+            className={`peer h-full w-full rounded-md border ${errors.username ? 'border-red-500' : `border-${primaryColor}-300`} bg-transparent px-3 py-3 ${textColor} outline-none transition-all focus:border-1 focus:border-${primaryColor}-500`}
         />
         <div className="h-5">
         {errors.username && <span className="text-red-500 text-sm">Obligatorio</span>}
@@ -43,7 +49,7 @@ return (
             type="email"
             placeholder="Email"
             {...register("email", { required: true })}
-            className={`peer h-full w-full rounded-md border ${errors.email ? 'border-red-500' : 'border-blue-gray-200'} bg-transparent px-3 py-3 text-sm text-blue-gray-700 outline-none transition-all focus:border-1 focus:border-gray-900`}
+            className={`peer h-full w-full rounded-md border ${errors.email ? 'border-red-500' : `border-${primaryColor}-300`} bg-transparent px-3 py-3 ${textColor} outline-none transition-all focus:border-1 focus:border-${primaryColor}-500`}
         />
         <div className="h-5">
         {errors.email && <span className="text-red-500 text-sm">Ingrese una dirección de correo electrónico</span>}
@@ -57,7 +63,7 @@ return (
             type="password"
             placeholder="Contraseña"
             {...register("password", { required: true })}
-            className={`peer h-full w-full rounded-md border ${errors.password ? 'border-red-500' : 'border-blue-gray-200'} bg-transparent px-3 py-3 text-sm text-blue-gray-700 outline-none transition-all focus:border-1 focus:border-gray-900`}
+            className={`peer h-full w-full rounded-md border ${errors.password ? 'border-red-500' : `border-${primaryColor}-300`} bg-transparent px-3 py-3 ${textColor} outline-none transition-all focus:border-1 focus:border-${primaryColor}-500`}
         />
         <div className="h-5">
         {errors.password && <span className="text-red-500 text-sm">Introduzca una contraseña</span>}
@@ -67,13 +73,13 @@ return (
 
     <button
         type="submit"
-        className="block w-full bg-purple-900 text-white font-bold py-3 rounded-lg transition-all hover:bg-purple-700"
+        className={`block w-full ${buttonColor} ${textColor} font-bold py-3 rounded-lg transition-all`}
     >
         Únete a TalentIA
     </button>
     </form>
-    <p className="text-sm text-center text-blue-gray-500 mt-4">
-    ¿Ya tienes una cuenta? <a href="/login" className="text-white">Inicia sesión</a>
+    <p className={`text-sm text-center ${textColor} mt-4`}>
+    ¿Ya tienes una cuenta? <a href="/login" className={linkColor}>Inicia sesión</a>
     </p>
 </div>
 );

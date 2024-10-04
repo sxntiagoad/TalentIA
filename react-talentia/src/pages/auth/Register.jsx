@@ -1,7 +1,8 @@
 import React, { useContext } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { UserForm } from '../../components/UserForm';
-import backgroundImage from '../../assets/init.jpg';
+import backgroundImageFreelancer from '../../assets/init.jpg';
+import backgroundImageCompany from '../../assets/company-init.jpg';
 import { motion } from 'framer-motion';
 import Navbar from '../../components/general/Navbar';
 import { AuthContext } from '../../context/AuthContext';
@@ -13,6 +14,8 @@ export function Register() {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const userType = searchParams.get('type') || 'freelancer';
+
+  const backgroundImage = userType === 'company' ? backgroundImageCompany : backgroundImageFreelancer;
 
   const handleSubmit = async (data) => {
     try {

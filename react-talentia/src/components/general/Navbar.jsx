@@ -4,15 +4,15 @@ import { FaBell, FaEnvelope, FaUserCircle, FaSearch, FaExchangeAlt } from "react
 import '../../index.css';
 import logo from "../../assets/logo.png";
 import { searchItems } from '../../api/Search.api';
-import { AuthContext } from '../../context/AuthContext'; // Importación del contexto de autenticación
+import { AuthContext } from '../../context/AuthContext';
 
-export function Navbar({ isAuthenticated = false, isCompanyMode = false }) {
+export function Navbar({ isAuthenticated = false, isCompanyMode = false, hideSearch = false }) {
   const [query, setQuery] = useState("");
   const [showError, setShowError] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
   const navigate = useNavigate();
   const userMenuRef = useRef(null);
-  const { logout } = useContext(AuthContext); // Importación de la función de cierre de sesión desde el contexto de autenticación
+  const { logout, user } = useContext(AuthContext);
 
   const handleSearch = async () => {
     if (query.trim()) {
@@ -62,8 +62,12 @@ export function Navbar({ isAuthenticated = false, isCompanyMode = false }) {
 
   const handleLogout = async () => {
     try {
-      await logout(); // Llamada a la función de cierre de sesión desde el contexto de autenticación
-      navigate('/login', { replace: true }); // Redirigir al usuario a la página de inicio de sesión después de cerrar sesión
+      await logout();
+      if (isCompanyMode || user?.type === 'company') {
+        navigate('/company', { replace: true });
+      } else {
+        navigate('/', { replace: true });
+      }
     } catch (error) {
       console.error("Error al cerrar sesión:", error);
     }
@@ -87,13 +91,13 @@ export function Navbar({ isAuthenticated = false, isCompanyMode = false }) {
       <div className="flex items-center space-x-2">
         <img src={logo} alt="Logo" className="w-12 h-12" />
         <h1 className="font-bold text-3xl text-black">
-          <Link to="/">TalentIA</Link>
+          <Link to={isCompanyMode ? "/company" : "/"}>TalentIA</Link>
         </h1>
       </div>
 
-      {isAuthenticated ? (
-        <div className="flex items-center justify-between w-full ml-64">
-          <div className="relative w-2/3">
+      {isAuthenticated && !hideSearch && (
+        <div className="flex items-center justify-center w-1/2 mx-auto">
+          <div className="relative w-full">
             <input
               type="text"
               placeholder="Busca servicios y empleos"
@@ -112,40 +116,36 @@ export function Navbar({ isAuthenticated = false, isCompanyMode = false }) {
               <p className="absolute text-red-500 text-xs mt-1">Por favor, ingresa una consulta de búsqueda.</p>
             )}
           </div>
+        </div>
+      )}
 
-          <div className="flex space-x-6 items-center">
-            <FaBell className="text-black w-8 h-8 cursor-pointer hover:text-gray-600 transition-colors duration-300" />
-            <FaEnvelope className="text-black w-8 h-8 cursor-pointer hover:text-gray-600 transition-colors duration-300" />
-            <div className="relative" ref={userMenuRef}>
-              <FaUserCircle 
-                className="text-black w-8 h-8 cursor-pointer hover:text-gray-600 transition-colors duration-300" 
-                onClick={toggleUserMenu}
-              />
-              {showUserMenu && (
-                <div className="absolute right-0 mt-2 w-72 bg-white rounded-lg shadow-xl py-2 z-10">
-                  <Link to="/profile" className="block px-6 py-3 text-base text-gray-700 hover:bg-gray-100 font-bold transition-colors duration-200">Perfil</Link>
-                  <Link to="/settings" className="block px-6 py-3 text-base text-gray-700 hover:bg-gray-100 font-bold transition-colors duration-200">Configuración</Link>
-                  <button 
-                    onClick={handleLogout} // Asignación de la función de cierre de sesión al botón
-                    className="block w-full text-left px-6 py-3 text-base text-gray-700 hover:bg-gray-100 font-bold transition-colors duration-200"
-                  >
-                    Cerrar sesión
-                  </button>
-                </div>
-              )}
-            </div>
+      {isAuthenticated && (
+        <div className="flex space-x-6 items-center">
+          <FaBell className="text-black w-8 h-8 cursor-pointer hover:text-gray-600 transition-colors duration-300" />
+          <FaEnvelope className="text-black w-8 h-8 cursor-pointer hover:text-gray-600 transition-colors duration-300" />
+          <div className="relative" ref={userMenuRef}>
+            <FaUserCircle 
+              className="text-black w-8 h-8 cursor-pointer hover:text-gray-600 transition-colors duration-300" 
+              onClick={toggleUserMenu}
+            />
+            {showUserMenu && (
+              <div className="absolute right-0 mt-2 w-72 bg-white rounded-lg shadow-xl py-2 z-10">
+                <Link to="/profile" className="block px-6 py-3 text-base text-gray-700 hover:bg-gray-100 font-bold transition-colors duration-200">Perfil</Link>
+                <Link to="/settings" className="block px-6 py-3 text-base text-gray-700 hover:bg-gray-100 font-bold transition-colors duration-200">Configuración</Link>
+                <button 
+                  onClick={handleLogout}
+                  className="block w-full text-left px-6 py-3 text-base text-gray-700 hover:bg-gray-100 font-bold transition-colors duration-200"
+                >
+                  Cerrar sesión
+                </button>
+              </div>
+            )}
           </div>
         </div>
-      ) : (
-        <nav className="flex space-x-6">
-          <ul className="flex space-x-6">
-          </ul>
-        </nav>
       )}
 
       {!isAuthenticated && (
         <div className="flex space-x-4 items-center">
-          
           <button 
             onClick={() => handleAuth('login')}
             className={`border-${themeColor}-600 border-2 text-${themeColor}-600 font-bold py-2 px-4 rounded shadow-md transition-colors duration-300 hover:bg-${themeColor}-600 hover:text-white`}

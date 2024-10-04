@@ -1,20 +1,23 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { motion } from 'framer-motion';
 import { Navbar } from '../components/general/Navbar';
 import { Link } from 'react-router-dom';
 import initImage from '../assets/init.jpg';
 import Footer from '../components/general/footer';
 import ChatBot from './ChatBot';
+import { AuthContext } from '../context/AuthContext';
 
 function InitPage() {
+  const { user } = useContext(AuthContext);
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      transition={{ duration: 0.3 }} // Cambiado de 0.5 a 0.3
+      transition={{ duration: 0.3 }}
     >
-      <Navbar isAuthenticated={false} />
+      <Navbar isAuthenticated={!!user} hideSearch={true} />
       <div 
         className="relative h-screen bg-cover bg-center pt-16" 
         style={{ backgroundImage: `url(${initImage})` }}
@@ -27,16 +30,26 @@ function InitPage() {
             El mercado freelance más grande del mundo. Encuentra la persona ideal para cualquier trabajo.
           </p>
           <div className="flex space-x-4">
-            <Link to="/services">
-              <button className="bg-purple-800 hover:bg-purple-700 text-white font-bold py-4 px-8 rounded transition duration-300 ease-in-out transform hover:scale-105">
-                Buscar Servicios
-              </button>
-            </Link>
-            <Link to="/jobs">
-              <button className="bg-purple-800 hover:bg-purple-700 text-white font-bold py-4 px-8 rounded transition duration-300 ease-in-out transform hover:scale-105">
-                Buscar Trabajos
-              </button>
-            </Link>
+            {user ? (
+              <Link to="/home">
+                <button className="bg-purple-800 hover:bg-purple-700 text-white font-bold py-4 px-8 rounded transition duration-300 ease-in-out transform hover:scale-105">
+                  Ingresar
+                </button>
+              </Link>
+            ) : (
+              <>
+                <Link to="/services">
+                  <button className="bg-purple-800 hover:bg-purple-700 text-white font-bold py-4 px-8 rounded transition duration-300 ease-in-out transform hover:scale-105">
+                    Buscar Servicios
+                  </button>
+                </Link>
+                <Link to="/jobs">
+                  <button className="bg-purple-800 hover:bg-purple-700 text-white font-bold py-4 px-8 rounded transition duration-300 ease-in-out transform hover:scale-105">
+                    Buscar Trabajos
+                  </button>
+                </Link>
+              </>
+            )}
           </div>
         </div>
       </div>

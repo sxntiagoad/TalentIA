@@ -105,7 +105,7 @@ export function Banner() {
                 }}
                 onClick={toggleChatbot} // Al hacer clic, mostramos el chatbot
               >
-                Encontrar mi trabajo y servicio perfecto
+                Encontrar mi trabajo o servicio perfecto
               </button>
             </div>
           </div>

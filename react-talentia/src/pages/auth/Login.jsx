@@ -1,27 +1,35 @@
 import React, { useContext, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import backgroundImage from '../../assets/init.jpg';
-import logo from '../../assets/logo.png';
+import { useNavigate, useLocation } from 'react-router-dom';
+import backgroundImageFreelancer from '../../assets/init.jpg';
+import backgroundImageCompany from '../../assets/company-init.jpg';
 import { motion } from 'framer-motion';
 import Navbar from '../../components/general/Navbar';
 import { AuthContext } from '../../context/AuthContext';
 import { login as loginApi } from '../../api/Auth.api';
+import { LoginForm } from '../../components/LoginForm';
 
 export function Login() {
   const { login } = useContext(AuthContext);
   const navigate = useNavigate();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const location = useLocation();
   const [error, setError] = useState('');
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  // Obtener el tipo de usuario de los parámetros de la URL
+  const searchParams = new URLSearchParams(location.search);
+  const userType = searchParams.get('type') || 'freelancer';
+
+  const handleSubmit = async (data) => {
     setError('');
     try {
-      const response = await loginApi(email, password);
+      const response = await loginApi(data.email, data.password);
       if (response.data && response.data.token) {
         login(response.data.user, response.data.token);
-        navigate('/home');
+        if (userType === 'freelancer') {
+          navigate('/home');
+        } else if (userType === 'company') {
+          // Aquí debes definir la ruta para la página de inicio de la compañía
+          navigate('/company-dashboard'); // Ejemplo: redirige a un dashboard de compañía
+        }
       } else {
         throw new Error('No se recibió un token válido');
       }
@@ -30,6 +38,8 @@ export function Login() {
       setError('Credenciales inválidas. Por favor, intente de nuevo.');
     }
   };
+
+  const backgroundImage = userType === 'company' ? backgroundImageCompany : backgroundImageFreelancer;
 
   return (
     <>
@@ -42,53 +52,7 @@ export function Login() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <div className="flex items-center justify-center mb-6">
-            <img src={logo} alt="Logo" className="w-20 h-20" />
-          </div>
-          
-          <h4 className="text-2xl font-semibold text-blue-gray-900 mb-4 text-center">
-            Iniciar sesión
-          </h4>
-          <p className="text-base text-white mb-6 text-center">
-            Bienvenido de vuelta a TalentIA!
-          </p>
-          
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div>
-              <div className="relative h-11 w-full">
-                <input
-                  type="email"
-                  placeholder="Correo electrónico"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="peer h-full w-full rounded-md border border-blue-gray-200 bg-transparent px-3 py-3 text-sm text-blue-gray-700 outline-none transition-all focus:border-1 focus:border-gray-900"
-                  required
-                />
-              </div>
-            </div>
-            <div>
-              <div className="relative h-11 w-full">
-                <input
-                  type="password"
-                  placeholder="Contraseña"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="peer h-full w-full rounded-md border border-blue-gray-200 bg-transparent px-3 py-3 text-sm text-blue-gray-700 outline-none transition-all focus:border-1 focus:border-gray-900"
-                  required
-                />
-              </div>
-            </div>
-            {error && <p className="text-red-500 text-sm">{error}</p>}
-            <button
-              type="submit"
-              className="block w-full bg-purple-900 text-white font-bold py-3 rounded-lg transition-all hover:bg-purple-700"
-            >
-              Iniciar sesión
-            </button>
-          </form>
-          <p className="text-sm text-center text-blue-gray-500 mt-4">
-            ¿No tienes una cuenta? <a href="/register" className="text-white">Regístrate</a>
-          </p>
+          <LoginForm onSubmit={handleSubmit} error={error} userType={userType} />
         </motion.div>
       </div>
     </>

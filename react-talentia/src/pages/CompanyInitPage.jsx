@@ -1,11 +1,14 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { motion } from 'framer-motion';
 import { Navbar } from '../components/general/Navbar';
 import { Link } from 'react-router-dom';
 import companyInitImage from '../assets/company-init.jpg'; // Asegúrate de tener esta imagen
 import Footer from '../components/general/footer';
+import { AuthContext } from '../context/AuthContext';
 
 function CompanyInitPage() {
+  const { user } = useContext(AuthContext);
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -13,7 +16,7 @@ function CompanyInitPage() {
       exit={{ opacity: 0 }}
       transition={{ duration: 0.3 }} // Cambiado de 0.5 a 0.3
     >
-      <Navbar isAuthenticated={false} isCompanyMode={true} />
+      <Navbar isAuthenticated={!!user} isCompanyMode={true} hideSearch={true} />
       <div 
         className="relative h-screen bg-cover bg-center pt-16" 
         style={{ backgroundImage: `url(${companyInitImage})` }}
@@ -26,16 +29,26 @@ function CompanyInitPage() {
             Conecta con profesionales calificados y lleva tu negocio al siguiente nivel.
           </p>
           <div className="flex space-x-4">
-            <Link to="/post-job">
-              <button className="bg-green-600 hover:bg-green-700 text-white font-bold py-4 px-8 rounded transition duration-300 ease-in-out transform hover:scale-105">
-                Publicar Trabajo
-              </button>
-            </Link>
-            <Link to="/browse-talent">
-              <button className="bg-green-600 hover:bg-green-700 text-white font-bold py-4 px-8 rounded transition duration-300 ease-in-out transform hover:scale-105">
-                Buscar Talento
-              </button>
-            </Link>
+            {user ? (
+              <Link to="/company-dashboard">
+                <button className="bg-green-600 text-white font-bold py-4 px-8 rounded transition duration-300 ease-in-out transform hover:scale-105">
+                  Ingresar al Panel
+                </button>
+              </Link>
+            ) : (
+              <>
+                <Link to="/post-job">
+                  <button className="bg-green-600  text-white font-bold py-4 px-8 rounded transition duration-300 ease-in-out transform hover:scale-105">
+                    Publicar Trabajo
+                  </button>
+                </Link>
+                <Link to="/browse-talent">
+                  <button className="bg-green-600 text-white font-bold py-4 px-8 rounded transition duration-300 ease-in-out transform hover:scale-105">
+                    Buscar Talento
+                  </button>
+                </Link>
+              </>
+            )}
           </div>
         </div>
       </div>
