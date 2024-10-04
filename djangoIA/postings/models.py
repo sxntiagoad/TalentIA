@@ -97,5 +97,22 @@ class Job(models.Model):
     subcategory = models.ForeignKey(Subcategory, on_delete=models.SET_NULL, null=True)
     nestedcategory = models.ForeignKey(NestedCategory, on_delete=models.SET_NULL, null=True)
 
+    DRAFT = 'draft'
+    PENDING = 'pending'
+    PUBLISHED = 'published'
+    STATUS_CHOICES = [
+        (DRAFT, 'Borrador'),
+        (PENDING, 'Pendiente de revisión'),
+        (PUBLISHED, 'Publicado'),
+    ]
+    status = models.CharField(
+        max_length=20,
+        choices=STATUS_CHOICES,
+        default=DRAFT,
+    )
+    
+    # Campos para rastrear el progreso de la publicación
+    step_completed = models.IntegerField(default=0)
+
     def __str__(self):
         return self.title

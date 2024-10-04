@@ -6,7 +6,62 @@ from rest_framework.decorators import api_view
 from django.db import models
 from .models import User, Category, Subcategory, Service, NestedCategory, Job, Company
 from .serializer import NestedcategorySerializer, UserSerializer, CategorySerializer, SubcategorySerializer, ServiceSerializer, JobSerializer, CompanySerializer
+from django.shortcuts import render, redirect
+from .models import Job
+from .Jobforms import JobBasicInfoForm, JobDetailsForm, JobRequirementsForm, JobFinalReviewForm
 
+def job_creation_step1(request):
+    if request.method == 'POST':
+        form = JobBasicInfoForm(request.POST)
+        if form.is_valid():
+            job = form.save(commit=False)
+            job.company = request.user.company  # Asumiendo que el usuario está autenticado y tiene una empresa asociada
+            job.step_completed = 1
+            job.save()
+            return redirect('job_creation_step2', job_id=job.id)
+    else:
+        form = JobBasicInfoForm()
+    return render(request, 'job_creation_step1.html', {'form': form})
+
+def job_creation_step2(request, job_id):
+    job = Job.objects.get(id=job_id)
+    if request.method == 'POST':
+        form = JobDetailsForm(request.POST, instance=job)
+        if form.is_valid():
+            job = form.save(commit=False)
+            job.step_completed = 2
+            job.save()
+            return redirect('job_creation_step3', job_id=job.id)
+    else:
+        form = JobDetailsForm(instance=job)
+    return render(request, 'job_creation_step2.html', {'form': form})
+
+def job_creation_step3(request, job_id):
+    job = Job.objects.get(id=job_id)
+    if request.method == 'POST':
+        form = JobRequirementsForm(request.POST, instance=job)
+        if form.is_valid():
+            job = form.save(commit=False)
+            job.step_completed = 3
+            job.save()
+            return redirect('job_creation_final_review', job_id=job.id)
+    else:
+        form = JobRequirementsForm(instance=job)
+    return render(request, 'job_creation_step3.html', {'form': form})
+
+def job_creation_final_review(request, job_id):
+    job = Job.objects.get(id=job_id)
+    if request.method == 'POST':
+        form = JobFinalReviewForm(request.POST, instance=job)
+        if form.is_valid():
+            job = form.save(commit=False)
+            job.status = Job.PENDING
+            job.step_completed = 4
+            job.save()
+            return redirect('job_creation_success')
+    else:
+        form = JobFinalReviewForm(instance=job)
+    return render(request, 'job_creation_final_review.html', {'form': form, 'job': job})
 # ViewSets
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
