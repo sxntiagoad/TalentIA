@@ -12,7 +12,8 @@ from .views import (
     search_items,
     services_by_subcategory,
     subcategories_by_category,
-    jobs_by_subcategory
+    jobs_by_subcategory,
+    publish_service  # Importa la nueva vista
 )
 
 router = routers.DefaultRouter()
@@ -29,6 +30,6 @@ urlpatterns = [
     path('api/v1/search/', search_items, name='search_items'),
     path('api/v1/services/subcategory/<int:subcategory_id>/', services_by_subcategory, name='services-by-subcategory'),
     path('api/v1/jobs/subcategory/<int:subcategory_id>/', jobs_by_subcategory, name='jobs-by-subcategory'),
-    path('api/v1/subcategories/category/<int:category_id>/', subcategories_by_category, name='subcategories-by-category')
-    
+    path('api/v1/subcategories/category/<int:category_id>/', subcategories_by_category, name='subcategories-by-category'),
+    path('api/v1/publish-service/', publish_service, name='publish-service')  # Nueva URL para publicar servicio
 ]

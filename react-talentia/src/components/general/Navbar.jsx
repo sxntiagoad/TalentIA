@@ -130,6 +130,7 @@ export function Navbar({ isAuthenticated = false, isCompanyMode = false, hideSea
             />
             {showUserMenu && (
               <div className="absolute right-0 mt-2 w-72 bg-white rounded-lg shadow-xl py-2 z-10">
+                <Link to= "/post-service" className="block px-6 py-3 text-base text-gray-700 hover:bg-gray-100 font-bold transition-colors duration-200">Publica tu servicio</Link>
                 <Link to="/profile" className="block px-6 py-3 text-base text-gray-700 hover:bg-gray-100 font-bold transition-colors duration-200">Perfil</Link>
                 <Link to="/settings" className="block px-6 py-3 text-base text-gray-700 hover:bg-gray-100 font-bold transition-colors duration-200">Configuración</Link>
                 <button 

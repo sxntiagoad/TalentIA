@@ -1,8 +1,10 @@
 from multiprocessing import process
 from rest_framework import viewsets
 from rest_framework.views import APIView
+from rest_framework import status
 from rest_framework.response import Response
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
 from django.db import models
 from .models import User, Category, Subcategory, Service, NestedCategory, Job, Company
 from .serializer import NestedcategorySerializer, UserSerializer, CategorySerializer, SubcategorySerializer, ServiceSerializer, JobSerializer, CompanySerializer
@@ -130,6 +132,16 @@ def find_best_match(query, terms, max_distance=2):
     return best_match
 
 # Vistas de API
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def publish_service(request):
+    serializer = ServiceSerializer(data=request.data, context={'request': request})
+    if serializer.is_valid():
+        serializer.save()  # Simplemente llamamos a save() sin asignar el resultado
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 @api_view(['GET'])
 def services_by_subcategory(request, subcategory_id):
     services = Service.objects.filter(subcategory_id=subcategory_id)

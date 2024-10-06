@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import *
+from authentication.models import CustomUser
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -22,6 +23,7 @@ class NestedcategorySerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class ServiceSerializer(serializers.ModelSerializer):
+    user = serializers.PrimaryKeyRelatedField(queryset=CustomUser.objects.filter(type_user='freelancer'))
     user_avatar = serializers.SerializerMethodField()
     service_image = serializers.SerializerMethodField()
     user_name = serializers.CharField(source='user.name', read_only=True)
@@ -65,9 +67,18 @@ class ServiceSerializer(serializers.ModelSerializer):
             'price', 'image', 'user_avatar', 'service_image', 
             'user_name', 'user_location', 'user_lastname', 'user_language', 'service_title', 
             'service_description', 'service_price', 'service_category', 'service_subcategory', 
-            'service_nestedcategory'
+            'service_nestedcategory', 'availability', 'location'
         ]
-
+        read_only_fields = ['user_avatar', 'service_image', 'user_name', 'user_location', 'user_lastname', 'user_language']
+        def create(self, validated_data):
+            user = self.context['request'].user
+            service = Service.objects.create(user=user, **validated_data)
+            return service
+    def validate_user(self, value):
+        if value.type_user != 'freelancer':
+            raise serializers.ValidationError("Solo los freelancers pueden publicar servicios")
+        return value
+        
 class JobSerializer(serializers.ModelSerializer):
     company_avatar = serializers.SerializerMethodField()
     job_image = serializers.SerializerMethodField()

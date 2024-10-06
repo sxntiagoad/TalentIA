@@ -30,10 +30,9 @@ function App() {
             <Route path="/company" element={<CompanyInitPage />} />
             <Route path="/services" element={<Services />} />
             <Route path="/jobs" element={<Jobs />} />
-            <Route path="/post-service" element={<ServiceForm />} />  // Nueva ruta para publicar un servicio
-
             <Route element={<ProtectedRoutes />}>
               <Route path="/home" element={<HomePage />} />
+            <Route path="/post-service" element={<ServiceForm />} />  // Nueva ruta para publicar un servicio
               <Route path="/services/:id" element={<ItemDetailsPage isService={true} />} />
               <Route path="/jobs/:id" element={<ItemDetailsPage isService={false} />} />
               <Route path="/subcategory/:id" element={<SubcategoryPage />} />
