@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils.text import slugify
+from authentication.models import CustomUser
 
 class Category(models.Model):
     name = models.CharField(max_length=255, unique=True)
@@ -70,7 +71,7 @@ class Company(models.Model):
         return self.name
 
 class Service(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     title = models.CharField(max_length=50)
     description = models.TextField() #pensar en short description y detail description
     price = models.FloatField()
