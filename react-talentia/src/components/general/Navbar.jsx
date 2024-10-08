@@ -86,22 +86,38 @@ export function Navbar({ isAuthenticated = false, isCompanyMode = false, hideSea
     };
   }, [userMenuRef]);
 
+ 
+  const [isOpen, setIsOpen] = useState(false)
+
   return (
-    <div className="fixed top-0 left-0 w-full p-4 flex justify-between items-center bg-white bg-opacity-30 backdrop-blur-md z-50">
-      <div className="flex items-center space-x-2">
+
+ 
+    
+     
+   <div className="   sm:fixed top-0 left-0 w-full p-4 sm:flex justify-between items-center bg-white bg-opacity-30 backdrop-blur-md z-50 grid grid-cols-2 grid-rows-2 ">
+
+      {
+        // logo 
+      }
+
+        <div className="flex col-span-1 row-span-1 justify-center items-center">
         <img src={logo} alt="Logo" className="w-12 h-12" />
         <h1 className="font-bold text-3xl text-black">
           <Link to={isCompanyMode ? "/company" : "/"}>TalentIA</Link>
         </h1>
       </div>
 
-      {isAuthenticated && !hideSearch && (
-        <div className="flex items-center justify-center w-1/2 mx-auto">
+      {
+        // search bar 
+      }
+
+{isAuthenticated && !hideSearch && (
+        <div className="sm:flex items-center justify-center   sm:w-1/2 mx-auto col-span-2 row-span-1">
           <div className="relative w-full">
             <input
               type="text"
               placeholder="Busca servicios y empleos"
-              className={`border ${showError ? 'border-red-500 animate-shake' : 'border-gray-300'} rounded-full px-4 py-2 w-full pr-16 transition-colors duration-300`}
+              className={`border ${showError ? 'border-red-500 animate-shake' : 'border-gray-300'} rounded-full px-4 py-2 w-full  pr-16 transition-colors duration-300`}
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               onKeyPress={handleKeyPress}
@@ -119,8 +135,70 @@ export function Navbar({ isAuthenticated = false, isCompanyMode = false, hideSea
         </div>
       )}
 
-      {isAuthenticated && (
-        <div className="flex space-x-6 items-center">
+
+{
+  // 3 iconos 
+}
+
+
+{isAuthenticated && (
+
+        <nav className="col-start-2 row-start-1 ">
+          <section  className="flex sm:hidden justify-end px-5 py-3"> 
+          
+          <div className=" flex flex-col justify-evenly items-center cursor-pointer  w-10 h-10"
+          onClick={()=>setIsOpen(!isOpen)}>
+          {
+            
+            isOpen? 
+              
+            <svg
+            className="h-8 w-8 text-gray-600"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <line x1="18" y1="6" x2="6" y2="18" />
+            <line x1="6" y1="6" x2="18" y2="18" />
+          </svg>
+
+            :
+           
+          <>
+          <span className="block h-0.5 w-8 bg-gray-600"></span>
+          <span className="block h-0.5 w-8 bg-gray-600"></span>
+          <span className="block h-0.5 w-8 bg-gray-600"></span>
+          </>
+             
+          }
+           
+         
+        </div>
+
+        
+         <div className={isOpen? "flex":"hidden"}> 
+          <ul
+                  className={`absolute  right-2 top-16 mt-2 bg-white border rounded-md shadow-md p-4 w-48 transition-all duration-300 ease-in-out ${isOpen ? 'opacity-100 visible' : 'opacity-0 invisible'}`}>
+            <li className="flex justify-evenly items-center mb-4">
+          <FaBell className="text-black w-5 h-5 cursor-pointer hover:text-gray-600 transition-colors duration-300" />
+          Notifications
+          </li>
+          <li className="flex justify-evenly items-center mb-4"> 
+          <FaEnvelope className="text-black w-5 h-5 cursor-pointer hover:text-gray-600 transition-colors duration-300" />
+           Inbox
+          </li>
+
+          </ul>
+
+         </div>
+
+          </section>
+
+          
+        <div className="hidden sm:flex space-x-6 items-center">
           <FaBell className="text-black w-8 h-8 cursor-pointer hover:text-gray-600 transition-colors duration-300" />
           <FaEnvelope className="text-black w-8 h-8 cursor-pointer hover:text-gray-600 transition-colors duration-300" />
           <div className="relative" ref={userMenuRef}>
@@ -130,6 +208,7 @@ export function Navbar({ isAuthenticated = false, isCompanyMode = false, hideSea
             />
             {showUserMenu && (
               <div className="absolute right-0 mt-2 w-72 bg-white rounded-lg shadow-xl py-2 z-10">
+                <Link to= "/post-service" className="block px-6 py-3 text-base text-gray-700 hover:bg-gray-100 font-bold transition-colors duration-200">Publica tu servicio</Link>
                 <Link to="/profile" className="block px-6 py-3 text-base text-gray-700 hover:bg-gray-100 font-bold transition-colors duration-200">Perfil</Link>
                 <Link to="/settings" className="block px-6 py-3 text-base text-gray-700 hover:bg-gray-100 font-bold transition-colors duration-200">Configuración</Link>
                 <button 
@@ -142,8 +221,12 @@ export function Navbar({ isAuthenticated = false, isCompanyMode = false, hideSea
             )}
           </div>
         </div>
+        </nav>
       )}
 
+{
+  // 3 iconos pero sin auth 
+}
       {!isAuthenticated && (
         <div className="flex space-x-4 items-center">
           <button 
@@ -167,7 +250,18 @@ export function Navbar({ isAuthenticated = false, isCompanyMode = false, hideSea
           </button>
         </div>
       )}
+
+
+
+
+
     </div>
+
+
+
+
+   
+  
   );
 }
 
