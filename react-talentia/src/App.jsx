@@ -16,8 +16,8 @@ import Jobs from "./pages/Jobs";
 import CompanyInitPage from './pages/CompanyInitPage';
 import Register from './pages/auth/Register';
 import Login from './pages/auth/Login';
-import ServiceForm from './pages/ServiceForm';
-import JobPostingPage from './pages/JobPostingPage';  // Importa la nueva página
+import ServiceForm from './pages/post/ServiceForm';
+import JobForm from './pages/post/JobForm';  // Importa la nueva página
 
 function App() {
   return (
@@ -32,7 +32,7 @@ function App() {
             <Route path="/services" element={<Services />} />
             <Route path="/jobs" element={<Jobs />} />
             <Route path="/post-service" element={<ServiceForm />} />
-            <Route path="/post-job" element={<JobPostingPage />} />  // Nueva ruta para publicar un trabajo
+            <Route path="/post-job" element={<JobForm />} />  // Nueva ruta para publicar un trabajo
             <Route element={<ProtectedRoutes />}>
               <Route path="/home" element={<HomePage />} />
               <Route path="/services/:id" element={<ItemDetailsPage isService={true} />} />

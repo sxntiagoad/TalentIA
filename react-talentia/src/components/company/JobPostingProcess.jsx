@@ -4,7 +4,6 @@ import Step1BasicInfo from './Step1BasicInfo';
 import Step2JobDetails from './Step2JobDetails';
 import Step3Requirements from './Step3Requirements';
 import Step4FinalReview from './Step4FinalReview';
-import { checkAuth } from '../../api/Auth.api';
 
 const JobPostingProcess = () => {
   const [step, setStep] = useState(1);
