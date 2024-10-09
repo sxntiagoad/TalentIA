@@ -20,17 +20,28 @@ export function Register() {
   const handleSubmit = async (data) => {
     try {
       const registrationData = {
-        username: data.username,
         email: data.email,
         password: data.password,
-        custom_user: {
-          type_user: userType
-        }
+        name: data.name,
+        phone: data.phone || '',
+        information: data.information || '',
+        interests: data.interests || '',
       };
+
+      if (userType === 'freelancer') {
+        registrationData.lastname = data.lastname;
+        registrationData.role = data.role || '';
+        registrationData.location = data.location || '';
+        registrationData.language = data.language || 'es';
+      } else {
+        registrationData.company_location = data.location || '';
+        registrationData.company_language = data.language || 'es';
+      }
+
       console.log('Datos de registro:', registrationData); // Para depuración
-      const response = await register(registrationData);
+      const response = await register(registrationData, userType);
       localStorage.setItem('token', response.data.token);
-      login(response.data.user);
+      login(response.data[userType]);
       navigate('/home');
     } catch (error) {
       console.error('Registration failed:', error.response?.data || error.message);

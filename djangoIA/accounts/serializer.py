@@ -4,6 +4,8 @@ from .models import Freelancer, Company
 class FreelancerSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
     avatar = serializers.ImageField(required=False)
+    name = serializers.CharField(required=False, allow_blank=True)
+    lastname = serializers.CharField(required=False, allow_blank=True)
 
     class Meta:
         model = Freelancer
@@ -29,6 +31,7 @@ class FreelancerSerializer(serializers.ModelSerializer):
 class CompanySerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
     company_avatar = serializers.ImageField(required=False)
+    name = serializers.CharField(required=False, allow_blank=True)
 
     class Meta:
         model = Company

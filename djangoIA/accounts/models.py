@@ -37,8 +37,8 @@ class CustomUser(AbstractBaseUser):
         return self.is_superuser
 
 class Freelancer(CustomUser):
-    name = models.CharField(max_length=50)
-    lastname = models.CharField(max_length=50)
+    name = models.CharField(max_length=50, blank=True, null=True)
+    lastname = models.CharField(max_length=50, blank=True, null=True)
     role = models.CharField(max_length=100, blank=True)
     phone = models.CharField(max_length=15, blank=True)
     information = models.TextField(max_length=500, blank=True)
@@ -53,10 +53,10 @@ class Freelancer(CustomUser):
     interests = models.TextField(blank=True)
 
     def __str__(self):
-        return f"{self.name} {self.lastname}"
+        return f"{self.name or ''} {self.lastname or ''}"
 
 class Company(CustomUser):
-    name = models.CharField(max_length=50)
+    name = models.CharField(max_length=50, blank=True, null=True)
     phone = models.CharField(max_length=15, blank=True)
     information = models.TextField(max_length=500, blank=True)
     company_avatar = models.ImageField(upload_to='companies/', null=True, blank=True)
@@ -70,4 +70,4 @@ class Company(CustomUser):
     interests = models.TextField(blank=True)
 
     def __str__(self):
-        return self.name
+        return self.name or self.email

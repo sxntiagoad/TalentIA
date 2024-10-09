@@ -25,6 +25,7 @@ urlpatterns = [
     path('postings/', include('postings.urls')),  # Incluye las URLs de la app postings
     path('api/', include('chatbot.urls')),  # Incluye las URLs de la app chatbot
     path('accounts/', include('accounts.urls')),  # Incluye las URLs de la app accounts
+    path('auth/', include('accounts.urls')),  # Asegúrate de que esta línea esté presente
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
