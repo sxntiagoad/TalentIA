@@ -1,11 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { getCategoryById, getSubCategoryById, getNestedCategoryById } from '../../api/Categories.api';
+import { createJob } from '../../api/Jobs.api';
+import { useNavigate } from 'react-router-dom';
 
 const Step4FinalReview = ({ prevStep, handleChange, handleFileChange, values }) => {
   const [categoryName, setCategoryName] = useState('');
   const [subcategoryName, setSubcategoryName] = useState('');
   const [nestedcategoryName, setNestedcategoryName] = useState('');
   const [imagePreview, setImagePreview] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchCategoryNames = async () => {
@@ -45,10 +50,30 @@ const Step4FinalReview = ({ prevStep, handleChange, handleFileChange, values }) 
     prevStep();
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Aquí iría la lógica para enviar los datos al backend
-    console.log('Datos del trabajo:', values);
+    setIsSubmitting(true);
+    setError(null);
+
+    try {
+      const formData = new FormData();
+      Object.keys(values).forEach(key => {
+        if (key === 'image') {
+          if (values[key]) formData.append(key, values[key]);
+        } else {
+          formData.append(key, values[key]);
+        }
+      });
+
+      const response = await createJob(formData);
+      console.log('Trabajo creado:', response.data);
+      navigate('/job-posted-success'); // Asegúrate de tener esta ruta definida
+    } catch (error) {
+      console.error('Error al crear el trabajo:', error);
+      setError('Hubo un error al publicar el trabajo. Por favor, inténtalo de nuevo.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -91,22 +116,25 @@ const Step4FinalReview = ({ prevStep, handleChange, handleFileChange, values }) 
             <p className="text-gray-700">{values.requirements}</p>
           </div>
         </div>
-        <div className="flex justify-between">
+        <div className="flex justify-between mt-6">
           <button 
             type="button" 
             className="bg-gray-300 text-gray-700 font-bold py-2 px-4 rounded-md hover:bg-gray-400 transition duration-300"
             onClick={regresar}
+            disabled={isSubmitting}
           >
             Anterior
           </button>
           <button 
             type="submit" 
             className="bg-green-600 text-white font-bold py-2 px-4 rounded-md hover:bg-green-700 transition duration-300"
+            disabled={isSubmitting}
           >
-            Publicar trabajo
+            {isSubmitting ? 'Publicando...' : 'Publicar trabajo'}
           </button>
         </div>
       </form>
+      {error && <p className="text-red-500 mt-4">{error}</p>}
     </div>
   );
 };

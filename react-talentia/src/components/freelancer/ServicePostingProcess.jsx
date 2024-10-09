@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Step1Basic from './Step1Basic';
 import Step2ServiceDetails from './Step2ServiceDetails';
 import Step3Pricing from './Step3Pricing';
@@ -17,6 +18,19 @@ const ServicePostingProcess = () => {
     availability: true,
     image: null,
   });
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [error, setError] = useState(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      setError('You must be logged in to post a service.');
+      setIsAuthenticated(false);
+    } else {
+      setIsAuthenticated(true);
+    }
+  }, []);
 
   const nextStep = () => setStep(step + 1);
   const prevStep = () => setStep(step - 1);
@@ -30,6 +44,20 @@ const ServicePostingProcess = () => {
   };
 
   const renderStep = () => {
+    if (!isAuthenticated) {
+      return (
+        <div className="text-red-600 text-center">
+          <p>{error}</p>
+          <button
+            onClick={() => navigate('/login')}
+            className="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          >
+            Go to Login
+          </button>
+        </div>
+      );
+    }
+
     switch (step) {
       case 1:
         return <Step1Basic 
@@ -59,18 +87,18 @@ const ServicePostingProcess = () => {
           values={serviceData} 
         />;
       default:
-        return <h2 className="text-green-600 text-2xl font-bold">Proceso completado</h2>;
+        return <h2 className="text-green-600 text-2xl font-bold">Process completed</h2>;
     }
   };
 
   return (
     <div className="bg-white shadow-lg rounded-lg p-6 max-w-3xl mx-auto mt-10">
-      <h1 className="text-3xl font-bold text-purple-600 mb-6 text-center">Publicación de Servicio</h1>
+      <h1 className="text-3xl font-bold text-purple-600 mb-6 text-center">Service Posting</h1>
       <div className="mb-6">
         <div className="flex justify-between items-center">
           {[1, 2, 3, 4].map((stepNumber) => (
             <div key={stepNumber} className={`w-1/4 text-center ${step === stepNumber ? 'text-purple-600 font-bold' : 'text-gray-400'}`}>
-              Paso {stepNumber}
+              Step {stepNumber}
             </div>
           ))}
         </div>

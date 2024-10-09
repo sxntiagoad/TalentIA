@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Step1BasicInfo from './Step1BasicInfo';
 import Step2JobDetails from './Step2JobDetails';
 import Step3Requirements from './Step3Requirements';
 import Step4FinalReview from './Step4FinalReview';
+import { checkAuth } from '../../api/Auth.api';
 
 const JobPostingProcess = () => {
   const [step, setStep] = useState(1);
@@ -18,6 +20,29 @@ const JobPostingProcess = () => {
     image: null,
     availability: true,
   });
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [error, setError] = useState(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const verifyAuth = async () => {
+      try {
+        const response = await checkAuth();
+        if (response.data.is_authenticated && response.data.user_type === 'company') {
+          setIsAuthenticated(true);
+        } else {
+          setError('Debes iniciar sesión como empresa para publicar un trabajo.');
+          setIsAuthenticated(false);
+        }
+      } catch (error) {
+        console.error('Error al verificar la autenticación:', error);
+        setError('Error al verificar la autenticación. Por favor, inicia sesión de nuevo.');
+        setIsAuthenticated(false);
+      }
+    };
+
+    verifyAuth();
+  }, []);
 
   const nextStep = () => setStep(step + 1);
   const prevStep = () => setStep(step - 1);
@@ -31,6 +56,20 @@ const JobPostingProcess = () => {
   };
 
   const renderStep = () => {
+    if (!isAuthenticated) {
+      return (
+        <div className="text-red-600 text-center">
+          <p>{error}</p>
+          <button
+            onClick={() => navigate('/login')}
+            className="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          >
+            Ir a Iniciar Sesión
+          </button>
+        </div>
+      );
+    }
+
     switch (step) {
       case 1:
         return <Step1BasicInfo 

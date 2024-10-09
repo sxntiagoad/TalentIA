@@ -32,6 +32,7 @@ router.register(r'jobs', JobViewSet)
 urlpatterns = [
     path('api/v1/', include(router.urls)),
     path('api/v1/search/', search_items, name='search_items'),
+    path('api/v1/all-subcategories/', subcategories_by_category, name='all-subcategories'),
     path('api/v1/services/subcategory/<int:subcategory_id>/', services_by_subcategory, name='services-by-subcategory'),
     path('api/v1/jobs/subcategory/<int:subcategory_id>/', jobs_by_subcategory, name='jobs-by-subcategory'),
     path('api/v1/subcategories/category/<int:category_id>/', subcategories_by_category, name='subcategories-by-category'),

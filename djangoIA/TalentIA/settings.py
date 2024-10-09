@@ -116,6 +116,8 @@ TIME_ZONE = 'UTC'
 
 USE_I18N = True
 
+APPEND_SLASH = False
+
 USE_TZ = True
 
 

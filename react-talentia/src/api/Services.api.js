@@ -1,4 +1,24 @@
 import axios from 'axios';
+
+const API_URL = 'http://localhost:8000/postings/api/v1/';
+
+// Create an axios instance with default headers
+const api = axios.create({
+  baseURL: API_URL,
+});
+
+// Interceptor para incluir el token en cada solicitud
+api.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      config.headers['Authorization'] = `Token ${token}`;
+    }
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
+
 export const getAllServices = () => {
     return axios.get('http://localhost:8000/postings/api/v1/services/')
 }
@@ -19,17 +39,17 @@ export const getJobsBySubcategory = (subcategoryId) => {
 }
 
 export const createService = (serviceData) => {
-    return axios.post('http://localhost:8000/postings/api/v1/services/', serviceData, {
-        headers: {
-            'Content-Type': 'multipart/form-data'
-        }
-    });
-}
+  return api.post('create-service/', serviceData, {
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    }
+  });
+};
 
 export const createJob = (jobData) => {
-    return axios.post('http://localhost:8000/postings/api/v1/jobs/', jobData, {
+    return api.post('create-job/', jobData, {
         headers: {
-            'Content-Type': 'multipart/form-data'
+          'Content-Type': 'multipart/form-data'
         }
-    });
-}
+      });
+    };

@@ -38,6 +38,30 @@ const Step4Final = ({ prevStep, handleChange, handleFileChange, values }) => {
     }
   }, [values.image]);
 
+  const handleSubmit = async () => {
+    try {
+      const formData = new FormData();
+      formData.append('title', values.title);
+      formData.append('category', values.category);
+      formData.append('subcategory', values.subcategory);
+      formData.append('nestedcategory', values.nestedcategory);
+      formData.append('description', values.description);
+      formData.append('price', values.price);
+      formData.append('location', values.location);
+      formData.append('availability', values.availability);
+      if (values.image) {
+        formData.append('image', values.image);
+      }
+      console.log(formData);
+      const response = await createService(formData);
+      console.log('Servicio creado:', response.data);
+      // Aquí puedes agregar lógica para redirigir al usuario o mostrar un mensaje de éxito
+    } catch (error) {
+      console.error('Error al crear el servicio:', error);
+      // Aquí puedes manejar el error, por ejemplo, mostrando un mensaje al usuario
+    }
+  };
+
   return (
     <div className="bg-white shadow-lg rounded-lg p-6">
       <h2 className="text-2xl font-bold text-purple-600 mb-6">Paso 4: Revisión Final</h2>
@@ -73,9 +97,7 @@ const Step4Final = ({ prevStep, handleChange, handleFileChange, values }) => {
         <button 
           type="button" 
           className="bg-green-600 text-white font-bold py-2 px-4 rounded-md hover:bg-green-700 transition duration-300"
-          onClick={() => {
-            // Lógica para crear el servicio
-          }}
+          onClick={handleSubmit}
         >
           Publicar Servicio
         </button>

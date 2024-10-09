@@ -21,20 +21,20 @@ export function Login() {
   const handleSubmit = async (data) => {
     setError('');
     try {
+      console.log('Attempting login with:', data);
       const response = await loginApi(data.email, data.password);
+      console.log('Login response:', response);
       if (response.data && response.data.token) {
+        console.log('Login successful, token received');
         login(response.data.user, response.data.token);
-        if (userType === 'freelancer') {
-          navigate('/home');
-        } else if (userType === 'company') {
-          // Aquí debes definir la ruta para la página de inicio de la compañía
-          navigate('/company-dashboard'); // Ejemplo: redirige a un dashboard de compañía
-        }
+        // ... rest of your code
       } else {
+        console.log('No token received in response');
         throw new Error('No se recibió un token válido');
       }
     } catch (error) {
-      console.error('Error de inicio de sesión:', error);
+      console.error('Login error:', error);
+      console.error('Error response:', error.response);
       setError('Credenciales inválidas. Por favor, intente de nuevo.');
     }
   };

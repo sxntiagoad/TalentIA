@@ -10,6 +10,7 @@ const Step1Basic = ({ nextStep, handleChange, values }) => {
     const fetchCategories = async () => {
       try {
         const response = await getAllCategories();
+        console.log('Categorías obtenidas:', response.data);
         setCategories(response.data);
       } catch (error) {
         console.error('Error al obtener las categorías:', error);
@@ -76,9 +77,13 @@ const Step1Basic = ({ nextStep, handleChange, values }) => {
             onChange={handleChange('category')}
           >
             <option value="">Seleccione una categoría</option>
-            {categories.map((category) => (
-              <option key={category.id} value={category.id}>{category.name}</option>
-            ))}
+            {categories && categories.length > 0 ? (
+              categories.map((category) => (
+                <option key={category.id} value={category.id}>{category.name}</option>
+              ))
+            ) : (
+              <option disabled>Cargando categorías...</option>
+            )}
           </select>
         </div>
         <div className="mb-4">
