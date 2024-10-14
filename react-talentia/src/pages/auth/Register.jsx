@@ -23,17 +23,20 @@ export function Register() {
         email: data.email,
         password: data.password,
         name: data.name,
+        // Estos campos opcionales se mantienen, pero podrían no ser necesarios en el registro inicial
         phone: data.phone || '',
         information: data.information || '',
         interests: data.interests || '',
       };
 
       if (userType === 'freelancer') {
-        registrationData.lastname = data.lastname;
+        registrationData.lastname = data.lastname || ''; // Aseguramos que el apellido se envíe para freelancers
+        // Estos campos opcionales se mantienen, pero podrían no ser necesarios en el registro inicial
         registrationData.role = data.role || '';
         registrationData.location = data.location || '';
         registrationData.language = data.language || 'es';
       } else {
+        // Estos campos opcionales se mantienen, pero podrían no ser necesarios en el registro inicial
         registrationData.company_location = data.location || '';
         registrationData.company_language = data.language || 'es';
       }
@@ -44,7 +47,7 @@ export function Register() {
       login(response.data[userType]);
       navigate('/home');
     } catch (error) {
-      console.error('Registration failed:', error.response?.data || error.message);
+      console.error('Registro fallido:', error.response?.data || error.message);
     }
   };
 

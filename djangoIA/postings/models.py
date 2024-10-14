@@ -29,7 +29,7 @@ class Service(models.Model):
         ('published', 'Publicado'),
     ]
 
-    Frelancer = models.ForeignKey(Freelancer, on_delete=models.CASCADE, related_name='services')
+    freelancer = models.ForeignKey(Freelancer, on_delete=models.CASCADE, related_name='services')
     title = models.CharField(max_length=50)
     description = models.TextField()
     price = models.DecimalField(max_digits=10, decimal_places=2)

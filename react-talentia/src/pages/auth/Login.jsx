@@ -26,16 +26,21 @@ export function Login() {
       console.log('Login response:', response);
       if (response.data && response.data.token) {
         console.log('Login successful, token received');
-        login(response.data.user, response.data.token);
-        // ... rest of your code
+        // Asegúrate de que estás pasando los datos correctos a la función login
+        login(response.data[userType], response.data.token);
+        navigate('/home');
       } else {
         console.log('No token received in response');
-        throw new Error('No se recibió un token válido');
+        setError('No se recibió un token válido. Por favor, intente de nuevo.');
       }
     } catch (error) {
       console.error('Login error:', error);
       console.error('Error response:', error.response);
-      setError('Credenciales inválidas. Por favor, intente de nuevo.');
+      if (error.response && error.response.status === 401) {
+        setError('Credenciales inválidas. Por favor, verifique su correo y contraseña.');
+      } else {
+        setError('Hubo un problema al iniciar sesión. Por favor, intente de nuevo más tarde.');
+      }
     }
   };
 

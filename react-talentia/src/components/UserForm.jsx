@@ -29,19 +29,50 @@ return (
     Bienvenido al registro de {isCompany ? "Compañía" : "Freelancer"} de TalentIA!
     </p>
     <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-6">
-    <div>
+    {isCompany ? (
+      <div>
         <div className="relative h-11 w-full">
-        <input
+          <input
             type="text"
-            placeholder={isCompany ? "Nombre empresa" : "Username"}
-            {...register("username", { required: true })}
-            className={`peer h-full w-full rounded-md border ${errors.username ? 'border-red-500' : `border-${primaryColor}-300`} bg-transparent px-3 py-3 ${textColor} outline-none transition-all focus:border-1 focus:border-${primaryColor}-500`}
-        />
-        <div className="h-5">
-        {errors.username && <span className="text-red-500 text-sm">Obligatorio</span>}
-            </div>
+            placeholder="Nombre empresa"
+            {...register("name", { required: true })}
+            className={`peer h-full w-full rounded-md border ${errors.name ? 'border-red-500' : `border-${primaryColor}-300`} bg-transparent px-3 py-3 ${textColor} outline-none transition-all focus:border-1 focus:border-${primaryColor}-500`}
+          />
+          <div className="h-5">
+            {errors.name && <span className="text-red-500 text-sm">Obligatorio</span>}
+          </div>
         </div>
-    </div>
+      </div>
+    ) : (
+      <>
+        <div>
+          <div className="relative h-11 w-full">
+            <input
+              type="text"
+              placeholder="Nombre"
+              {...register("name", { required: true })}
+              className={`peer h-full w-full rounded-md border ${errors.name ? 'border-red-500' : `border-${primaryColor}-300`} bg-transparent px-3 py-3 ${textColor} outline-none transition-all focus:border-1 focus:border-${primaryColor}-500`}
+            />
+            <div className="h-5">
+              {errors.name && <span className="text-red-500 text-sm">Obligatorio</span>}
+            </div>
+          </div>
+        </div>
+        <div>
+          <div className="relative h-11 w-full">
+            <input
+              type="text"
+              placeholder="Apellido"
+              {...register("lastname", { required: true })}
+              className={`peer h-full w-full rounded-md border ${errors.lastname ? 'border-red-500' : `border-${primaryColor}-300`} bg-transparent px-3 py-3 ${textColor} outline-none transition-all focus:border-1 focus:border-${primaryColor}-500`}
+            />
+            <div className="h-5">
+              {errors.lastname && <span className="text-red-500 text-sm">Obligatorio</span>}
+            </div>
+          </div>
+        </div>
+      </>
+    )}
 
     <div>
         <div className="relative h-11 w-full">
@@ -52,7 +83,7 @@ return (
             className={`peer h-full w-full rounded-md border ${errors.email ? 'border-red-500' : `border-${primaryColor}-300`} bg-transparent px-3 py-3 ${textColor} outline-none transition-all focus:border-1 focus:border-${primaryColor}-500`}
         />
         <div className="h-5">
-        {errors.email && <span className="text-red-500 text-sm">Ingrese una dirección de correo electrónico</span>}
+        {errors.email && <span className="text-red-500 text-sm">Ingrese una dirección de correo electrónico válida</span>}
             </div>
         </div>
     </div>

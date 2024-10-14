@@ -22,13 +22,11 @@ class ServiceSerializer(serializers.ModelSerializer):
     freelancer = FreelancerSerializer(read_only=True)
     service_image = serializers.SerializerMethodField()
     freelancer_name = serializers.CharField(source='freelancer.name', read_only=True)
-    freelancer_location = serializers.CharField(source='freelancer.Freelancer_location', read_only=True)
-    freelancer_lastname = serializers.CharField(source='freelancer.lastname', read_only=True)
-    freelancer_language = serializers.CharField(source='freelancer.Freelancer_language', read_only=True)
-    freelancer_avatar = serializers.SerializerMethodField()
     service_title = serializers.CharField(source='title', read_only=True)
     service_description = serializers.CharField(source='description', read_only=True)
-    service_price = serializers.FloatField(source='price', read_only=True)
+    freelancer_language = serializers.CharField(source='freelancer.language', read_only=True)
+    freelancer_location = serializers.CharField(source='freelancer.location', read_only=True)
+    freelancer_avatar = serializers.SerializerMethodField()
     service_category = serializers.CharField(source='category.name', read_only=True)
     service_subcategory = serializers.CharField(source='subcategory.name', read_only=True)
     service_nestedcategory = serializers.CharField(source='nestedcategory.name', read_only=True)
@@ -41,8 +39,8 @@ class ServiceSerializer(serializers.ModelSerializer):
 
     def get_freelancer_avatar(self, obj):
         request = self.context.get('request')
-        if request and obj.freelancer and obj.freelancer.Freelancer_avatar:
-            return request.build_absolute_uri(obj.freelancer.Freelancer_avatar.url)
+        if request and obj.freelancer and obj.freelancer.avatar:
+            return request.build_absolute_uri(obj.freelancer.avatar.url)
         return None
 
     def to_representation(self, instance):
@@ -58,13 +56,15 @@ class ServiceSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Service
-        fields = [
-            'id', 'freelancer', 'category', 'subcategory', 'nestedcategory', 'title', 'description', 
-            'price', 'image', 'service_image', 
-            'freelancer_name', 'freelancer_location', 'freelancer_lastname', 'freelancer_language', 'freelancer_avatar', 
-            'service_title', 'service_description', 'service_price', 'service_category', 'service_subcategory', 
-            'service_nestedcategory'
-        ]
+        fields = '__all__'
+        read_only_fields = ('freelancer',)
+
+    def create(self, validated_data):
+        freelancer = self.context['request'].user.freelancer
+        # Removemos el campo 'freelancer' de validated_data si existe
+        validated_data.pop('freelancer', None)
+        service = Service.objects.create(freelancer=freelancer, **validated_data)
+        return service
 
 class JobSerializer(serializers.ModelSerializer):
     company = CompanySerializer(read_only=True)

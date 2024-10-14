@@ -11,6 +11,10 @@ from .Jobforms import JobBasicInfoForm, JobDetailsForm, JobRequirementsForm, Job
 from .Serviceform import ServiceBasicInfoForm, ServiceDetailsForm, ServiceFinalReviewForm
 from accounts.models import Freelancer, Company
 from accounts.serializer import FreelancerSerializer, CompanySerializer
+from django.core.exceptions import ObjectDoesNotExist
+import logging
+
+logger = logging.getLogger(__name__)
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
@@ -27,13 +31,19 @@ def create_job(request):
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def create_service(request):
-    if not hasattr(request.user, 'freelancer'):
-        return Response({'error': 'Solo los freelancers pueden crear servicios'}, status=status.HTTP_403_FORBIDDEN)
-    
+    try:
+        freelancer = request.user.freelancer
+        logger.info(f"Freelancer encontrado: {freelancer}")
+    except ObjectDoesNotExist:
+        logger.error(f"El usuario {request.user.username} no tiene un perfil de freelancer")
+        return Response({'error': 'El usuario no tiene un perfil de freelancer'}, status=status.HTTP_403_FORBIDDEN)
+
     serializer = ServiceSerializer(data=request.data, context={'request': request})
     if serializer.is_valid():
-        serializer.save(freelancer=request.user.freelancer)
+        service = serializer.save()
+        logger.info(f"Servicio creado: {service}, Freelancer: {service.freelancer}")
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+    logger.error(f"Error al crear el servicio: {serializer.errors}")
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @permission_classes([IsAuthenticated])
@@ -153,7 +163,7 @@ class SubcategoryViewSet(viewsets.ModelViewSet):
     serializer_class = SubcategorySerializer
 
 class ServiceViewSet(viewsets.ModelViewSet):
-    queryset = Service.objects.all()
+    queryset = Service.objects.all().select_related('freelancer')
     serializer_class = ServiceSerializer
 
     def get_serializer_context(self):

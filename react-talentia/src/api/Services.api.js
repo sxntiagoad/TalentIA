@@ -39,9 +39,11 @@ export const getJobsBySubcategory = (subcategoryId) => {
 }
 
 export const createService = (serviceData) => {
+  const token = localStorage.getItem('token');
   return api.post('create-service/', serviceData, {
     headers: {
-      'Content-Type': 'multipart/form-data'
+      'Content-Type': 'multipart/form-data',
+      'Authorization': `Token ${token}`
     }
   });
 };

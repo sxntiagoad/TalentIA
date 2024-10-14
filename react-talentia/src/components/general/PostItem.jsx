@@ -27,7 +27,7 @@ export function PostItem({ item, isService }) {
         <h2 className="text-sm font-bold text-gray-800 mb-1 truncate">{item.title}</h2>
         <div className="flex items-center space-x-1 mb-1">
           <span className="text-gray-600 text-xs truncate">
-            {isService ? `Anuncio de ${item.user_name}` : `Publicado por ${item.company_name}`}
+            {isService ? `Anuncio de ${item.freelancer_name}` : `Publicado por ${item.company_name}`}
           </span>
         </div>
         <p className="text-gray-500 text-xs mb-1 line-clamp-2">{item.description}</p>

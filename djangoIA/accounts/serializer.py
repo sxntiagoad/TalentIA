@@ -9,7 +9,7 @@ class FreelancerSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Freelancer
-        fields = ('id', 'email', 'password', 'name', 'lastname', 'role', 'phone', 'information', 'avatar', 'location', 'language', 'interests')
+        fields = ('id', 'email', 'password', 'name', 'lastname', 'phone', 'avatar', 'location', 'language', 'skills', 'experience', 'education', 'hourly_rate', 'availability', 'portfolio_link', 'linkedin_profile', 'github_profile')
         extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):
@@ -18,13 +18,18 @@ class FreelancerSerializer(serializers.ModelSerializer):
             password=validated_data['password'],
             name=validated_data.get('name', ''),
             lastname=validated_data.get('lastname', ''),
-            role=validated_data.get('role', ''),
             phone=validated_data.get('phone', ''),
-            information=validated_data.get('information', ''),
             avatar=validated_data.get('avatar'),
             location=validated_data.get('location', ''),
             language=validated_data.get('language', 'es'),
-            interests=validated_data.get('interests', '')
+            skills=validated_data.get('skills', ''),
+            experience=validated_data.get('experience', ''),
+            education=validated_data.get('education', ''),
+            hourly_rate=validated_data.get('hourly_rate'),
+            availability=validated_data.get('availability', ''),
+            portfolio_link=validated_data.get('portfolio_link', ''),
+            linkedin_profile=validated_data.get('linkedin_profile', ''),
+            github_profile=validated_data.get('github_profile', '')
         )
         return freelancer
 

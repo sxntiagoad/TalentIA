@@ -18,8 +18,20 @@ authAxios.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
+authAxios.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    console.error('Error en la respuesta:', error);
+    if (error.response) {
+      console.error('Datos de la respuesta de error:', error.response.data);
+      console.error('Estado de la respuesta de error:', error.response.status);
+    }
+    return Promise.reject(error);
+  }
+);
+
 export const login = (email, password) => {
-  return authAxios.post('login', { email, password });
+  return authAxios.post('login/', { email, password });
 };
 
 export const register = (registrationData, userType) => {
@@ -33,5 +45,16 @@ export const logout = () => {
 };
 
 export const getProfile = () => {
-  return authAxios.get('profile');
+  return authAxios.get('profile/');
+};
+
+export const updateProfile = (profileData) => {
+  return authAxios.put('profile/', profileData)
+    .then(response => {
+      if (response.data && response.data.user) {
+        return response.data.user;
+      } else {
+        throw new Error('La respuesta no contiene los datos del usuario actualizados');
+      }
+    });
 };
