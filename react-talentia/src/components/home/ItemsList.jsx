@@ -5,10 +5,12 @@ import 'react-alice-carousel/lib/alice-carousel.css';
 import AliceCarousel from 'react-alice-carousel';
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import '@fontsource/poppins';
+import { useNavigate } from "react-router-dom";
 
 export function ItemsList({ isService = true, title = "Servicios" }) {
   const [items, setItems] = useState([]);
   const carousel = useRef(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     async function loadItems() {
@@ -17,7 +19,15 @@ export function ItemsList({ isService = true, title = "Servicios" }) {
       console.log(response.data);
     }
     loadItems();
-  }, []);
+  }, [isService]);
+
+  const handlePost = () => {
+    if (isService) {
+      navigate("/post-service");
+    } else {
+      navigate("/post-job");
+    }
+  };
 
   const slidePrev = () => {
     if (carousel.current) {
@@ -71,6 +81,16 @@ export function ItemsList({ isService = true, title = "Servicios" }) {
             style={{ backgroundColor: '#1a202c' }} 
           >
             <FaArrowRight size={20} />
+          </button>
+        </div>
+        
+        {/* Botón "Publicar Servicio" o "Publicar Trabajo" */}
+        <div className="mt-8 text-center">
+          <button
+            onClick={handlePost}
+            className="bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-full shadow-lg transform transition duration-300 ease-in-out hover:scale-105 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-opacity-50"
+          >
+            {isService ? "Publicar Servicio" : "Publicar Trabajo"}
           </button>
         </div>
       </div>

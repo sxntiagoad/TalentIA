@@ -58,19 +58,25 @@ const Step4FinalReview = ({ prevStep, handleChange, handleFileChange, values }) 
     try {
       const formData = new FormData();
       Object.keys(values).forEach(key => {
-        if (key === 'image') {
-          if (values[key]) formData.append(key, values[key]);
-        } else {
-          formData.append(key, values[key]);
+        if (key !== 'company') {  // Excluye explícitamente 'company'
+          if (key === 'image') {
+            if (values[key]) formData.append(key, values[key]);
+          } else {
+            formData.append(key, values[key]);
+          }
         }
       });
 
       const response = await createJob(formData);
       console.log('Trabajo creado:', response.data);
-      navigate('/job-posted-success'); // Asegúrate de tener esta ruta definida
+      navigate('/job-posted-success');
     } catch (error) {
       console.error('Error al crear el trabajo:', error);
-      setError('Hubo un error al publicar el trabajo. Por favor, inténtalo de nuevo.');
+      if (error.response && error.response.data) {
+        setError(error.response.data.error || 'Hubo un error al publicar el trabajo. Por favor, inténtalo de nuevo.');
+      } else {
+        setError('Hubo un error al publicar el trabajo. Por favor, inténtalo de nuevo.');
+      }
     } finally {
       setIsSubmitting(false);
     }

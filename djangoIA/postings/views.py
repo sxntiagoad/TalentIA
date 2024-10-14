@@ -19,13 +19,19 @@ logger = logging.getLogger(__name__)
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def create_job(request):
-    if not hasattr(request.user, 'company'):
-        return Response({'error': 'Solo las empresas pueden crear trabajos'}, status=status.HTTP_403_FORBIDDEN)
+    try:
+        company = request.user.company
+        logger.info(f"Compañía encontrada: {company}")
+    except ObjectDoesNotExist:
+        logger.error(f"El usuario {request.user.email} no tiene un perfil de empresa")
+        return Response({'error': 'El usuario no tiene un perfil de empresa'}, status=status.HTTP_403_FORBIDDEN)
     
     serializer = JobSerializer(data=request.data, context={'request': request})
     if serializer.is_valid():
-        serializer.save(company=request.user.company)
+        job = serializer.save()
+        logger.info(f"Trabajo creado: {job}, Compañía: {job.company}")
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+    logger.error(f"Error al crear el trabajo: {serializer.errors}")
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['POST'])

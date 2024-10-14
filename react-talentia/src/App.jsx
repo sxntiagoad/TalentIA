@@ -3,8 +3,8 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 import { AuthProvider } from './context/AuthContext';
 import ProtectedRoutes from './components/general/ProtectedRoutes';
-
-// Importa tus componentes aquí
+import ServicePostedSuccess from './components/freelancer/ServicePostedSuccess';
+import JobPostedSuccess from './components/company/JobPostedSuccess';
 import { HomePage } from "./pages/HomePage";
 import { ItemDetailsPage } from "./pages/ItemsDetailsPage";
 import SubcategoryPage from "./pages/SubCategories";
@@ -32,9 +32,11 @@ function App() {
             <Route path="/company" element={<CompanyInitPage />} />
             <Route path="/services" element={<Services />} />
             <Route path="/jobs" element={<Jobs />} />
-            <Route path="/post-service" element={<ServiceForm />} />
-            <Route path="/post-job" element={<JobForm />} /> 
             <Route element={<ProtectedRoutes />}>
+              <Route path="/post-service" element={<ServiceForm />} />
+              <Route path="/post-job" element={<JobForm />} /> 
+              <Route path="/job-posted" element={<JobPostedSuccess />} />
+              <Route path="/service-posted" element={<ServicePostedSuccess />} />
               <Route path="/home" element={<HomePage />} />
               <Route path="/services/:id" element={<ItemDetailsPage isService={true} />} />
               <Route path="/jobs/:id" element={<ItemDetailsPage isService={false} />} />

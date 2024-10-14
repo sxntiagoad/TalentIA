@@ -49,9 +49,29 @@ export const createService = (serviceData) => {
 };
 
 export const createJob = (jobData) => {
-    return api.post('create-job/', jobData, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-      });
-    };
+  const token = localStorage.getItem('token');
+  if (!token) {
+    console.error('No se encontró el token de autenticación');
+    return Promise.reject(new Error('No hay token de autenticación'));
+  }
+  return api.post('create-job/', jobData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+      'Authorization': `Token ${token}`
+    }
+  }).catch(error => {
+    if (error.response) {
+      // El servidor respondió con un estado de error
+      console.error('Error en la respuesta del servidor:', error.response.data);
+      throw error.response.data;
+    } else if (error.request) {
+      // La petición fue hecha pero no se recibió respuesta
+      console.error('No se recibió respuesta del servidor');
+      throw new Error('No se recibió respuesta del servidor');
+    } else {
+      // Algo sucedió al configurar la petición que provocó un error
+      console.error('Error al configurar la petición:', error.message);
+      throw new Error('Error al configurar la petición');
+    }
+  });
+};

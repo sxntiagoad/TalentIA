@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import React, { useState, useRef, useEffect, useContext } from "react";
 import { FaBell, FaEnvelope, FaUserCircle, FaSearch, FaExchangeAlt } from "react-icons/fa";
 import '../../index.css';
@@ -13,6 +13,18 @@ export function Navbar({ isAuthenticated = false, isCompanyMode = false, hideSea
   const navigate = useNavigate();
   const userMenuRef = useRef(null);
   const { logout, user } = useContext(AuthContext);
+  const location = useLocation();
+  const [currentType, setCurrentType] = useState(isCompanyMode ? 'company' : 'freelancer');
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const typeParam = params.get('type');
+    if (typeParam === 'company' || typeParam === 'freelancer') {
+      setCurrentType(typeParam);
+    } else {
+      setCurrentType(isCompanyMode ? 'company' : 'freelancer');
+    }
+  }, [location, isCompanyMode]);
 
   const handleSearch = async () => {
     if (query.trim()) {
@@ -44,15 +56,15 @@ export function Navbar({ isAuthenticated = false, isCompanyMode = false, hideSea
   };
 
   const toggleMode = () => {
-    const nextPath = isCompanyMode ? '/' : '/company';
+    const nextType = currentType === 'company' ? 'freelancer' : 'company';
+    const nextPath = location.pathname + '?type=' + nextType;
     navigate(nextPath, { replace: true });
   };
 
-  const themeColor = isCompanyMode ? 'green' : 'purple';
+  const themeColor = currentType === 'company' ? 'green' : 'purple';
 
   const handleAuth = (action) => {
-    const userType = isCompanyMode ? 'company' : 'freelancer';
-    const path = `/${action}?type=${userType}`;
+    const path = `/${action}?type=${currentType}`;
     navigate(path);
   };
 
@@ -163,7 +175,7 @@ export function Navbar({ isAuthenticated = false, isCompanyMode = false, hideSea
             className={`bg-${themeColor}-600 text-white font-bold py-2 px-4 rounded shadow-md transition-colors duration-300 hover:bg-${themeColor}-700 flex items-center`}
           >
             <FaExchangeAlt className="mr-2" />
-            {isCompanyMode ? 'Modo Freelancer' : 'Modo Empresa'}
+            {currentType === 'company' ? 'Modo Freelancer' : 'Modo Empresa'}
           </button>
         </div>
       )}

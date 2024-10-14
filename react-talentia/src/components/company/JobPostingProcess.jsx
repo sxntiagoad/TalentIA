@@ -24,23 +24,13 @@ const JobPostingProcess = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const verifyAuth = async () => {
-      try {
-        const response = await checkAuth();
-        if (response.data.is_authenticated && response.data.user_type === 'company') {
-          setIsAuthenticated(true);
-        } else {
-          setError('Debes iniciar sesión como empresa para publicar un trabajo.');
-          setIsAuthenticated(false);
-        }
-      } catch (error) {
-        console.error('Error al verificar la autenticación:', error);
-        setError('Error al verificar la autenticación. Por favor, inicia sesión de nuevo.');
-        setIsAuthenticated(false);
-      }
-    };
-
-    verifyAuth();
+    const token = localStorage.getItem('token');
+    if (!token) {
+      setError('Debes iniciar sesión para publicar un trabajo.');
+      setIsAuthenticated(false);
+    } else {
+      setIsAuthenticated(true);
+    }
   }, []);
 
   const nextStep = () => setStep(step + 1);

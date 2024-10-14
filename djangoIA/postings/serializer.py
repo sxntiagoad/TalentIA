@@ -67,7 +67,7 @@ class ServiceSerializer(serializers.ModelSerializer):
         return service
 
 class JobSerializer(serializers.ModelSerializer):
-    company = CompanySerializer(read_only=True)
+    company = serializers.PrimaryKeyRelatedField(read_only=True)
     job_image = serializers.SerializerMethodField()
     company_name = serializers.CharField(source='company.name', read_only=True)
     job_title = serializers.CharField(source='title', read_only=True)
@@ -101,7 +101,10 @@ class JobSerializer(serializers.ModelSerializer):
                     representation[field] = request.build_absolute_uri(representation[field])
 
         return representation
-
+    def create(self, validated_data):
+        company = self.context['request'].user.company
+        job = Job.objects.create(company=company, **validated_data)
+        return job
     class Meta:
         model = Job
         fields = '__all__'

@@ -67,7 +67,7 @@ const Step4Final = ({ prevStep, handleChange, handleFileChange, values }) => {
 
       const response = await createService(formData);
       console.log('Servicio creado:', response.data);
-      navigate('/service-posted-success'); // Asegúrate de tener esta ruta definida
+      navigate('/service-posted'); // Asegúrate de tener esta ruta definida
     } catch (error) {
       console.error('Error al crear el servicio:', error);
       setError('Hubo un error al publicar el servicio. Por favor, inténtalo de nuevo.');
