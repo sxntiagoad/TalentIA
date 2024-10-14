@@ -1,5 +1,5 @@
 import React from 'react';
-import { FaUser, FaEnvelope, FaPhone, FaMapMarkerAlt, FaBriefcase, FaGraduationCap, FaLanguage, FaStar, FaMoneyBillWave, FaCalendarAlt, FaLink, FaLinkedin, FaGithub } from 'react-icons/fa';
+import { FaUser, FaEnvelope, FaPhone, FaMapMarkerAlt, FaBriefcase, FaGraduationCap, FaLanguage, FaStar, FaLink, FaLinkedin, FaGithub } from 'react-icons/fa';
 
 const FreelancerProfile = ({ profile }) => {
   const renderField = (icon, label, value) => (
@@ -25,8 +25,6 @@ const FreelancerProfile = ({ profile }) => {
         {renderField(<FaStar className="text-purple-500 text-xl" />, "Habilidades", profile.skills)}
         {renderField(<FaBriefcase className="text-purple-500 text-xl" />, "Experiencia", profile.experience)}
         {renderField(<FaGraduationCap className="text-purple-500 text-xl" />, "Educación", profile.education)}
-        {renderField(<FaMoneyBillWave className="text-purple-500 text-xl" />, "Tarifa por hora", profile.hourly_rate)}
-        {renderField(<FaCalendarAlt className="text-purple-500 text-xl" />, "Disponibilidad", profile.availability)}
         {renderField(<FaLink className="text-purple-500 text-xl" />, "Portafolio", profile.portfolio_link)}
         {renderField(<FaLinkedin className="text-purple-500 text-xl" />, "LinkedIn", profile.linkedin_profile)}
         {renderField(<FaGithub className="text-purple-500 text-xl" />, "GitHub", profile.github_profile)}

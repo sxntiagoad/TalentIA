@@ -13,7 +13,7 @@ User = get_user_model()
 def register_freelancer(request):
     serializer = FreelancerSerializer(data=request.data)
     if serializer.is_valid():
-        freelancer = serializer.save()
+        freelancer = serializer.save(profile_completed=False)
         token, _ = Token.objects.get_or_create(user=freelancer)
         return Response({
             'token': token.key,
@@ -75,3 +75,14 @@ def profile(request):
 
     serializador = clase_serializador(instancia)
     return Response(serializador.data)
+
+# Añadir una nueva vista para completar el perfil
+@api_view(['PUT', 'PATCH'])
+@permission_classes([IsAuthenticated])
+def complete_freelancer_profile(request):
+    freelancer = request.user.freelancer
+    serializer = FreelancerSerializer(freelancer, data=request.data, partial=True)
+    if serializer.is_valid():
+        serializer.save(profile_completed=True)
+        return Response(serializer.data)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

@@ -49,10 +49,10 @@ export const getProfile = () => {
 };
 
 export const updateProfile = (profileData) => {
-  return authAxios.put('profile/', profileData)
+  return authAxios.put('complete-profile/', profileData)
     .then(response => {
-      if (response.data && response.data.user) {
-        return response.data.user;
+      if (response.data) {
+        return response.data;
       } else {
         throw new Error('La respuesta no contiene los datos del usuario actualizados');
       }

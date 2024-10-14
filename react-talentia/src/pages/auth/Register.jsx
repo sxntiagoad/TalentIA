@@ -45,7 +45,11 @@ export function Register() {
       const response = await register(registrationData, userType);
       localStorage.setItem('token', response.data.token);
       login(response.data[userType]);
-      navigate('/home');
+      if (userType === 'freelancer' && !response.data[userType].profile_completed) {
+        navigate('/completar-perfil');
+      } else {
+        navigate('/home');
+      }
     } catch (error) {
       console.error('Registro fallido:', error.response?.data || error.message);
     }

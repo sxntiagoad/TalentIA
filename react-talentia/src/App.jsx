@@ -19,6 +19,7 @@ import Login from './pages/auth/Login';
 import ServiceForm from './pages/post/ServiceForm';
 import JobForm from './pages/post/JobForm';
 import ProfilePage from './pages/ProfilePage';  // Importa la nueva página de perfil
+import CompletarPerfil from './components/freelancer/CompletarPerfil';
 
 function App() {
   return (
@@ -44,6 +45,7 @@ function App() {
               <Route path="/search" element={<SearchPage />} />
               <Route path="/category/:id" element={<MainCategoryPage />} />
               <Route path="/profile" element={<ProfilePage />} />  // Agrega la nueva ruta de perfil
+              <Route path="/completar-perfil" element={<CompletarPerfil />} />
             </Route>
           </Routes>
         </AnimatePresence>

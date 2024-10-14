@@ -51,11 +51,10 @@ class Freelancer(CustomUser):
     skills = models.TextField(blank=True)
     experience = models.TextField(blank=True)
     education = models.TextField(blank=True)
-    hourly_rate = models.DecimalField(max_digits=8, decimal_places=2, null=True, blank=True)
-    availability = models.CharField(max_length=100, blank=True)
     portfolio_link = models.URLField(blank=True)
     linkedin_profile = models.URLField(blank=True)
     github_profile = models.URLField(blank=True)
+    profile_completed = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.name} {self.lastname}"

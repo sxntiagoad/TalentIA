@@ -1,5 +1,5 @@
 import React, { createContext, useState, useEffect } from 'react';
-import { getProfile } from '../api/Auth.api';
+import { getProfile, updateProfile } from '../api/Auth.api';
 
 export const AuthContext = createContext();
 
@@ -25,9 +25,8 @@ export const AuthProvider = ({ children }) => {
     verifyToken();
   }, []);
 
-  const login = (userData, token) => {
+  const login = (userData) => {
     setUser(userData);
-    localStorage.setItem('token', token);
   };
 
   const logout = () => {
@@ -35,8 +34,17 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem('token');
   };
 
+  const updateUser = async (userData) => {
+    try {
+      const updatedUser = await updateProfile(userData);
+      setUser(updatedUser);
+    } catch (error) {
+      console.error('Error al actualizar el usuario:', error);
+    }
+  };
+
   return (
-    <AuthContext.Provider value={{ user, login, logout, loading }}>
+    <AuthContext.Provider value={{ user, login, logout, loading, updateUser }}>
       {children}
     </AuthContext.Provider>
   );
