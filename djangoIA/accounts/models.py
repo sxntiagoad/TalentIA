@@ -72,6 +72,7 @@ class Company(CustomUser):
         ('de', 'Deutsch'),
     ], blank=True, default='es')
     interests = models.TextField(blank=True)
+    profile_completed = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name
