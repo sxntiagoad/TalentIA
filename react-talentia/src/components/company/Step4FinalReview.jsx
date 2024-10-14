@@ -69,7 +69,7 @@ const Step4FinalReview = ({ prevStep, handleChange, handleFileChange, values }) 
 
       const response = await createJob(formData);
       console.log('Trabajo creado:', response.data);
-      navigate('/job-posted-success');
+      navigate('/job-posted');
     } catch (error) {
       console.error('Error al crear el trabajo:', error);
       if (error.response && error.response.data) {
