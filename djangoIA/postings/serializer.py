@@ -39,8 +39,8 @@ class ServiceSerializer(serializers.ModelSerializer):
 
     def get_freelancer_avatar(self, obj):
         request = self.context.get('request')
-        if request and obj.freelancer and obj.freelancer.avatar:
-            return request.build_absolute_uri(obj.freelancer.avatar.url)
+        if request and obj.freelancer and obj.freelancer.freelancer_avatar:
+            return request.build_absolute_uri(obj.freelancer.freelancer_avatar.url)
         return None
 
     def to_representation(self, instance):

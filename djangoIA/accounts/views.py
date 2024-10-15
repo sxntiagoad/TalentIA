@@ -86,3 +86,14 @@ def complete_freelancer_profile(request):
         serializer.save(profile_completed=True)
         return Response(serializer.data)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+# Añadir una nueva vista para completar el perfil de empresa
+@api_view(['PUT', 'PATCH'])
+@permission_classes([IsAuthenticated])
+def complete_company_profile(request):
+    company = request.user.company
+    serializer = CompanySerializer(company, data=request.data, partial=True)
+    if serializer.is_valid():
+        serializer.save(profile_completed=True)
+        return Response(serializer.data)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

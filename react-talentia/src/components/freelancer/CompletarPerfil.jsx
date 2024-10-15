@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { AuthContext } from '../../context/AuthContext';
 import { updateProfile } from '../../api/Auth.api';
-import { FaUser, FaPhone, FaMapMarkerAlt, FaLanguage, FaTools, FaBriefcase, FaGraduationCap, FaLink, FaLinkedin, FaGithub, FaChevronLeft, FaChevronRight, FaCheck } from 'react-icons/fa';
+import { FaUser, FaPhone, FaMapMarkerAlt, FaLanguage, FaTools, FaBriefcase, FaGraduationCap, FaLink, FaLinkedin, FaGithub, FaChevronLeft, FaChevronRight, FaCheck, FaImage } from 'react-icons/fa';
 import { motion } from 'framer-motion';
 
 const TOTAL_STEPS = 3;
@@ -23,12 +23,20 @@ const CompletarPerfil = () => {
 
   const onSubmit = async (data) => {
     try {
-      const updatedUser = await updateProfile(data);
+      const formData = new FormData();
+      Object.keys(data).forEach(key => {
+        if (key === 'freelancer_avatar' && data[key][0]) {
+          formData.append(key, data[key][0]);
+        } else {
+          formData.append(key, data[key]);
+        }
+      });
+      const updatedUser = await updateProfile(formData);
       updateUser(updatedUser);
       navigate('/home');
     } catch (err) {
       setError('Hubo un problema al guardar tu información. Por favor, inténtalo de nuevo.');
-      console.error('Error al actualizar el perfil:', err);
+      console.error('Error al actualizar el perfil:', err.response?.data);
     }
   };
 
@@ -79,6 +87,12 @@ const CompletarPerfil = () => {
             placeholder={placeholder}
             className="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-10 py-3 sm:text-sm border-gray-300 rounded-md"
           />
+        ) : type === "file" ? (
+          <input
+            type={type}
+            {...register(name, { required: required })}
+            className="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-10 py-3 sm:text-sm border-gray-300 rounded-md"
+          />
         ) : (
           <input
             type={type}
@@ -110,11 +124,12 @@ const CompletarPerfil = () => {
       {renderInput("experience", "Experiencia laboral", <FaBriefcase className="text-gray-500" />, "textarea", null, true, "Ej. 3 años como desarrollador frontend en XYZ Company")}
       {renderInput("education", "Educación", <FaGraduationCap className="text-gray-500" />, "textarea", null, true, "Ej. Grado en Ingeniería Informática, Universidad XYZ")}
     </>,
-    // Paso 3: Enlaces Profesionales
+    // Paso 3: Enlaces Profesionales y Avatar
     <>
       {renderInput("portfolio_link", "Enlace al portafolio", <FaLink className="text-gray-500" />, "url", null, false, "https://miportfolio.com")}
       {renderInput("linkedin_profile", "Perfil de LinkedIn", <FaLinkedin className="text-gray-500" />, "url", null, false, "https://linkedin.com/in/tuusuario")}
       {renderInput("github_profile", "Perfil de GitHub", <FaGithub className="text-gray-500" />, "url", null, false, "https://github.com/tuusuario")}
+      {renderInput("freelancer_avatar", "Foto de perfil", <FaImage className="text-gray-500" />, "file", null, false)}
     </>
   ];
 

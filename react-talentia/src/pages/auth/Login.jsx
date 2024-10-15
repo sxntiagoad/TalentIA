@@ -28,7 +28,13 @@ export function Login() {
         console.log('Login successful, token received');
         // Asegúrate de que estás pasando los datos correctos a la función login
         login(response.data[userType], response.data.token);
-        navigate('/home');
+        
+        // Redirige según el tipo de usuario
+        if (userType === 'company') {
+          navigate('/company-home');
+        } else {
+          navigate('/home');
+        }
       } else {
         console.log('No token received in response');
         setError('No se recibió un token válido. Por favor, intente de nuevo.');

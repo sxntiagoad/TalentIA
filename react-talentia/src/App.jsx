@@ -20,6 +20,8 @@ import ServiceForm from './pages/post/ServiceForm';
 import JobForm from './pages/post/JobForm';
 import ProfilePage from './pages/ProfilePage';  // Importa la nueva página de perfil
 import CompletarPerfil from './components/freelancer/CompletarPerfil';
+import CompletarPerfilCompania from './components/company/CompletarPerfilCompania';
+import CompanyHomePage from './pages/CompanyHomePage';
 
 function App() {
   return (
@@ -46,6 +48,8 @@ function App() {
               <Route path="/category/:id" element={<MainCategoryPage />} />
               <Route path="/profile" element={<ProfilePage />} />  // Agrega la nueva ruta de perfil
               <Route path="/completar-perfil" element={<CompletarPerfil />} />
+              <Route path="/company-home" element={<CompanyHomePage />} />
+              <Route path="/completar-perfil-compania" element={<CompletarPerfilCompania />} />
             </Route>
           </Routes>
         </AnimatePresence>

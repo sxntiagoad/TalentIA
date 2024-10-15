@@ -3,14 +3,14 @@ from .models import Freelancer, Company
 
 class FreelancerSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, required=False)
-    avatar = serializers.ImageField(required=False, allow_null=True)
+    freelancer_avatar = serializers.ImageField(required=False, allow_null=True)
     name = serializers.CharField(required=False, allow_blank=True)
     lastname = serializers.CharField(required=False, allow_blank=True)
     profile_completed = serializers.BooleanField(read_only=True)
 
     class Meta:
         model = Freelancer
-        fields = ('id', 'email', 'password', 'name', 'lastname', 'phone', 'avatar', 'location', 'language', 'skills', 'experience', 'education', 'portfolio_link', 'linkedin_profile', 'github_profile', 'profile_completed')
+        fields = ('id', 'email', 'password', 'name', 'lastname', 'phone', 'freelancer_avatar', 'location', 'language', 'skills', 'experience', 'education', 'portfolio_link', 'linkedin_profile', 'github_profile', 'profile_completed')
         extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):
@@ -20,7 +20,7 @@ class FreelancerSerializer(serializers.ModelSerializer):
             name=validated_data.get('name', ''),
             lastname=validated_data.get('lastname', ''),
             phone=validated_data.get('phone', ''),
-            avatar=validated_data.get('avatar', None),
+            freelancer_avatar=validated_data.get('freelancer_avatar', None),
             location=validated_data.get('location', ''),
             language=validated_data.get('language', 'es'),
             skills=validated_data.get('skills', ''),
@@ -39,13 +39,14 @@ class FreelancerSerializer(serializers.ModelSerializer):
         return instance
 
 class CompanySerializer(serializers.ModelSerializer):
-    password = serializers.CharField(write_only=True)
+    password = serializers.CharField(write_only=True, required=False)
     company_avatar = serializers.ImageField(required=False, allow_null=True)
     name = serializers.CharField(required=False, allow_blank=True)
+    profile_completed = serializers.BooleanField(read_only=True)
 
     class Meta:
         model = Company
-        fields = ('id', 'email', 'password', 'name', 'phone', 'information', 'company_avatar', 'company_location', 'company_language', 'interests')
+        fields = ('id', 'email', 'password', 'name', 'phone', 'information', 'company_avatar', 'company_location', 'company_language', 'interests', 'profile_completed')
         extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):
@@ -61,3 +62,9 @@ class CompanySerializer(serializers.ModelSerializer):
             interests=validated_data.get('interests', '')
         )
         return company
+
+    def update(self, instance, validated_data):
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        instance.save()
+        return instance

@@ -49,12 +49,23 @@ export const getProfile = () => {
 };
 
 export const updateProfile = (profileData) => {
-  return authAxios.put('complete-profile/', profileData)
+  return authAxios.put('complete-profile/freelancer/', profileData)
     .then(response => {
       if (response.data) {
         return response.data;
       } else {
         throw new Error('La respuesta no contiene los datos del usuario actualizados');
+      }
+    });
+};
+
+export const updateCompanyProfile = (profileData) => {
+  return authAxios.put('complete-profile/company/', profileData)
+    .then(response => {
+      if (response.data) {
+        return response.data;
+      } else {
+        throw new Error('La respuesta no contiene los datos de la compañía actualizados');
       }
     });
 };

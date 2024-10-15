@@ -23,32 +23,26 @@ export function Register() {
         email: data.email,
         password: data.password,
         name: data.name,
-        // Estos campos opcionales se mantienen, pero podrían no ser necesarios en el registro inicial
-        phone: data.phone || '',
-        information: data.information || '',
-        interests: data.interests || '',
       };
 
       if (userType === 'freelancer') {
-        registrationData.lastname = data.lastname || ''; // Aseguramos que el apellido se envíe para freelancers
-        // Estos campos opcionales se mantienen, pero podrían no ser necesarios en el registro inicial
-        registrationData.role = data.role || '';
-        registrationData.location = data.location || '';
-        registrationData.language = data.language || 'es';
-      } else {
-        // Estos campos opcionales se mantienen, pero podrían no ser necesarios en el registro inicial
-        registrationData.company_location = data.location || '';
-        registrationData.company_language = data.language || 'es';
+        registrationData.lastname = data.lastname || '';
       }
 
-      console.log('Datos de registro:', registrationData); // Para depuración
+      console.log('Datos de registro:', registrationData);
       const response = await register(registrationData, userType);
       localStorage.setItem('token', response.data.token);
       login(response.data[userType]);
-      if (userType === 'freelancer' && !response.data[userType].profile_completed) {
-        navigate('/completar-perfil');
+      
+      if (userType === 'freelancer') {
+        if (!response.data[userType].profile_completed) {
+          navigate('/completar-perfil');
+        } else {
+          navigate('/home');
+        }
       } else {
-        navigate('/home');
+        // Para compañías, redirigimos a completar el perfil
+        navigate('/completar-perfil-compania');
       }
     } catch (error) {
       console.error('Registro fallido:', error.response?.data || error.message);

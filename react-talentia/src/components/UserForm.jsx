@@ -17,7 +17,6 @@ const linkColor = isCompany ? 'text-green-300' : 'text-purple-300';
 
 return (
 <div>
-
     <div className="flex items-center justify-center">
         <img src={logo} alt="Logo" className="w-20 h-20" />
     </div>

@@ -40,7 +40,7 @@ class Freelancer(CustomUser):
     name = models.CharField(max_length=50)
     lastname = models.CharField(max_length=50)
     phone = models.CharField(max_length=15, blank=True)
-    avatar = models.ImageField(upload_to='users/', null=True, blank=True)
+    freelancer_avatar = models.ImageField(upload_to='freelancers/', null=True, blank=True)
     location = models.CharField(max_length=100, blank=True)
     language = models.CharField(max_length=50, choices=[
         ('es', 'Español'),
