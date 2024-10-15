@@ -1,10 +1,14 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { FaBuilding, FaSearch, FaUsers, FaBriefcase } from 'react-icons/fa';
+import Navbar from '../components/general/Navbar';
 
 const CompanyHomePage = () => {
   return (
     <div className="bg-green-50 min-h-screen">
+      {/* Navbar */}
+      <Navbar isAuthenticated={true} isCompanyMode={true} />
+
       {/* Encabezado */}
       <header className="bg-green-600 text-white py-6">
         <div className="container mx-auto px-4">
@@ -31,7 +35,7 @@ const CompanyHomePage = () => {
 
         {/* Sección de acciones rápidas */}
         <section className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <Link to="/publicar-trabajo" className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow">
+          <Link to="/post-job" className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow">
             <FaBriefcase className="text-4xl text-green-600 mb-4" />
             <h3 className="text-xl font-semibold text-green-800 mb-2">Publicar Trabajo</h3>
             <p className="text-gray-600">Cree una nueva oferta de trabajo para atraer talento.</p>

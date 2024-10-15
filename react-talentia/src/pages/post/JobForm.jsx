@@ -17,7 +17,7 @@ const JobForm = () => {
             Publica tu Oferta de Trabajo
           </h1>
           <Link 
-            to="/home" 
+            to="/company-home" 
             className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full transition duration-300 ease-in-out transform hover:scale-105 text-sm uppercase tracking-wide"
           >
             Volver a Inicio

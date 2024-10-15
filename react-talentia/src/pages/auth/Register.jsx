@@ -31,21 +31,32 @@ export function Register() {
 
       console.log('Datos de registro:', registrationData);
       const response = await register(registrationData, userType);
-      localStorage.setItem('token', response.data.token);
-      login(response.data[userType]);
       
-      if (userType === 'freelancer') {
-        if (!response.data[userType].profile_completed) {
-          navigate('/completar-perfil');
+      if (response.data && response.data.token) {
+        console.log('Registro exitoso, token recibido:', response.data.token);
+        localStorage.setItem('token', response.data.token);
+        login(response.data[userType], response.data.token);
+        
+        if (userType === 'freelancer') {
+          if (!response.data[userType].profile_completed) {
+            navigate('/completar-perfil');
+          } else {
+            navigate('/home');
+          }
         } else {
-          navigate('/home');
+          if (!response.data[userType].profile_completed) {
+            navigate('/completar-perfil-compania');
+          } else {
+            navigate('/company-home');
+          }
         }
       } else {
-        // Para compañías, redirigimos a completar el perfil
-        navigate('/completar-perfil-compania');
+        console.error('No se recibió un token en la respuesta del registro');
+        // Manejar el error apropiadamente, tal vez mostrar un mensaje al usuario
       }
     } catch (error) {
       console.error('Registro fallido:', error.response?.data || error.message);
+      // Manejar el error apropiadamente, tal vez mostrar un mensaje al usuario
     }
   };
 
