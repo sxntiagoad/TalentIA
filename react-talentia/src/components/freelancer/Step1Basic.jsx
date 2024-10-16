@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { getAllCategories, getSubcategoriesByCategory, getAllNestedCategories } from '../../api/Categories.api';
+import { getAllCategories, getSubcategoriesByCategory, getNestedCategoriesBySubcategory } from '../../api/Categories.api';
 
 const Step1Basic = ({ nextStep, handleChange, values }) => {
   const [categories, setCategories] = useState([]);
@@ -26,9 +26,15 @@ const Step1Basic = ({ nextStep, handleChange, values }) => {
         try {
           const response = await getSubcategoriesByCategory(values.category);
           setSubcategories(response.data);
+          // Resetear la subcategoría y nested categoría seleccionadas
+          handleChange('subcategory')({ target: { value: '' } });
+          handleChange('nestedcategory')({ target: { value: '' } });
         } catch (error) {
           console.error('Error al obtener las subcategorías:', error);
         }
+      } else {
+        setSubcategories([]);
+        setNestedCategories([]);
       }
     };
 
@@ -37,16 +43,22 @@ const Step1Basic = ({ nextStep, handleChange, values }) => {
 
   useEffect(() => {
     const fetchNestedCategories = async () => {
-      try {
-        const response = await getAllNestedCategories();
-        setNestedCategories(response.data);
-      } catch (error) {
-        console.error('Error al obtener las categorías anidadas:', error);
+      if (values.subcategory) {
+        try {
+          const response = await getNestedCategoriesBySubcategory(values.subcategory);
+          setNestedCategories(response.data);
+          // Resetear la nested categoría seleccionada
+          handleChange('nestedcategory')({ target: { value: '' } });
+        } catch (error) {
+          console.error('Error al obtener las categorías anidadas:', error);
+        }
+      } else {
+        setNestedCategories([]);
       }
     };
 
     fetchNestedCategories();
-  }, []);
+  }, [values.subcategory]);
 
   const continuar = (e) => {
     e.preventDefault();

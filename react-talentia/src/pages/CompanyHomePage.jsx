@@ -10,7 +10,7 @@ const CompanyHomePage = () => {
       <Navbar isAuthenticated={true} isCompanyMode={true} hideSearch={true} />
 
       {/* Espacio adicional para evitar que el contenido sea cubierto por el navbar */}
-      <div className="h-16"></div>
+      <div className="h-24"></div>
 
       {/* Encabezado */}
       <header className="bg-green-600 text-white py-6">

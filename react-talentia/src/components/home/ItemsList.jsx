@@ -22,11 +22,7 @@ export function ItemsList({ isService = true, title = "Servicios" }) {
   }, [isService]);
 
   const handlePost = () => {
-    if (isService) {
-      navigate("/post-service");
-    } else {
-      navigate("/post-job");
-    }
+    navigate("/post-service");
   };
 
   const slidePrev = () => {
@@ -57,12 +53,20 @@ export function ItemsList({ isService = true, title = "Servicios" }) {
 
   return (
     <div className="py-4">
-      {/* Contenedor Principal */}
-      <div className="w-full mx-auto px-10"> {/* Remueve max-w-6xl y reduce px */}
-        {/* Subcontenedor más ancho y centrado */}
-        <h2 className="text-3xl font-semibold text-center" style={{ fontFamily: 'Poppins, sans-serif' }}>
-          {title}
-        </h2>
+      <div className="w-full mx-auto px-10">
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-3xl font-semibold" style={{ fontFamily: 'Poppins, sans-serif' }}>
+            {title}
+          </h2>
+          {isService && (
+            <button
+              onClick={handlePost}
+              className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transform transition duration-300 ease-in-out hover:scale-105 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-opacity-50 animate-pulse"
+            >
+              ¡Publica tu Servicio Ahora!
+            </button>
+          )}
+        </div>
         <div className="relative">
           <AliceCarousel
             mouseTracking
@@ -81,16 +85,6 @@ export function ItemsList({ isService = true, title = "Servicios" }) {
             style={{ backgroundColor: '#1a202c' }} 
           >
             <FaArrowRight size={20} />
-          </button>
-        </div>
-        
-        {/* Botón "Publicar Servicio" o "Publicar Trabajo" */}
-        <div className="mt-8 text-center">
-          <button
-            onClick={handlePost}
-            className="bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-full shadow-lg transform transition duration-300 ease-in-out hover:scale-105 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-opacity-50"
-          >
-            {isService ? "Publicar Servicio" : "Publicar Trabajo"}
           </button>
         </div>
       </div>

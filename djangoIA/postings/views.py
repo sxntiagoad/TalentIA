@@ -238,6 +238,12 @@ def subcategories_by_category(request, category_id):
     return Response(serializer.data)
 
 @api_view(['GET'])
+def nestedcategories_by_subcategory(request, subcategory_id):
+    nestedcategories = NestedCategory.objects.filter(subcategory_id=subcategory_id)
+    serializer = NestedcategorySerializer(nestedcategories, many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
 def search_items(request):
     query = request.GET.get('q', '').strip()
     services_response = []

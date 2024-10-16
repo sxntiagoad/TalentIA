@@ -19,7 +19,8 @@ from .views import (
     job_creation_final_review,
     service_creation_step1,
     service_creation_step2,
-    service_creation_final_review
+    service_creation_final_review,
+    nestedcategories_by_subcategory
 )
 
 router = routers.DefaultRouter()
@@ -45,4 +46,7 @@ urlpatterns = [
     path('service/create/step1/', service_creation_step1, name='service_creation_step1'),
     path('service/create/step2/<int:service_id>/', service_creation_step2, name='service_creation_step2'),
     path('service/create/final-review/<int:service_id>/', service_creation_final_review, name='service_creation_final_review'),
+    path('api/v1/nestedcategories/subcategory/<int:subcategory_id>/', 
+         nestedcategories_by_subcategory, 
+         name='nestedcategories-by-subcategory'),
 ]
