@@ -7,7 +7,10 @@ const CompanyHomePage = () => {
   return (
     <div className="bg-green-50 min-h-screen">
       {/* Navbar */}
-      <Navbar isAuthenticated={true} isCompanyMode={true} />
+      <Navbar isAuthenticated={true} isCompanyMode={true} hideSearch={true} />
+
+      {/* Espacio adicional para evitar que el contenido sea cubierto por el navbar */}
+      <div className="h-16"></div>
 
       {/* Encabezado */}
       <header className="bg-green-600 text-white py-6">
@@ -45,7 +48,7 @@ const CompanyHomePage = () => {
             <h3 className="text-xl font-semibold text-green-800 mb-2">Gestionar Candidatos</h3>
             <p className="text-gray-600">Revise y gestione las aplicaciones a sus ofertas.</p>
           </Link>
-          <Link to="/perfil-empresa" className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow">
+          <Link to="/profile" className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow">
             <FaBuilding className="text-4xl text-green-600 mb-4" />
             <h3 className="text-xl font-semibold text-green-800 mb-2">Perfil de Empresa</h3>
             <p className="text-gray-600">Actualice la información de su empresa.</p>
