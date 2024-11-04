@@ -51,12 +51,18 @@ export function AboutItem({ item, isService }) {
           {[category, subcategory, nestedcategory].filter(Boolean).map((cat, index) => (
             <React.Fragment key={index}>
               <FaChevronRight className="text-gray-400" />
-              <Link
-                to={`/category/${categoryLookup[cat] || '#'}`}
-                className="hover:text-purple-600 transition-colors duration-200"
-              >
-                {cat}
-              </Link>
+              {index === 0 ? (
+                <Link
+                  to={`/category/${categoryLookup[cat] || '#'}`}
+                  className="hover:text-purple-600 transition-colors duration-200"
+                >
+                  {cat}
+                </Link>
+              ) : (
+                <span className="hover:text-purple-600 transition-colors duration-200">
+                  {cat}
+                </span>
+              )}
             </React.Fragment>
           ))}
         </nav>

@@ -87,36 +87,45 @@ def process_user_message(mensaje):
         trabajos, servicios = buscar_en_base_de_datos(palabras_clave)
         
         info_trabajos_servicios = ""
-        if trabajos or servicios:
-            info_trabajos_servicios += "He encontrado algunos trabajos y servicios que podrían interesarte:\n\n"
-            
-            for trabajo in trabajos:
-                info_trabajos_servicios += f"- Trabajo: {trabajo.title}\n"
-                info_trabajos_servicios += f"  {trabajo.description[:100]}...\n"
-                info_trabajos_servicios += f"  Salario: {trabajo.salary}, Ubicación: {trabajo.location}\n"
-                info_trabajos_servicios += f"  Empresa: {trabajo.company.name}\n"
-                info_trabajos_servicios += f"  Requisitos: {trabajo.requirements[:100]}...\n"
-                info_trabajos_servicios += f"  Categoría: {trabajo.category.name if trabajo.category else 'No especificada'}"
+
+        if trabajos:
+            info_trabajos_servicios += "TRABAJOS DISPONIBLES:\n\n"
+            for i, trabajo in enumerate(trabajos, 1):
+                info_trabajos_servicios += f"{i}. {trabajo.title}\n"
+                info_trabajos_servicios += "-" * 40 + "\n"
+                info_trabajos_servicios += f"Descripción: {trabajo.description[:150]}...\n\n"
+                info_trabajos_servicios += f"Salario: {trabajo.salary}\n"
+                info_trabajos_servicios += f"Ubicación: {trabajo.location}\n"
+                info_trabajos_servicios += f"Empresa: {trabajo.company.name}\n"
+                
+                categoria_info = f"Categoría: {trabajo.category.name if trabajo.category else 'No especificada'}"
                 if trabajo.subcategory:
-                    info_trabajos_servicios += f" > {trabajo.subcategory.name}"
+                    categoria_info += f" > {trabajo.subcategory.name}"
                 if trabajo.nestedcategory:
-                    info_trabajos_servicios += f" > {trabajo.nestedcategory.name}"
-                info_trabajos_servicios += "\n\n"
-            
-            for servicio in servicios:
-                info_trabajos_servicios += f"- Servicio: {servicio.title}\n"
-                info_trabajos_servicios += f"  {servicio.description[:100]}...\n"
-                info_trabajos_servicios += f"  Precio: {servicio.price}, Ubicación: {servicio.location}\n"
-                info_trabajos_servicios += f"  Freelancer: {servicio.freelancer.name} {servicio.freelancer.lastname}\n"
+                    categoria_info += f" > {trabajo.nestedcategory.name}"
+                info_trabajos_servicios += f"{categoria_info}\n\n"
+
+        if servicios:
+            info_trabajos_servicios += "SERVICIOS DISPONIBLES:\n\n"
+            for i, servicio in enumerate(servicios, 1):
+                info_trabajos_servicios += f"{i}. {servicio.title}\n"
+                info_trabajos_servicios += "-" * 40 + "\n"
+                info_trabajos_servicios += f"Descripción: {servicio.description[:150]}...\n\n"
+                info_trabajos_servicios += f"Precio: {servicio.price}\n"
+                info_trabajos_servicios += f"Ubicación: {servicio.location}\n"
+                info_trabajos_servicios += f"Freelancer: {servicio.freelancer.name} {servicio.freelancer.lastname}\n"
+                
                 if servicio.freelancer.skills:
-                    info_trabajos_servicios += f"  Habilidades: {servicio.freelancer.skills[:100]}...\n"
-                info_trabajos_servicios += f"  Categoría: {servicio.category.name if servicio.category else 'No especificada'}"
+                    info_trabajos_servicios += f"Habilidades: {servicio.freelancer.skills[:100]}...\n"
+                
+                categoria_info = f"Categoría: {servicio.category.name if servicio.category else 'No especificada'}"
                 if servicio.subcategory:
-                    info_trabajos_servicios += f" > {servicio.subcategory.name}"
+                    categoria_info += f" > {servicio.subcategory.name}"
                 if servicio.nestedcategory:
-                    info_trabajos_servicios += f" > {servicio.nestedcategory.name}"
-                info_trabajos_servicios += "\n\n"
-        else:
+                    categoria_info += f" > {servicio.nestedcategory.name}"
+                info_trabajos_servicios += f"{categoria_info}\n\n"
+
+        if not (trabajos or servicios):
             info_trabajos_servicios = "No he encontrado trabajos o servicios disponibles que coincidan con tu búsqueda."
         
         resumen_db = obtener_resumen_base_de_datos()

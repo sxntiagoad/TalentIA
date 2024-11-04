@@ -126,7 +126,7 @@ body {
   margin-left: 0 !important;
   max-width: 80% !important;
   width: fit-content !important;
-  white-space: normal !important;
+  white-space: pre-wrap !important;
   overflow: visible !important;
   text-overflow: clip !important;
   background-color: rgba(90, 24, 154, 0.7) !important;
@@ -135,6 +135,38 @@ body {
   margin-bottom: 10px !important;
   position: relative !important;
   z-index: 5 !important;
+  line-height: 1.5 !important;
+  font-family: monospace !important;
+}
+
+.react-chatbot-kit-chat-bot-message h2 {
+  color: #FFD700 !important;
+  font-size: 1.2em !important;
+  margin-bottom: 10px !important;
+  font-weight: bold !important;
+}
+
+.react-chatbot-kit-chat-bot-message h3 {
+  color: #E6E6FA !important;
+  font-size: 1.1em !important;
+  margin-top: 15px !important;
+  margin-bottom: 5px !important;
+  font-weight: bold !important;
+}
+
+.react-chatbot-kit-chat-bot-message hr {
+  border: 0 !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.2) !important;
+  margin: 8px 0 !important;
+}
+
+.react-chatbot-kit-chat-bot-message strong {
+  color: #FFD700 !important;
+  font-weight: bold !important;
+}
+
+.react-chatbot-kit-chat-bot-message p {
+  margin: 8px 0 !important;
 }
 
 .react-chatbot-kit-user-chat-message {
