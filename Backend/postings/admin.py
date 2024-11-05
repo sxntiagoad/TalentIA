@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Service, Category, Subcategory, NestedCategory, Job
+from .models import Service, Category, Subcategory, NestedCategory, Job, Review
 
 # Inline para mostrar Subcategories en la vista de Category
 class SubcategoryInline(admin.TabularInline):
@@ -28,3 +28,9 @@ class NestedCategoryAdmin(admin.ModelAdmin):
 # Registro de los otros modelos sin modificaciones adicionales
 admin.site.register(Service)
 admin.site.register(Job)
+
+@admin.register(Review)
+class ReviewAdmin(admin.ModelAdmin):
+    list_display = ('author', 'rating', 'service', 'job', 'created_at')
+    list_filter = ('rating', 'created_at')
+    search_fields = ('content', 'author__email')

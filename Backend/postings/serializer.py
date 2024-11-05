@@ -1,7 +1,9 @@
 from rest_framework import serializers
-from .models import Category, Subcategory, NestedCategory, Service, Job
+from .models import Category, Subcategory, NestedCategory, Service, Job, Review
 from accounts.serializer import FreelancerSerializer, CompanySerializer
 from accounts.models import Freelancer, Company
+from django.db import models
+from django.db.models import Avg
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
@@ -22,6 +24,7 @@ class ServiceSerializer(serializers.ModelSerializer):
     freelancer = FreelancerSerializer(read_only=True)
     service_image = serializers.SerializerMethodField()
     freelancer_name = serializers.CharField(source='freelancer.name', read_only=True)
+    freelancer_lastname = serializers.CharField(source='freelancer.lastname', read_only=True)
     service_title = serializers.CharField(source='title', read_only=True)
     service_description = serializers.CharField(source='description', read_only=True)
     freelancer_language = serializers.CharField(source='freelancer.language', read_only=True)
@@ -30,6 +33,9 @@ class ServiceSerializer(serializers.ModelSerializer):
     service_category = serializers.CharField(source='category.name', read_only=True)
     service_subcategory = serializers.CharField(source='subcategory.name', read_only=True)
     service_nestedcategory = serializers.CharField(source='nestedcategory.name', read_only=True)
+    reviews = serializers.SerializerMethodField()
+    average_rating = serializers.SerializerMethodField()
+    review_count = serializers.SerializerMethodField()
 
     def get_service_image(self, obj):
         request = self.context.get('request')
@@ -66,6 +72,17 @@ class ServiceSerializer(serializers.ModelSerializer):
         service = Service.objects.create(freelancer=freelancer, **validated_data)
         return service
 
+    def get_reviews(self, obj):
+        reviews = obj.reviews.all()
+        serializer = ReviewSerializer(reviews, many=True)
+        return serializer.data
+
+    def get_average_rating(self, obj):
+        return obj.reviews.aggregate(Avg('rating'))['rating__avg'] or 0
+
+    def get_review_count(self, obj):
+        return obj.reviews.count()
+
 class JobSerializer(serializers.ModelSerializer):
     company = serializers.PrimaryKeyRelatedField(read_only=True)
     job_image = serializers.SerializerMethodField()
@@ -78,6 +95,9 @@ class JobSerializer(serializers.ModelSerializer):
     job_category = serializers.CharField(source='category.name', read_only=True)
     job_subcategory = serializers.CharField(source='subcategory.name', read_only=True)
     job_nestedcategory = serializers.CharField(source='nestedcategory.name', read_only=True)
+    reviews = serializers.SerializerMethodField()
+    average_rating = serializers.SerializerMethodField()
+    review_count = serializers.SerializerMethodField()
 
     def get_job_image(self, obj):
         request = self.context.get('request')
@@ -108,3 +128,48 @@ class JobSerializer(serializers.ModelSerializer):
     class Meta:
         model = Job
         fields = '__all__'
+
+    def get_reviews(self, obj):
+        reviews = obj.reviews.all()
+        serializer = ReviewSerializer(reviews, many=True)
+        return serializer.data
+
+    def get_average_rating(self, obj):
+        return obj.reviews.aggregate(Avg('rating'))['rating__avg'] or 0
+
+    def get_review_count(self, obj):
+        return obj.reviews.count()
+
+class ReviewSerializer(serializers.ModelSerializer):
+    author_name = serializers.SerializerMethodField()
+    author_avatar = serializers.SerializerMethodField()
+    author_email = serializers.SerializerMethodField()
+
+    def get_author_name(self, obj):
+        if hasattr(obj.author, 'freelancer'):
+            return f"{obj.author.freelancer.name} {obj.author.freelancer.lastname}"
+        elif hasattr(obj.author, 'company'):
+            return obj.author.company.name
+        return obj.author.email
+
+    def get_author_email(self, obj):
+        return obj.author.email
+
+    def get_author_avatar(self, obj):
+        request = self.context.get('request')
+        avatar = None
+        
+        if hasattr(obj.author, 'freelancer'):
+            avatar = obj.author.freelancer.freelancer_avatar
+        elif hasattr(obj.author, 'company'):
+            avatar = obj.author.company.company_avatar
+
+        if request and avatar:
+            return request.build_absolute_uri(avatar.url)
+        return None
+
+    class Meta:
+        model = Review
+        fields = ['id', 'content', 'rating', 'created_at', 'author_name', 
+                 'author_avatar', 'author_email', 'service', 'job']
+        read_only_fields = ['author']

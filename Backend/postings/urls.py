@@ -13,7 +13,13 @@ from .views import (
     jobs_by_subcategory,
     create_job,
     create_service,
-    nestedcategories_by_subcategory
+    nestedcategories_by_subcategory,
+    ReviewViewSet,
+    create_review,
+    get_service_reviews,
+    get_job_reviews,
+    update_review,
+    delete_review,
 )
 
 router = routers.DefaultRouter()
@@ -22,6 +28,7 @@ router.register(r'subcategories', SubcategoryViewSet)
 router.register(r'nestedcategories', NestedCategoryViewSet)
 router.register(r'services', ServiceViewSet)
 router.register(r'jobs', JobViewSet)
+router.register(r'reviews', ReviewViewSet)
 
 urlpatterns = [
     path('api/v1/', include(router.urls)),
@@ -35,4 +42,9 @@ urlpatterns = [
     path('api/v1/nestedcategories/subcategory/<int:subcategory_id>/', 
          nestedcategories_by_subcategory, 
          name='nestedcategories-by-subcategory'),
+    path('api/v1/create-review/', create_review, name='create-review'),
+    path('api/v1/service-reviews/<int:service_id>/', get_service_reviews, name='service-reviews'),
+    path('api/v1/job-reviews/<int:job_id>/', get_job_reviews, name='job-reviews'),
+    path('api/v1/reviews/<int:review_id>/', update_review, name='update-review'),
+    path('api/v1/reviews/<int:review_id>/delete/', delete_review, name='delete-review'),
 ]

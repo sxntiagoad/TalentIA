@@ -1,11 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { getAllCategories } from '../../api/Categories.api';
+import { createReview, getServiceReviews, getJobReviews } from '../../api/Reviews.api';
 import { Link } from "react-router-dom";
-import { FaMapMarkerAlt, FaCommentAlt, FaHome, FaChevronRight } from "react-icons/fa";
+import { FaMapMarkerAlt, FaCommentAlt, FaHome, FaChevronRight, FaStar } from "react-icons/fa";
+import { useAuth } from '../../context/AuthContext';
+import ReviewSection from '../reviews/ReviewSection';
 
 export function AboutItem({ item, isService }) {
   const [categories, setCategories] = useState([]);
   const [categoryLookup, setCategoryLookup] = useState({});
+  const [reviews, setReviews] = useState([]);
+  const [newReview, setNewReview] = useState({ content: '', rating: 5 });
+  const [showReviewForm, setShowReviewForm] = useState(false);
+  const { user } = useAuth();
 
   useEffect(() => {
     getAllCategories()
@@ -25,6 +32,49 @@ export function AboutItem({ item, isService }) {
       });
   }, []);
 
+  useEffect(() => {
+    if (item?.id) {
+      const fetchReviews = async () => {
+        try {
+          const response = isService 
+            ? await getServiceReviews(item.id)
+            : await getJobReviews(item.id);
+          setReviews(Array.isArray(response.data) ? response.data : []);
+        } catch (error) {
+          console.error('Error al obtener reviews:', error);
+          setReviews([]);
+        }
+      };
+      fetchReviews();
+    }
+  }, [item?.id, isService]);
+
+  const handleReviewSubmit = async (reviewData) => {
+    if (!user) {
+      alert('Debes iniciar sesión para publicar una review');
+      return;
+    }
+
+    try {
+      const response = await createReview({
+        ...reviewData,
+        [isService ? 'service' : 'job']: item.id,
+      });
+      
+      if (response.data) {
+        const updatedReviews = isService 
+          ? await getServiceReviews(item.id)
+          : await getJobReviews(item.id);
+        
+        setReviews(Array.isArray(updatedReviews.data) ? updatedReviews.data : []);
+      }
+    } catch (error) {
+      console.error('Error al crear review:', error);
+      const errorMessage = error.response?.data?.error || 'Error al crear la review';
+      alert(errorMessage);
+    }
+  };
+
   if (!item) {
     return <div className="text-center py-8">Cargando...</div>;
   }
@@ -34,7 +84,9 @@ export function AboutItem({ item, isService }) {
   const category = isService ? item.service_category : item.job_category;
   const subcategory = isService ? item.service_subcategory : item.job_subcategory;
   const nestedcategory = isService ? item.service_nestedcategory : item.job_nestedcategory;
-  const name = isService ? item.freelancer_name : item.company_name;
+  const name = isService ? 
+    `${item.freelancer_name} ${item.freelancer_lastname || ''}`.trim() : 
+    item.company_name;
   const avatar = isService ? item.freelancer_avatar : item.company_avatar;
   const location = isService ? item.freelancer_location : item.company_location;
   const language = isService ? item.freelancer_language : item.company_language;
@@ -45,7 +97,7 @@ export function AboutItem({ item, isService }) {
       {/* Ruta de navegación */}
       {categories.length > 0 && (
         <nav className="flex items-center space-x-2 text-sm text-gray-500 mb-6">
-          <Link to="/" className="hover:text-purple-600 transition-colors duration-200">
+          <Link to="/home" className="hover:text-purple-600 transition-colors duration-200">
             <FaHome className="text-gray-400 mr-1" />
           </Link>
           {[category, subcategory, nestedcategory].filter(Boolean).map((cat, index) => (
@@ -82,7 +134,10 @@ export function AboutItem({ item, isService }) {
           className="w-24 h-24 object-cover rounded-full border-4 border-white shadow-md"
         />
         <div>
-          <Link to={`/${isService ? 'freelancer' : 'company'}/${item.id}`} className="text-xl font-bold text-gray-800 hover:text-purple-600 transition-colors duration-200">
+          <Link 
+            to={`/${isService ? 'freelancer' : 'company'}/${item.id}`} 
+            className="text-xl font-bold text-gray-800 hover:text-purple-600 transition-colors duration-200"
+          >
             {name}
           </Link>
           <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-6 mt-2 text-sm text-gray-600">
@@ -108,6 +163,14 @@ export function AboutItem({ item, isService }) {
           />
         </div>
       )}
+
+      {/* Reemplazar toda la sección de reviews con el nuevo componente */}
+      <ReviewSection
+        reviews={reviews}
+        onReviewSubmit={handleReviewSubmit}
+        isService={isService}
+        itemId={item.id}
+      />
     </div>
   );
 }
