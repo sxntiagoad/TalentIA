@@ -84,7 +84,7 @@ class ServiceSerializer(serializers.ModelSerializer):
         return obj.reviews.count()
 
 class JobSerializer(serializers.ModelSerializer):
-    company = serializers.PrimaryKeyRelatedField(read_only=True)
+    company = CompanySerializer(read_only=True)
     job_image = serializers.SerializerMethodField()
     company_name = serializers.CharField(source='company.name', read_only=True)
     job_title = serializers.CharField(source='title', read_only=True)

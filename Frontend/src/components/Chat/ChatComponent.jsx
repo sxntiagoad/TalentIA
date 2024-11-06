@@ -10,27 +10,45 @@ import {
 } from 'stream-chat-react';
 import { createChannel } from '../../api/Chat.api';
 import { useStreamChat } from '../../hooks/useStreamChat';
+import { useAuth } from '../../context/AuthContext';
 import 'stream-chat-react/dist/css/v2/index.css';
 
 const ChatComponent = ({ otherUser, onClose }) => {
   const { client, connecting, error: connectionError, reconnect } = useStreamChat();
+  const { user } = useAuth();
   const [channel, setChannel] = useState(null);
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   const initChannel = useCallback(async () => {
-    if (!client || !otherUser?.id) return;
+    if (!client || !otherUser?.id) {
+      setError('No se puede iniciar el chat en este momento');
+      return;
+    }
 
     try {
+      setLoading(true);
       console.log('Iniciando chat con usuario:', otherUser);
       
-      const channelData = await createChannel(otherUser.id);
+      // Determinar el tipo de usuario actual y el otro usuario
+      const currentUserType = user.hasOwnProperty('company_name') ? 'company' : 'freelancer';
+      const otherUserType = otherUser.hasOwnProperty('company_name') ? 'company' : 'freelancer';
+      
+      const channelData = await createChannel(otherUser.id, {
+        currentUserType,
+        otherUserType
+      });
       
       if (channelData && channelData.channel) {
         const newChannel = client.channel(
           'messaging', 
           channelData.channel.id,
           {
-            members: [client.userID, String(otherUser.id)]
+            members: [client.userID, String(otherUser.id)],
+            userTypes: {
+              [client.userID]: currentUserType,
+              [otherUser.id]: otherUserType
+            }
           }
         );
 
@@ -40,9 +58,11 @@ const ChatComponent = ({ otherUser, onClose }) => {
       }
     } catch (err) {
       console.error('Error al inicializar canal:', err);
-      setError(err.message);
+      setError('Error al iniciar el chat');
+    } finally {
+      setLoading(false);
     }
-  }, [client, otherUser]);
+  }, [client, otherUser, user]);
 
   useEffect(() => {
     if (!channel) {
@@ -56,21 +76,9 @@ const ChatComponent = ({ otherUser, onClose }) => {
     };
   }, [channel, initChannel]);
 
-  // Reconectar si hay error
-  useEffect(() => {
-    if (connectionError) {
-      const attemptReconnect = async () => {
-        await reconnect();
-        initChannel();
-      };
-      attemptReconnect();
-    }
-  }, [connectionError, reconnect, initChannel]);
-
-  if (!otherUser?.id) return null;
-  if (connecting) return <div className="p-4">Conectando...</div>;
-  if (error) return <div className="p-4 text-red-500">Error: {error}</div>;
-  if (!channel) return <div className="p-4">Cargando chat...</div>;
+  if (loading) return <div className="p-4 text-center">Iniciando chat...</div>;
+  if (error) return <div className="p-4 text-center text-red-500">{error}</div>;
+  if (!channel) return <div className="p-4 text-center">Cargando chat...</div>;
 
   return (
     <div className="chat-window h-full">
@@ -88,4 +96,4 @@ const ChatComponent = ({ otherUser, onClose }) => {
   );
 };
 
-export default ChatComponent; 
+export default ChatComponent;
