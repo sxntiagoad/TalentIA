@@ -9,4 +9,7 @@ urlpatterns = [
     path('profile/', views.profile, name='profile'),
     path('complete-profile/freelancer/', views.complete_freelancer_profile, name='complete_freelancer_profile'),
     path('complete-profile/company/', views.complete_company_profile, name='complete_company_profile'),
+    path('get-company-email/<str:company_name>/', views.get_company_email, name='get-company-email'),
+    path('get-freelancer-email/<str:name>/<str:lastname>/', views.get_freelancer_email, name='get-freelancer-email'),
+    path('get-company-id/<str:company_name>/', views.get_company_id, name='get-company-id'),
 ]

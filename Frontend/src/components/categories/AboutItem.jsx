@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { FaMapMarkerAlt, FaCommentAlt, FaHome, FaChevronRight, FaStar } from "react-icons/fa";
 import { useAuth } from '../../context/AuthContext';
 import ReviewSection from '../reviews/ReviewSection';
+import ChatButton from '../chat/ChatButton';
 
 export function AboutItem({ item, isService }) {
   const [categories, setCategories] = useState([]);
@@ -133,13 +134,24 @@ export function AboutItem({ item, isService }) {
           alt={`Avatar de ${name}`}
           className="w-24 h-24 object-cover rounded-full border-4 border-white shadow-md"
         />
-        <div>
-          <Link 
-            to={`/${isService ? 'freelancer' : 'company'}/${item.id}`} 
-            className="text-xl font-bold text-gray-800 hover:text-purple-600 transition-colors duration-200"
-          >
-            {name}
-          </Link>
+        <div className="flex flex-col flex-grow">
+          <div className="flex justify-between items-center">
+            <Link 
+              to={`/${isService ? 'freelancer' : 'company'}/${item.id}`} 
+              className="text-xl font-bold text-gray-800 hover:text-purple-600 transition-colors duration-200"
+            >
+              {name}
+            </Link>
+            {user && user.id !== (isService ? item.freelancer?.id : item.company?.id) && (
+              <ChatButton 
+                otherUser={{
+                  id: isService ? item.freelancer?.id : item.company?.id,
+                  name: name,
+                  avatar: avatar
+                }} 
+              />
+            )}
+          </div>
           <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-6 mt-2 text-sm text-gray-600">
             <div className="flex items-center mt-2 sm:mt-0">
               <FaMapMarkerAlt className="mr-2 text-purple-500" />

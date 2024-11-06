@@ -27,6 +27,8 @@
     "react-scroll": "^1.9.0",
     "react-slick": "^0.30.2",
     "slick-carousel": "^1.8.1",
+    "stream-chat": "^8.14.0",
+    "stream-chat-react": "^10.20.0",
     "styled-components": "^6.1.13"
   },
   "devDependencies": {

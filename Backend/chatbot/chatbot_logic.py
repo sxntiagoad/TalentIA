@@ -7,6 +7,7 @@ import nltk
 from nltk.corpus import stopwords
 import os
 from dotenv import load_dotenv
+import google.generativeai as genai
 
 # Cargar variables de entorno
 load_dotenv()
@@ -22,11 +23,13 @@ try:
 except Exception as e:
     logger.error(f"Error al descargar recursos NLTK: {e}")
 
-# Obtener la API key del archivo .env
-api_key = os.getenv("API_KEY")
-url = "https://api.segmind.com/v1/claude-3-haiku"
+# Configurar Gemini API
+api_key = os.getenv("GOOGLE_API_KEY")
+genai.configure(api_key=api_key)
+model = genai.GenerativeModel("gemini-1.5-flash")
 
-memoria_temporal = []
+# Iniciar chat
+chat = model.start_chat(history=[])
 
 def extraer_palabras_clave(mensaje):
     try:
@@ -79,9 +82,7 @@ def obtener_resumen_base_de_datos():
 
 def process_user_message(mensaje):
     try:
-        global memoria_temporal
-        
-        memoria_temporal.append({"role": "user", "content": mensaje})
+        global chat
         
         palabras_clave = extraer_palabras_clave(mensaje)
         trabajos, servicios = buscar_en_base_de_datos(palabras_clave)
@@ -130,28 +131,26 @@ def process_user_message(mensaje):
         
         resumen_db = obtener_resumen_base_de_datos()
         
-        datos = {
-            "instruction": f"Eres TalentIa chatbot, diseñado para ayudar a encontrar empleo, trabajos y servicios freelancer. {resumen_db} Responde al usuario basándote en esta información: {info_trabajos_servicios}. Da respuestas concisas y relevantes. Si no hay resultados específicos, sugiere alternativas o pide más detalles sobre el tipo de trabajo que busca el usuario.",
-            "temperature": 0.3,
-            "messages": memoria_temporal
-        }
+        # Preparar el prompt para Gemini
+        prompt = f"""Eres TalentIa chatbot, diseñado para ayudar a encontrar empleo, trabajos y servicios freelancer.
+{resumen_db}
+Responde al usuario basándote en esta información: {info_trabajos_servicios}
+Da respuestas concisas y relevantes. Si no hay resultados específicos, sugiere alternativas o pide más detalles.
+Pregunta del usuario: {mensaje}"""
 
-        headers = {'x-api-key': api_key, 'Content-Type': 'application/json'}
-        respuesta = requests.post(url, json=datos, headers=headers, timeout=10)
-        respuesta.raise_for_status()
-        respuesta_json = respuesta.json()
+        # Configurar la generación
+        generation_config = genai.types.GenerationConfig(
+            temperature=0.7,
+            max_output_tokens=1000,
+        )
+
+        # Obtener respuesta de Gemini
+        response = chat.send_message(
+            prompt,
+            generation_config=generation_config
+        )
         
-        logger.info(f"Respuesta de la API: {respuesta_json}")
-        
-        if 'content' in respuesta_json and respuesta_json['content']:
-            contenido_respuesta = respuesta_json['content'][0]['text']
-        else:
-            contenido_respuesta = "Lo siento, no pude procesar tu solicitud. Por favor, intenta de nuevo con más detalles sobre el tipo de trabajo que buscas."
-        
-        memoria_temporal.append({"role": "assistant", "content": contenido_respuesta})
-        
-        if len(memoria_temporal) > 10:
-            memoria_temporal = memoria_temporal[-10:]
+        contenido_respuesta = response.text
         
         return {
             'type': 'general',
@@ -187,9 +186,6 @@ def process_user_message(mensaje):
                 'availability': s.availability
             } for s in servicios]
         }
-    except requests.exceptions.RequestException as error:
-        logger.error(f"Error en la solicitud a la API: {error}")
-        return {'type': 'error', 'response': "Lo siento, ocurrió un error al procesar tu mensaje. Por favor, inténtalo de nuevo más tarde."}
     except Exception as e:
         logger.error(f"Error inesperado: {e}")
         return {'type': 'error', 'response': "Ocurrió un error inesperado. Por favor, inténtalo de nuevo más tarde."}

@@ -5,6 +5,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.authtoken.models import Token
 from .serializer import FreelancerSerializer, CompanySerializer
+from .models import Company
 
 User = get_user_model()
 
@@ -97,3 +98,44 @@ def complete_company_profile(request):
         serializer.save(profile_completed=True)
         return Response(serializer.data)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
+def get_company_email(request, company_name):
+    try:
+        company = Company.objects.get(name=company_name)
+        return Response({
+            'email': company.email
+        })
+    except Company.DoesNotExist:
+        return Response(
+            {'error': 'Compañía no encontrada'}, 
+            status=status.HTTP_404_NOT_FOUND
+        )
+
+@api_view(['GET'])
+def get_freelancer_email(request, name, lastname):
+    try:
+        freelancer = Freelancer.objects.get(name=name, lastname=lastname)
+        return Response({
+            'email': freelancer.email
+        })
+    except Freelancer.DoesNotExist:
+        return Response(
+            {'error': 'Freelancer no encontrado'}, 
+            status=status.HTTP_404_NOT_FOUND
+        )
+
+@api_view(['GET'])
+def get_company_id(request, company_name):
+    try:
+        company = Company.objects.get(name=company_name)
+        return Response({
+            'id': company.id,
+            'name': company.name,
+            'email': company.email
+        })
+    except Company.DoesNotExist:
+        return Response(
+            {'error': 'Compañía no encontrada'}, 
+            status=status.HTTP_404_NOT_FOUND
+        )
