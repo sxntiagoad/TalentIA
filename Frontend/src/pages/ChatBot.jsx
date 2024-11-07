@@ -3,7 +3,7 @@ import Chatbot from 'react-chatbot-kit';
 import 'react-chatbot-kit/build/main.css';
 import '../index.css'; // Importamos los estilos personalizados
 
-import config from '../chatbot/config';
+import config from '../chatbot/Config';
 import MessageParser from '../chatbot/MessageParser';
 import ActionProvider from '../chatbot/ActionProvider';
 
