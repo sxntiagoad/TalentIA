@@ -7,7 +7,7 @@ import Chatbot from 'react-chatbot-kit';
 import 'react-chatbot-kit/build/main.css'; // Asegúrate de importar los estilos del chatbot
 import ActionProvider from "../../chatbot/ActionProvider"; // Ruta al ActionProvider
 import MessageParser from "../../chatbot/MessageParser"; // Ruta al MessageParser (corregí el nombre, si es "MessageParser")
-import config from "../../chatbot/config"; // Cambia 'Config' a 'config'
+import config from "../../chatbot/Config"; // Cambia 'Config' a 'config'
 
 export function Banner() {
   const [text, setText] = useState("");
