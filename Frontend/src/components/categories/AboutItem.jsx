@@ -145,23 +145,10 @@ export function AboutItem({ item, isService }) {
             {user && user.id !== (isService ? item.freelancer?.id : item.company?.id) && (
               <ChatButton 
                 otherUser={{
-                  id: isService ? 
-                    (item.freelancer?.id || item.freelancer_id) : 
-                    (item.company?.id || item.id),
-                  name: isService ? 
-                    `${item.freelancer_name} ${item.freelancer_lastname || ''}` : 
-                    item.company_name,
-                  avatar: isService ? item.freelancer_avatar : item.company_avatar,
+                  id: isService ? item.freelancer?.id : item.company?.id,
+                  name: isService ? `${item.freelancer_name} ${item.freelancer_lastname || ''}` : item.company_name,
                   type: isService ? 'freelancer' : 'company',
-                  company: !isService ? {
-                    id: item.company?.id || item.id,
-                    name: item.company_name
-                  } : null,
-                  freelancer: isService ? {
-                    id: item.freelancer?.id || item.freelancer_id,
-                    name: item.freelancer_name,
-                    lastname: item.freelancer_lastname
-                  } : null
+                  profile_id: isService ? item.freelancer?.id : item.company?.id
                 }} 
               />
             )}

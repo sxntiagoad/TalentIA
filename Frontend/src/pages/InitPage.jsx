@@ -76,12 +76,12 @@ function InitPage() {
                 </Link>
               ) : (
                 <>
-                  <Link to={currentType === 'company' ? "/post-job" : "/services"}>
+                  <Link to={currentType === 'company' ? "/login?type=company" : "/services"}>
                     <button className={`bg-${themeColor}-600 hover:bg-${themeColor}-700 text-white font-bold py-4 px-8 rounded transition duration-300 ease-in-out transform hover:scale-105`}>
                       {currentType === 'company' ? "Publicar Trabajo" : "Buscar Servicios"}
                     </button>
                   </Link>
-                  <Link to={currentType === 'company' ? "/browse-talent" : "/jobs"}>
+                  <Link to={currentType === 'company' ? "/login?type=company" : "/jobs"}>
                     <button className={`bg-${themeColor}-600 hover:bg-${themeColor}-700 text-white font-bold py-4 px-8 rounded transition duration-300 ease-in-out transform hover:scale-105`}>
                       {currentType === 'company' ? "Buscar Talento" : "Buscar Trabajos"}
                     </button>

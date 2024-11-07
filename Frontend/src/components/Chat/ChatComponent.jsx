@@ -81,17 +81,27 @@ const ChatComponent = ({ otherUser, onClose }) => {
   if (!channel) return <div className="p-4 text-center">Cargando chat...</div>;
 
   return (
-    <div className="chat-window h-full">
-      <Chat client={client} theme="messaging light">
-        <Channel channel={channel}>
-          <Window>
-            <ChannelHeader />
-            <MessageList />
-            <MessageInput focus />
-          </Window>
-          <Thread />
-        </Channel>
-      </Chat>
+    <div className="flex flex-col h-full">
+      <div className="bg-gray-100 p-2 flex justify-end">
+        <button 
+          onClick={onClose}
+          className="text-gray-600 hover:text-gray-800 font-medium"
+        >
+          Cerrar chat ×
+        </button>
+      </div>
+      <div className="chat-window flex-1">
+        <Chat client={client} theme="messaging light">
+          <Channel channel={channel}>
+            <Window>
+              <ChannelHeader />
+              <MessageList />
+              <MessageInput focus />
+            </Window>
+            <Thread />
+          </Channel>
+        </Chat>
+      </div>
     </div>
   );
 };
