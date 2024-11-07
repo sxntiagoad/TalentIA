@@ -4,7 +4,7 @@ import { getProfile } from '../api/Auth.api';
 import { getAllServices, getAllJobs } from '../api/Services.api';
 import Navbar from '../components/general/Navbar';
 import FreelancerProfile from '../components/freelancer/freelancerProfile';
-import CompanyProfile from '../components/Company/CompanyProfile';
+import CompanyProfile from '../components/company/CompanyProfile';
 import ResultsGrid from '../components/general/ResultsGrid';
 import { Navigate } from 'react-router-dom';
 
