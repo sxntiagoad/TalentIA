@@ -87,14 +87,6 @@ jsonpatch==1.33
 jsonpointer==3.0.0
 jsonref==1.1.0
 kubernetes==30.1.0
-langchain==0.2.16
-langchain-cohere==0.1.9
-langchain-community==0.2.17
-langchain-core==0.2.40
-langchain-experimental==0.0.65
-langchain-openai==0.1.25
-langchain-text-splitters==0.2.4
-langsmith==0.1.117
 Levenshtein==0.25.1
 Mako==1.3.5
 markdown-it-py==3.0.0
@@ -112,7 +104,6 @@ numpy==1.26.4
 oauthlib==3.2.2
 ollama==0.3.3
 onnxruntime==1.19.2
-openai==1.45.0
 opentelemetry-api==1.27.0
 opentelemetry-exporter-otlp-proto-common==1.27.0
 opentelemetry-exporter-otlp-proto-grpc==1.27.0
@@ -134,7 +125,6 @@ portalocker==2.10.1
 posthog==3.6.5
 proto-plus==1.24.0
 protobuf==4.25.4
-psycopg2==2.9.9
 pulsar-client==3.5.0
 pyasn1==0.6.1
 pyasn1_modules==0.4.1
@@ -155,7 +145,6 @@ python-dateutil==2.9.0.post0
 python-dotenv==1.0.1
 python-Levenshtein==0.25.1
 pytz==2024.2
-pywin32==306
 PyYAML==6.0.2
 qdrant-client==1.11.1
 rapidfuzz==3.9.7
