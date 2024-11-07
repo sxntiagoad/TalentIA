@@ -4,7 +4,7 @@ import { Banner } from "../components/home/Banner";
 import { CategoriesList } from "../components/home/CategoriesList";
 import { ItemsList } from "../components/home/ItemsList";
 import { Footer } from "../components/general/footer";
-import ChatList from "../components/chat/ChatList";
+import ChatList from "../components/Chat/ChatList";
 import { FaComments } from 'react-icons/fa';
 
 export const HomePage = () => {
