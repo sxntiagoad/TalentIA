@@ -4,7 +4,7 @@ import { createReview, getServiceReviews, getJobReviews } from '../../api/Review
 import { Link } from "react-router-dom";
 import { FaMapMarkerAlt, FaCommentAlt, FaHome, FaChevronRight, FaStar } from "react-icons/fa";
 import { useAuth } from '../../context/AuthContext';
-import ReviewSection from '../reviews/ReviewSection';
+import ReviewSection from '../Reviews/ReviewSection';
 import ChatButton from '../chat/ChatButton';
 
 export function AboutItem({ item, isService }) {
