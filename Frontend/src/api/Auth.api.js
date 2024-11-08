@@ -1,8 +1,6 @@
 import axios from 'axios';
 
-const API_URL = window.location.hostname === 'localhost'
-  ? 'http://localhost:8000/accounts/'  // Local
-  : 'http://34.121.119.251:8000/accounts/';  // Producción
+const API_URL = 'http://34.121.119.251:8000/accounts/';
 
 const authAxios = axios.create({
   baseURL: API_URL,
