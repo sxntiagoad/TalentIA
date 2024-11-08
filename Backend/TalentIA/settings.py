@@ -143,7 +143,8 @@ MEDIA_URL = '/media/'
 CORS_ALLOWED_ORIGINS = [
     "http://34.121.119.251",
 ]
-CORS_ALLOW_CREDENTIALS = True
+
+CORS_ALLOW_ALL_ORIGINS = True  # Solo para desarrollo, configura apropiadamente para producción
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
