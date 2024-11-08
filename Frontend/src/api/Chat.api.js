@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // Crear una instancia de axios con la configuración base
 const chatAxios = axios.create({
-  baseURL: 'http://localhost:8000/chat',
+  baseURL: 'http://34.135.123.36/chat',
   headers: {
     'Content-Type': 'application/json',
   },
