@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://34.121.119.251/accounts/';
+const API_URL = 'http://http://34.135.123.36/accounts/';
 
 const authAxios = axios.create({
   baseURL: API_URL,
