@@ -141,7 +141,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",
+    "http://34.121.119.251",
 ]
 
 CORS_ALLOW_ALL_ORIGINS = True  # Solo para desarrollo, configura apropiadamente para producción
