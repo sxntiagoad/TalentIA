@@ -8,6 +8,9 @@ from nltk.corpus import stopwords
 import os
 from dotenv import load_dotenv
 import google.generativeai as genai
+from django.contrib.auth.models import User
+from django.conf import settings
+from accounts.models import Freelancer, Company
 
 # Cargar variables de entorno
 load_dotenv()
@@ -41,22 +44,49 @@ def extraer_palabras_clave(mensaje):
     
     return [palabra for palabra in tokens if palabra.isalnum() and palabra not in stop_words]
 
-def buscar_en_base_de_datos(palabras_clave):
-    query = Q()
+def buscar_en_base_de_datos(palabras_clave, perfil_usuario=None):
+    # Query para trabajos
+    query_trabajos = Q()
     for palabra in palabras_clave:
-        query |= (
+        query_trabajos |= (
             Q(title__icontains=palabra) | 
             Q(description__icontains=palabra) |
             Q(location__icontains=palabra) |
             Q(category__name__icontains=palabra) |
             Q(subcategory__name__icontains=palabra) |
-            Q(nestedcategory__name__icontains=palabra)
+            Q(nestedcategory__name__icontains=palabra) |
+            Q(technical_skills__icontains=palabra) |
+            Q(soft_skills__icontains=palabra)
         )
     
-    trabajos = Job.objects.filter(query, availability=True).distinct()[:5]
-    servicios = Service.objects.filter(query, availability=True).distinct()[:5]
+    # Query para servicios (sin campos específicos de trabajos)
+    query_servicios = Q()
+    for palabra in palabras_clave:
+        query_servicios |= (
+            Q(title__icontains=palabra) | 
+            Q(description__icontains=palabra) |
+            Q(location__icontains=palabra) |
+            Q(category__name__icontains=palabra) |
+            Q(subcategory__name__icontains=palabra) |
+            Q(nestedcategory__name__icontains=palabra) |
+            Q(freelancer__skills__icontains=palabra)  # Buscar en las habilidades del freelancer
+        )
     
-    return trabajos, servicios
+    trabajos = Job.objects.filter(query_trabajos, availability=True).distinct()
+    servicios = Service.objects.filter(query_servicios, availability=True).distinct()
+    
+    if perfil_usuario and perfil_usuario.get('tipo') == 'freelancer':
+        habilidades = perfil_usuario.get('habilidades', '').split(',')
+        for habilidad in habilidades:
+            habilidad = habilidad.strip()
+            if habilidad:
+                trabajos = trabajos.filter(
+                    Q(technical_skills__icontains=habilidad) |
+                    Q(soft_skills__icontains=habilidad) |
+                    Q(description__icontains=habilidad)
+                )
+    
+    return trabajos[:5], servicios[:5]
 
 def obtener_resumen_base_de_datos():
     try:
@@ -80,33 +110,95 @@ def obtener_resumen_base_de_datos():
         logger.error(f"Error al obtener resumen de la base de datos: {e}")
         return "No se pudo obtener el resumen de la base de datos."
 
-def reiniciar_gemini():
-    global model, chat
+def obtener_perfil_usuario(user_id):
     try:
-        # Reconfigurar Gemini
-        api_key = os.getenv("GOOGLE_API_KEY")
-        genai.configure(api_key=api_key)
-        model = genai.GenerativeModel("gemini-1.5-flash")
-        chat = model.start_chat(history=[])
-        return True
+        user = User.objects.get(id=user_id)
+        Profile = getattr(settings, 'AUTH_USER_MODEL', 'auth.User').split('.')[0]
+        profile = Profile.objects.get(user=user)
+        return {
+            'nombre': user.first_name,
+            'apellido': user.last_name,
+            'email': user.email,
+            'telefono': getattr(profile, 'phone', ''),
+            'ubicacion': getattr(profile, 'location', ''),
+            'habilidades': getattr(profile, 'skills', ''),
+            'experiencia': getattr(profile, 'experience', ''),
+            'educacion': getattr(profile, 'education', ''),
+            'portfolio': getattr(profile, 'portfolio_link', ''),
+            'linkedin': getattr(profile, 'linkedin_profile', ''),
+            'github': getattr(profile, 'github_profile', '')
+        }
+    except User.DoesNotExist:
+        logger.error(f"Usuario con ID {user_id} no encontrado")
+        return None
     except Exception as e:
-        logger.error(f"Error al reiniciar Gemini: {e}")
-        return False
+        logger.error(f"Error al obtener perfil de usuario: {e}")
+        return None
 
-def process_user_message(mensaje):
+def process_user_message(mensaje, user_id=None):
     try:
         global chat
         
-        if not reiniciar_gemini():
-            return {
-                'type': 'error',
-                'response': "Error al conectar con el servicio de chat. Por favor, intenta más tarde.",
-                'trabajos': [],
-                'servicios': []
-            }
-        
+        # Obtener información del perfil del usuario si está disponible
+        perfil_usuario = None
+        if user_id:
+            try:
+                # Intentar obtener directamente el Freelancer o Company
+                try:
+                    freelancer = Freelancer.objects.get(id=user_id)
+                    perfil_usuario = {
+                        'tipo': 'freelancer',
+                        'nombre': freelancer.name,
+                        'apellido': freelancer.lastname,
+                        'email': freelancer.email,
+                        'telefono': freelancer.phone,
+                        'ubicacion': freelancer.location,
+                        'habilidades': freelancer.skills,
+                        'experiencia': freelancer.experience,
+                        'educacion': freelancer.education,
+                        'portfolio': freelancer.portfolio_link,
+                        'linkedin': freelancer.linkedin_profile,
+                        'github': freelancer.github_profile,
+                        'idioma': freelancer.language,
+                        'avatar': freelancer.freelancer_avatar.url if freelancer.freelancer_avatar else None
+                    }
+                    # Mensaje de inicio personalizado para freelancer
+                    if not chat.history:
+                        chat.send_message(
+                            f"¡Hola {freelancer.name}! Soy TalentIA, tu asistente personal. "
+                            f"Veo que tienes experiencia en {freelancer.skills if freelancer.skills else 'diferentes áreas'}. "
+                            "¿En qué puedo ayudarte hoy? ¿Estás buscando trabajo o servicios?"
+                        )
+                except Freelancer.DoesNotExist:
+                    try:
+                        company = Company.objects.get(id=user_id)
+                        perfil_usuario = {
+                            'tipo': 'company',
+                            'nombre': company.name,
+                            'email': company.email,
+                            'telefono': company.phone,
+                            'ubicacion': company.company_location,
+                            'informacion': company.information,
+                            'intereses': company.interests,
+                            'idioma': company.company_language,
+                            'avatar': company.company_avatar.url if company.company_avatar else None
+                        }
+                        # Mensaje de inicio personalizado para empresa
+                        if not chat.history:
+                            chat.send_message(
+                                f"¡Hola {company.name}! Soy TalentIA, tu asistente personal. "
+                                "¿En qué puedo ayudarte a encontrar el talento que necesitas hoy?"
+                            )
+                    except Company.DoesNotExist:
+                        logger.error(f"No se encontró ni Freelancer ni Company con ID {user_id}")
+                        perfil_usuario = None
+                
+            except Exception as e:
+                logger.error(f"Error al obtener perfil: {str(e)}")
+                perfil_usuario = None
+
         palabras_clave = extraer_palabras_clave(mensaje)
-        trabajos, servicios = buscar_en_base_de_datos(palabras_clave)
+        trabajos, servicios = buscar_en_base_de_datos(palabras_clave, perfil_usuario)
         
         info_trabajos_servicios = ""
 
@@ -178,15 +270,43 @@ def process_user_message(mensaje):
                 info_trabajos_servicios += f"{categoria_info}\n\n"
 
         if not (trabajos or servicios):
-            info_trabajos_servicios = "No he encontrado trabajos o servicios disponibles que coincidan con tu búsqueda."
+            info_trabajos_servicios = "No he encontrado trabajos o servicios que coincidan exactamente con tu búsqueda, pero puedo sugerirte algunas opciones similares basadas en tu perfil."
         
         resumen_db = obtener_resumen_base_de_datos()
         
-        # Preparar el prompt para Gemini
         prompt = f"""Eres TalentIa chatbot, diseñado para ayudar a encontrar empleo, trabajos y servicios freelancer.
+
+INFORMACIÓN DEL USUARIO ACTUAL:
+{f'''Tipo de usuario: {perfil_usuario["tipo"]}
+Nombre: {perfil_usuario["nombre"]} {perfil_usuario.get("apellido", "")}
+Email: {perfil_usuario["email"]}
+Ubicación: {perfil_usuario["ubicacion"]}
+''' + (f'''Habilidades: {perfil_usuario["habilidades"]}
+Experiencia: {perfil_usuario["experiencia"]}
+Educación: {perfil_usuario["educacion"]}''' if perfil_usuario["tipo"] == "freelancer" else f'''
+Información de la empresa: {perfil_usuario["informacion"]}
+Intereses: {perfil_usuario["intereses"]}''') if perfil_usuario else 'Usuario no identificado'}
+
 {resumen_db}
-Responde al usuario basándote en esta información: {info_trabajos_servicios}
-Da respuestas concisas y relevantes. Si no hay resultados específicos, sugiere alternativas o pide más detalles.
+
+Información de trabajos y servicios disponibles:
+{info_trabajos_servicios}
+
+INSTRUCCIONES ESPECÍFICAS:
+1. Usa el nombre del usuario en tus respuestas para hacerlas más personales.
+2. Proporciona respuestas concisas y relevantes con una longitud moderada.
+3. Si el usuario es freelancer:
+   - Enfócate en recomendarle trabajos basados en sus habilidades y experiencia.
+   - No es necesario que las habilidades coincidan exactamente, busca similitudes y relaciones.
+   - Sugiere trabajos que puedan ser relevantes aunque no sean una coincidencia perfecta.
+   - No menciones servicios a menos que el usuario lo solicite específicamente.
+4. Si el usuario es empresa:
+   - Ayúdale a encontrar freelancers que coincidan con sus necesidades.
+   - Céntrate en los servicios disponibles que se ajusten a sus requerimientos.
+5. Si no hay resultados específicos, sugiere alternativas basadas en el perfil del usuario y explica por qué podrían ser interesantes.
+6. Pregunta al usuario si está buscando trabajo o servicios para enfocar mejor la conversación.
+7. Mantén la conversación centrada en el tipo de búsqueda que el usuario ha indicado (trabajo o servicios).
+
 Pregunta del usuario: {mensaje}"""
 
         # Configurar la generación
@@ -195,46 +315,14 @@ Pregunta del usuario: {mensaje}"""
             max_output_tokens=1000,
         )
 
-        # Obtener respuesta de Gemini con manejo de errores más robusto
-        try:
-            # Reiniciar el chat si hay algún problema
-            global chat
-            try:
-                chat = model.start_chat(history=[])
-            except Exception as chat_error:
-                logger.error(f"Error al reiniciar el chat: {chat_error}")
-                
-            # Intentar obtener respuesta
-            response = chat.send_message(
-                content=prompt,
-                generation_config=generation_config
-            )
-            
-            # Manejar la respuesta
-            if response is None:
-                logger.error("La respuesta de Gemini es None")
-                contenido_respuesta = "Lo siento, no pude procesar tu mensaje en este momento. Por favor, intenta de nuevo."
-            else:
-                try:
-                    # Intentar diferentes formas de obtener el contenido de la respuesta
-                    if hasattr(response, 'text'):
-                        contenido_respuesta = response.text
-                    elif hasattr(response, 'parts'):
-                        contenido_respuesta = ' '.join(part.text for part in response.parts)
-                    else:
-                        contenido_respuesta = str(response)
-                except Exception as content_error:
-                    logger.error(f"Error al extraer contenido de la respuesta: {content_error}")
-                    contenido_respuesta = "Lo siento, hubo un problema al procesar la respuesta."
-                
-        except Exception as gemini_error:
-            logger.error(f"Error al obtener respuesta de Gemini: {gemini_error}")
-            contenido_respuesta = "Lo siento, hubo un problema al procesar tu mensaje. Por favor, intenta de nuevo."
-
-        # Verificación final de la respuesta
-        if not contenido_respuesta or contenido_respuesta.strip() == "":
-            contenido_respuesta = "Lo siento, no pude generar una respuesta apropiada. Por favor, intenta reformular tu pregunta."
-
+        # Obtener respuesta de Gemini
+        response = chat.send_message(
+            prompt,
+            generation_config=generation_config
+        )
+        
+        contenido_respuesta = response.text
+        
         return {
             'type': 'general',
             'response': contenido_respuesta,
@@ -295,14 +383,9 @@ Pregunta del usuario: {mensaje}"""
         }
     except Exception as e:
         logger.error(f"Error inesperado: {e}")
-        return {
-            'type': 'error', 
-            'response': "Ocurrió un error inesperado. Por favor, inténtalo de nuevo más tarde.",
-            'trabajos': [],
-            'servicios': []
-        }
+        return {'type': 'error', 'response': "Ocurrió un error inesperado. Por favor, inténtalo de nuevo más tarde."}
 
 # Ejemplo de uso
 if __name__ == "__main__":
-    respuesta = process_user_message("Estoy buscando trabajo como desarrollador de software en Madrid.")
+    respuesta = process_user_message("Estoy buscando trabajo como desarrollador de software en Madrid.", user_id=1)
     print(respuesta)
