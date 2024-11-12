@@ -6,7 +6,7 @@ import { motion } from 'framer-motion';
 import Navbar from '../../components/general/Navbar';
 import { AuthContext } from '../../context/AuthContext';
 import { login as loginApi } from '../../api/Auth.api';
-import { LoginForm } from '../../components/LoginForm';
+import { LoginForm } from '../../components/User_forms/LoginForm';
 
 export function Login() {
   const { login } = useContext(AuthContext);

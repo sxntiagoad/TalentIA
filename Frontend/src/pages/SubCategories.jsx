@@ -3,6 +3,8 @@ import { useParams } from 'react-router-dom';
 import ResultsGrid from '../components/general/ResultsGrid';
 import { getServicesBySubcategory, getJobsBySubcategory } from '../api/Services.api';
 import { Navbar } from "../components/general/Navbar";
+import { FaArrowLeft } from "react-icons/fa";
+import { Link } from 'react-router-dom';
 
 function SubcategoryPage() {
   const { id } = useParams();
@@ -32,14 +34,18 @@ function SubcategoryPage() {
     loadData();
   }, [id]);
 
-  if (loading) return <div>Cargando datos...</div>;
   if (error) return <div>{error}</div>;
 
   return (
     <div>
       <Navbar isAuthenticated={true} />
-      <div className="pt-16">
-        <h1>Servicios y trabajos en esta subcategoría</h1>
+      <div className="pt-24"> {/* Aumentado el padding-top para bajar un poco la página */}
+        <div className="flex justify-between mb-4">
+          <Link to="/home" className="flex items-center text-gray-500 hover:text-gray-700 transition-colors">
+            <FaArrowLeft className="mr-2" />
+            Volver al inicio
+          </Link>
+        </div>
         <ResultsGrid items={services} isService={true} title="Servicios disponibles" />
         <ResultsGrid items={jobs} isService={false} title="Trabajos disponibles" />
       </div>

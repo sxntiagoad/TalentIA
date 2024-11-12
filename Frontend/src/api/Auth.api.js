@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://35.224.34.63:8000/accounts/';
+const API_URL = 'http://localhost:8000/accounts/';
 
 const authAxios = axios.create({
   baseURL: API_URL,
@@ -49,23 +49,39 @@ export const getProfile = () => {
 };
 
 export const updateProfile = (profileData) => {
-  return authAxios.put('complete-profile/freelancer/', profileData)
-    .then(response => {
-      if (response.data) {
-        return response.data;
-      } else {
-        throw new Error('La respuesta no contiene los datos del usuario actualizados');
-      }
-    });
+  return authAxios.put('complete-profile/freelancer/', profileData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    }
+  })
+  .then(response => {
+    if (response.data) {
+      return response.data;
+    } else {
+      throw new Error('La respuesta no contiene los datos del usuario actualizados');
+    }
+  })
+  .catch(error => {
+    console.error('Error detallado:', error.response?.data);
+    throw error;
+  });
 };
 
 export const updateCompanyProfile = (profileData) => {
-  return authAxios.put('complete-profile/company/', profileData)
-    .then(response => {
-      if (response.data) {
-        return response.data;
-      } else {
-        throw new Error('La respuesta no contiene los datos de la compañía actualizados');
-      }
-    });
+  return authAxios.put('complete-profile/company/', profileData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    }
+  })
+  .then(response => {
+    if (response.data) {
+      return response.data;
+    } else {
+      throw new Error('La respuesta no contiene los datos del usuario actualizados');
+    }
+  })
+  .catch(error => {
+    console.error('Error detallado:', error.response?.data);
+    throw error;
+  });
 };

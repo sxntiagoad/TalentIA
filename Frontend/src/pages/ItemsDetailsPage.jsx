@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getServiceById, getJobById } from "../api/Services.api";
-import { AboutItem } from "../components/categories/AboutItem";
+import { AboutItem } from "../components/Modules/AboutItem";
 import { Navbar } from "../components/general/Navbar"; // Importamos el componente Navbar
 
 export function ItemDetailsPage({ isService = true }) {

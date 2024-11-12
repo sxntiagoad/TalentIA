@@ -1,6 +1,6 @@
 import React from 'react';
 import { useForm } from "react-hook-form";
-import logo from "../assets/logo.png";
+import logo from "../../assets/logo.png";
 
 export function LoginForm({ onSubmit, error, userType }) {
   const { register, handleSubmit, formState: { errors } } = useForm();

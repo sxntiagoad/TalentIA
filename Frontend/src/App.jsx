@@ -5,7 +5,7 @@ import { AuthProvider } from './context/AuthContext';
 import ProtectedRoutes from './components/general/ProtectedRoutes';
 import ServicePostedSuccess from './components/freelancer/ServicePostedSuccess';
 import JobPostedSuccess from './components/company/JobPostedSuccess';
-import { HomePage } from "./pages/HomePage";
+import { HomePage } from "./pages/FreelancerHomePage";
 import { ItemDetailsPage } from "./pages/ItemsDetailsPage";
 import SubcategoryPage from "./pages/SubCategories";
 import SearchPage from "./pages/SearchPage";
@@ -18,10 +18,16 @@ import Register from './pages/auth/Register';
 import Login from './pages/auth/Login';
 import ServiceForm from './pages/post/ServiceForm';
 import JobForm from './pages/post/JobForm';
-import ProfilePage from './pages/ProfilePage';  // Importa la nueva página de perfil
+import ProfilePage from './components/profiles/ProfilePage';
 import CompletarPerfil from './components/freelancer/CompletarPerfil';
 import CompletarPerfilCompania from './components/company/CompletarPerfilCompania';
 import CompanyHomePage from './pages/CompanyHomePage';
+import { PublicProfile } from './components/profiles/PublicProfile';
+import ManageCandidatesPage from './pages/ManageCandidatesPage';
+import EmployeesList from './components/company/EmployeesList';
+import MyJobsPage from './pages/MyJobsPage';
+import WorkspacePage from './pages/WorkspacePage';
+import MyServicesPage from './pages/MyServicesPage';
 
 function App() {
   return (
@@ -46,10 +52,16 @@ function App() {
               <Route path="/subcategory/:id" element={<SubcategoryPage />} />
               <Route path="/search" element={<SearchPage />} />
               <Route path="/category/:id" element={<MainCategoryPage />} />
-              <Route path="/profile" element={<ProfilePage />} />  // Agrega la nueva ruta de perfil
+              <Route path="/profile" element={<ProfilePage />} />
               <Route path="/completar-perfil" element={<CompletarPerfil />} />
               <Route path="/company-home" element={<CompanyHomePage />} />
               <Route path="/completar-perfil-compania" element={<CompletarPerfilCompania />} />
+              <Route path="/profile/:userType/:id" element={<PublicProfile />} />
+              <Route path="/gestionar-candidatos" element={<ManageCandidatesPage />} />
+              <Route path="/empleados" element={<EmployeesList />} />
+              <Route path="/my-jobs" element={<MyJobsPage />} />
+              <Route path="/workspace/:applicationId" element={<WorkspacePage />} />
+              <Route path="/my-services" element={<MyServicesPage />} />
             </Route>
           </Routes>
         </AnimatePresence>

@@ -80,9 +80,30 @@ def obtener_resumen_base_de_datos():
         logger.error(f"Error al obtener resumen de la base de datos: {e}")
         return "No se pudo obtener el resumen de la base de datos."
 
+def reiniciar_gemini():
+    global model, chat
+    try:
+        # Reconfigurar Gemini
+        api_key = os.getenv("GOOGLE_API_KEY")
+        genai.configure(api_key=api_key)
+        model = genai.GenerativeModel("gemini-1.5-flash")
+        chat = model.start_chat(history=[])
+        return True
+    except Exception as e:
+        logger.error(f"Error al reiniciar Gemini: {e}")
+        return False
+
 def process_user_message(mensaje):
     try:
         global chat
+        
+        if not reiniciar_gemini():
+            return {
+                'type': 'error',
+                'response': "Error al conectar con el servicio de chat. Por favor, intenta más tarde.",
+                'trabajos': [],
+                'servicios': []
+            }
         
         palabras_clave = extraer_palabras_clave(mensaje)
         trabajos, servicios = buscar_en_base_de_datos(palabras_clave)
@@ -95,6 +116,12 @@ def process_user_message(mensaje):
                 info_trabajos_servicios += f"{i}. {trabajo.title}\n"
                 info_trabajos_servicios += "-" * 40 + "\n"
                 info_trabajos_servicios += f"Descripción: {trabajo.description[:150]}...\n\n"
+                info_trabajos_servicios += f"Requisitos: {trabajo.requirements[:150]}...\n"
+                info_trabajos_servicios += f"Responsabilidades: {trabajo.responsibilities[:150]}...\n"
+                info_trabajos_servicios += f"Nivel educativo: {trabajo.education_level}\n"
+                info_trabajos_servicios += f"Posición: {trabajo.position}\n"
+                info_trabajos_servicios += f"Habilidades técnicas: {trabajo.technical_skills}\n"
+                info_trabajos_servicios += f"Habilidades blandas: {trabajo.soft_skills}\n"
                 info_trabajos_servicios += f"Salario: {trabajo.salary}\n"
                 info_trabajos_servicios += f"Ubicación: {trabajo.location}\n"
                 info_trabajos_servicios += f"Empresa: {trabajo.company.name}\n"
@@ -112,12 +139,36 @@ def process_user_message(mensaje):
                 info_trabajos_servicios += f"{i}. {servicio.title}\n"
                 info_trabajos_servicios += "-" * 40 + "\n"
                 info_trabajos_servicios += f"Descripción: {servicio.description[:150]}...\n\n"
-                info_trabajos_servicios += f"Precio: {servicio.price}\n"
+                
+                # Información de planes
+                if servicio.basic_active:
+                    info_trabajos_servicios += "Plan Básico:\n"
+                    info_trabajos_servicios += f"- Precio: {servicio.basic_price}\n"
+                    info_trabajos_servicios += f"- Descripción: {servicio.basic_description[:100]}...\n"
+                    info_trabajos_servicios += f"- Tiempo de entrega: {servicio.basic_delivery_time} días\n"
+                    info_trabajos_servicios += f"- Revisiones: {servicio.basic_revisions}\n\n"
+                
+                if servicio.standard_active:
+                    info_trabajos_servicios += "Plan Estándar:\n"
+                    info_trabajos_servicios += f"- Precio: {servicio.standard_price}\n"
+                    info_trabajos_servicios += f"- Descripción: {servicio.standard_description[:100]}...\n"
+                    info_trabajos_servicios += f"- Tiempo de entrega: {servicio.standard_delivery_time} días\n"
+                    info_trabajos_servicios += f"- Revisiones: {servicio.standard_revisions}\n\n"
+                
+                if servicio.premium_active:
+                    info_trabajos_servicios += "Plan Premium:\n"
+                    info_trabajos_servicios += f"- Precio: {servicio.premium_price}\n"
+                    info_trabajos_servicios += f"- Descripción: {servicio.premium_description[:100]}...\n"
+                    info_trabajos_servicios += f"- Tiempo de entrega: {servicio.premium_delivery_time} días\n"
+                    info_trabajos_servicios += f"- Revisiones: {servicio.premium_revisions}\n\n"
+                
                 info_trabajos_servicios += f"Ubicación: {servicio.location}\n"
                 info_trabajos_servicios += f"Freelancer: {servicio.freelancer.name} {servicio.freelancer.lastname}\n"
                 
                 if servicio.freelancer.skills:
                     info_trabajos_servicios += f"Habilidades: {servicio.freelancer.skills[:100]}...\n"
+                if servicio.freelancer.experience:
+                    info_trabajos_servicios += f"Experiencia: {servicio.freelancer.experience[:100]}...\n"
                 
                 categoria_info = f"Categoría: {servicio.category.name if servicio.category else 'No especificada'}"
                 if servicio.subcategory:
@@ -144,14 +195,46 @@ Pregunta del usuario: {mensaje}"""
             max_output_tokens=1000,
         )
 
-        # Obtener respuesta de Gemini
-        response = chat.send_message(
-            prompt,
-            generation_config=generation_config
-        )
-        
-        contenido_respuesta = response.text
-        
+        # Obtener respuesta de Gemini con manejo de errores más robusto
+        try:
+            # Reiniciar el chat si hay algún problema
+            global chat
+            try:
+                chat = model.start_chat(history=[])
+            except Exception as chat_error:
+                logger.error(f"Error al reiniciar el chat: {chat_error}")
+                
+            # Intentar obtener respuesta
+            response = chat.send_message(
+                content=prompt,
+                generation_config=generation_config
+            )
+            
+            # Manejar la respuesta
+            if response is None:
+                logger.error("La respuesta de Gemini es None")
+                contenido_respuesta = "Lo siento, no pude procesar tu mensaje en este momento. Por favor, intenta de nuevo."
+            else:
+                try:
+                    # Intentar diferentes formas de obtener el contenido de la respuesta
+                    if hasattr(response, 'text'):
+                        contenido_respuesta = response.text
+                    elif hasattr(response, 'parts'):
+                        contenido_respuesta = ' '.join(part.text for part in response.parts)
+                    else:
+                        contenido_respuesta = str(response)
+                except Exception as content_error:
+                    logger.error(f"Error al extraer contenido de la respuesta: {content_error}")
+                    contenido_respuesta = "Lo siento, hubo un problema al procesar la respuesta."
+                
+        except Exception as gemini_error:
+            logger.error(f"Error al obtener respuesta de Gemini: {gemini_error}")
+            contenido_respuesta = "Lo siento, hubo un problema al procesar tu mensaje. Por favor, intenta de nuevo."
+
+        # Verificación final de la respuesta
+        if not contenido_respuesta or contenido_respuesta.strip() == "":
+            contenido_respuesta = "Lo siento, no pude generar una respuesta apropiada. Por favor, intenta reformular tu pregunta."
+
         return {
             'type': 'general',
             'response': contenido_respuesta,
@@ -160,25 +243,49 @@ Pregunta del usuario: {mensaje}"""
                 'title': t.title,
                 'description': t.description,
                 'requirements': t.requirements,
+                'responsibilities': t.responsibilities,
+                'education_level': t.education_level,
+                'position': t.position,
+                'technical_skills': t.technical_skills,
+                'soft_skills': t.soft_skills,
                 'salary': t.salary,
                 'location': t.location,
                 'company': t.company.name,
                 'category': t.category.name if t.category else None,
                 'subcategory': t.subcategory.name if t.subcategory else None,
                 'nestedcategory': t.nestedcategory.name if t.nestedcategory else None,
-                'availability': t.availability
+                'availability': t.availability,
+                'published_date': t.published_date
             } for t in trabajos],
             'servicios': [{
                 'id': s.id,
                 'title': s.title,
                 'description': s.description,
-                'price': s.price,
                 'location': s.location,
+                'basic_active': s.basic_active,
+                'basic_price': s.basic_price,
+                'basic_description': s.basic_description,
+                'basic_delivery_time': s.basic_delivery_time,
+                'basic_revisions': s.basic_revisions,
+                'standard_active': s.standard_active,
+                'standard_price': s.standard_price,
+                'standard_description': s.standard_description,
+                'standard_delivery_time': s.standard_delivery_time,
+                'standard_revisions': s.standard_revisions,
+                'premium_active': s.premium_active,
+                'premium_price': s.premium_price,
+                'premium_description': s.premium_description,
+                'premium_delivery_time': s.premium_delivery_time,
+                'premium_revisions': s.premium_revisions,
                 'freelancer': {
                     'name': s.freelancer.name,
                     'lastname': s.freelancer.lastname,
                     'skills': s.freelancer.skills,
-                    'experience': s.freelancer.experience
+                    'experience': s.freelancer.experience,
+                    'education': s.freelancer.education,
+                    'portfolio_link': s.freelancer.portfolio_link,
+                    'linkedin_profile': s.freelancer.linkedin_profile,
+                    'github_profile': s.freelancer.github_profile
                 },
                 'category': s.category.name if s.category else None,
                 'subcategory': s.subcategory.name if s.subcategory else None,
@@ -188,7 +295,12 @@ Pregunta del usuario: {mensaje}"""
         }
     except Exception as e:
         logger.error(f"Error inesperado: {e}")
-        return {'type': 'error', 'response': "Ocurrió un error inesperado. Por favor, inténtalo de nuevo más tarde."}
+        return {
+            'type': 'error', 
+            'response': "Ocurrió un error inesperado. Por favor, inténtalo de nuevo más tarde.",
+            'trabajos': [],
+            'servicios': []
+        }
 
 # Ejemplo de uso
 if __name__ == "__main__":

@@ -1,5 +1,5 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
-import { getProfile, updateProfile } from '../api/Auth.api';
+import { getProfile, updateProfile, updateCompanyProfile } from '../api/Auth.api';
 
 export const AuthContext = createContext();
 
@@ -48,10 +48,20 @@ export const AuthProvider = ({ children }) => {
 
   const updateUser = async (userData) => {
     try {
-      const updatedUser = await updateProfile(userData);
+      let updatedUser;
+      // Verificar si el usuario es una compañía o un freelancer
+      if (user && 'company_location' in user) {
+        // Es una compañía
+        updatedUser = await updateCompanyProfile(userData);
+      } else {
+        // Es un freelancer
+        updatedUser = await updateProfile(userData);
+      }
       setUser(updatedUser);
+      return updatedUser;
     } catch (error) {
       console.error('Error al actualizar el usuario:', error);
+      throw error;
     }
   };
 

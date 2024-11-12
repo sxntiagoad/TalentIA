@@ -18,7 +18,7 @@ const ServiceStep2ServiceDetails = ({ nextStep, prevStep, handleChange, values }
         <div className="mb-4">
           <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-2">Descripción</label>
           <textarea
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
             id="description"
             value={values.description}
             onChange={handleChange('description')}
@@ -30,7 +30,7 @@ const ServiceStep2ServiceDetails = ({ nextStep, prevStep, handleChange, values }
           <label htmlFor="location" className="block text-sm font-medium text-gray-700 mb-2">Ubicación</label>
           <input
             type="text"
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
             id="location"
             value={values.location}
             onChange={handleChange('location')}

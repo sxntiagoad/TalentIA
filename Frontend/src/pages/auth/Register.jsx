@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { UserForm } from '../../components/UserForm';
+import { UserForm } from '../../components/User_forms/RegisterForm';
 import backgroundImageFreelancer from '../../assets/init.jpg';
 import backgroundImageCompany from '../../assets/company-init.jpg';
 import { motion } from 'framer-motion';

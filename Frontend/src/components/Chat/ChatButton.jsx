@@ -70,7 +70,7 @@ const ChatButton = ({ otherUser }) => {
       )}
 
       {showChat && userData && (
-        <div className="fixed bottom-0 right-4 w-96 h-[600px] bg-white rounded-t-lg shadow-xl z-50">
+        <div className="fixed bottom-16 right-4 w-96 h-[600px] bg-white rounded-t-lg shadow-xl z-50">
           <ChatComponent otherUser={userData} onClose={() => setShowChat(false)} />
         </div>
       )}

@@ -90,12 +90,12 @@ const ChatComponent = ({ otherUser, onClose }) => {
           Cerrar chat ×
         </button>
       </div>
-      <div className="chat-window flex-1">
+      <div className="chat-window flex-1 overflow-hidden">
         <Chat client={client} theme="messaging light">
           <Channel channel={channel}>
             <Window>
               <ChannelHeader />
-              <MessageList />
+              <MessageList className="!h-[450px] overflow-y-auto" />
               <MessageInput focus />
             </Window>
             <Thread />

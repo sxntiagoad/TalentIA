@@ -27,7 +27,7 @@ const JobPostedSuccess = () => {
             Tu oferta de trabajo ha sido publicada correctamente y ya está disponible para que los candidatos la vean.
           </p>
           <Link 
-            to="/home" 
+            to="/company-home" 
             className="bg-green-600 text-white font-bold py-3 px-6 rounded-full hover:bg-green-700 transition duration-300 ease-in-out transform hover:scale-105 inline-block"
           >
             Volver al inicio

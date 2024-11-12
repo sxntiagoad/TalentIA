@@ -4,8 +4,9 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.authtoken.models import Token
+from django.db.models import Q
 from .serializer import FreelancerSerializer, CompanySerializer
-from .models import Company
+from .models import Freelancer, Company
 
 User = get_user_model()
 
@@ -92,12 +93,19 @@ def complete_freelancer_profile(request):
 @api_view(['PUT', 'PATCH'])
 @permission_classes([IsAuthenticated])
 def complete_company_profile(request):
-    company = request.user.company
-    serializer = CompanySerializer(company, data=request.data, partial=True)
-    if serializer.is_valid():
-        serializer.save(profile_completed=True)
-        return Response(serializer.data)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    try:
+        company = request.user.company
+        serializer = CompanySerializer(company, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save(profile_completed=True)
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    except Exception as e:
+        print(f"Error en complete_company_profile: {str(e)}")
+        return Response(
+            {'error': f'Error al actualizar el perfil: {str(e)}'}, 
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR
+        )
 
 @api_view(['GET'])
 def get_company_email(request, company_name):
@@ -137,5 +145,103 @@ def get_company_id(request, company_name):
     except Company.DoesNotExist:
         return Response(
             {'error': 'Compañía no encontrada'}, 
+            status=status.HTTP_404_NOT_FOUND
+        )
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def search_freelancers(request):
+    try:
+        search_params = request.data
+
+        query = Q()
+
+        # Búsqueda por nombre
+        if search_params.get('name'):
+            name_terms = search_params['name'].lower().strip().split()
+            name_query = Q()
+            for term in name_terms:
+                name_query |= (
+                    Q(name__icontains=term) | 
+                    Q(lastname__icontains=term)
+                )
+            query &= name_query
+
+        # Búsqueda por habilidades
+        if search_params.get('skills'):
+            skills = [skill.strip().lower() for skill in search_params['skills'].split(',')]
+            skills_query = Q()
+            for skill in skills:
+                skills_query |= Q(skills__icontains=skill)
+            query &= skills_query
+
+        # Búsqueda por ubicación
+        if search_params.get('location'):
+            location_term = search_params['location'].lower().strip()
+            query &= Q(location__icontains=location_term)
+
+        # Búsqueda por experiencia
+        if search_params.get('experience'):
+            exp_terms = search_params['experience'].lower().strip().split()
+            exp_query = Q()
+            for term in exp_terms:
+                exp_query |= Q(experience__icontains=term)
+            query &= exp_query
+
+        # Búsqueda por educación
+        if search_params.get('education'):
+            edu_terms = search_params['education'].lower().strip().split()
+            edu_query = Q()
+            for term in edu_terms:
+                edu_query |= Q(education__icontains=term)
+            query &= edu_query
+
+        # Búsqueda por idioma
+        if search_params.get('language'):
+            language_term = search_params['language'].lower().strip()
+            query &= Q(language__icontains=language_term)
+
+        # Realizar la búsqueda
+        freelancers = Freelancer.objects.filter(query).distinct()
+
+        serializer = FreelancerSerializer(freelancers, many=True)
+        
+        return Response({
+            'freelancers': serializer.data,
+            'count': len(serializer.data)
+        })
+
+    except Exception as e:
+        return Response(
+            {
+                'error': f'Error en la búsqueda de freelancers: {str(e)}',
+                'detail': str(e)
+            }, 
+            status=status.HTTP_400_BAD_REQUEST
+        )
+
+@api_view(['GET'])
+def get_public_profile(request, user_type, user_id):
+    """Vista unificada para obtener perfiles públicos"""
+    try:
+        if user_type == 'freelancer':
+            instance = Freelancer.objects.get(id=user_id)
+            serializer = FreelancerSerializer(instance)
+        elif user_type == 'company':
+            instance = Company.objects.get(id=user_id)
+            serializer = CompanySerializer(instance)
+        else:
+            return Response(
+                {'error': 'Tipo de usuario inválido'}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        return Response({
+            'type': user_type,
+            'data': serializer.data
+        })
+    except (Freelancer.DoesNotExist, Company.DoesNotExist):
+        return Response(
+            {'error': 'Perfil no encontrado'}, 
             status=status.HTTP_404_NOT_FOUND
         )

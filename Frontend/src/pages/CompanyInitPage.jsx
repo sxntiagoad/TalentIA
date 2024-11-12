@@ -98,6 +98,11 @@ function CompanyInitPage() {
                   )}
                 </motion.div>
               )}
+              <Link to="/company-home">
+                <button className={`bg-${themeColor}-600 hover:bg-${themeColor}-700 text-white font-bold py-4 px-8 rounded transition duration-300 ease-in-out transform hover:scale-105`}>
+                  Ingresar al Portal de la Empresa
+                </button>
+              </Link>
             </div>
           </motion.div>
         )}

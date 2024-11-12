@@ -16,9 +16,16 @@ export const HomePage = () => {
     setChatError(error);
   };
 
+  const handleToggleChat = () => {
+    setShowChat(!showChat);
+  };
+
   return (
     <div className="relative min-h-screen">
-      <Navbar isAuthenticated={true} />
+      <Navbar 
+        isAuthenticated={true} 
+        onToggleChat={handleToggleChat}
+      />
       
       {/* Chat flotante */}
       <div className="fixed right-4 bottom-4 z-50">

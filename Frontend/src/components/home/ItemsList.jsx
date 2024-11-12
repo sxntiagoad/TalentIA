@@ -16,14 +16,9 @@ export function ItemsList({ isService = true, title = "Servicios" }) {
     async function loadItems() {
       const response = isService ? await getAllServices() : await getAllJobs();
       setItems(response.data);
-      console.log(response.data);
     }
     loadItems();
   }, [isService]);
-
-  const handlePost = () => {
-    navigate("/post-service");
-  };
 
   const slidePrev = () => {
     if (carousel.current) {
@@ -54,18 +49,10 @@ export function ItemsList({ isService = true, title = "Servicios" }) {
   return (
     <div className="py-4">
       <div className="w-full mx-auto px-10">
-        <div className="flex justify-between items-center mb-6">
+        <div className="flex justify-center items-center mb-6">
           <h2 className="text-3xl font-semibold" style={{ fontFamily: 'Poppins, sans-serif' }}>
             {title}
           </h2>
-          {isService && (
-            <button
-              onClick={handlePost}
-              className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transform transition duration-300 ease-in-out hover:scale-105 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-opacity-50 animate-pulse"
-            >
-              ¡Publica tu Servicio Ahora!
-            </button>
-          )}
         </div>
         <div className="relative">
           <AliceCarousel
@@ -76,16 +63,25 @@ export function ItemsList({ isService = true, title = "Servicios" }) {
             infinite={true}
             disableDotsControls={true} 
             ref={carousel}
-            renderPrevButton={() => null} // Eliminar flechas predeterminadas
-            renderNextButton={() => null} // Eliminar flechas predeterminadas
+            renderPrevButton={() => (
+              <button
+                className="absolute left-0 top-1/2 transform -translate-y-1/2 z-10 bg-gray-800 text-purple-500 rounded-full p-2 shadow-lg"
+                onClick={slidePrev}
+                style={{ backgroundColor: '#1a202c' }} 
+              >
+                <FaArrowLeft size={20} />
+              </button>
+            )}
+            renderNextButton={() => (
+              <button
+                className="absolute right-0 top-1/2 transform -translate-y-1/2 z-10 bg-gray-800 text-purple-500 rounded-full p-2 shadow-lg"
+                onClick={slideNext}
+                style={{ backgroundColor: '#1a202c' }} 
+              >
+                <FaArrowRight size={20} />
+              </button>
+            )}
           />
-          <button
-            className="absolute right-0 top-1/2 transform -translate-y-1/2 z-10 bg-gray-800 text-purple-500 rounded-full p-2 shadow-lg"
-            onClick={slideNext}
-            style={{ backgroundColor: '#1a202c' }} 
-          >
-            <FaArrowRight size={20} />
-          </button>
         </div>
       </div>
     </div>

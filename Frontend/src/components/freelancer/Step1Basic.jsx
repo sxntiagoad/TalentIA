@@ -10,7 +10,6 @@ const Step1Basic = ({ nextStep, handleChange, values }) => {
     const fetchCategories = async () => {
       try {
         const response = await getAllCategories();
-        console.log('Categorías obtenidas:', response.data);
         setCategories(response.data);
       } catch (error) {
         console.error('Error al obtener las categorías:', error);
@@ -73,7 +72,7 @@ const Step1Basic = ({ nextStep, handleChange, values }) => {
           <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-2">Título del servicio</label>
           <input
             type="text"
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
             id="title"
             value={values.title}
             onChange={handleChange('title')}
@@ -83,7 +82,7 @@ const Step1Basic = ({ nextStep, handleChange, values }) => {
         <div className="mb-4">
           <label htmlFor="category" className="block text-sm font-medium text-gray-700 mb-2">Categoría</label>
           <select
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
             id="category"
             value={values.category}
             onChange={handleChange('category')}
@@ -101,7 +100,7 @@ const Step1Basic = ({ nextStep, handleChange, values }) => {
         <div className="mb-4">
           <label htmlFor="subcategory" className="block text-sm font-medium text-gray-700 mb-2">Subcategoría</label>
           <select
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
             id="subcategory"
             value={values.subcategory}
             onChange={handleChange('subcategory')}
@@ -115,7 +114,7 @@ const Step1Basic = ({ nextStep, handleChange, values }) => {
         <div className="mb-6">
           <label htmlFor="nestedcategory" className="block text-sm font-medium text-gray-700 mb-2">Categoría anidada</label>
           <select
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
             id="nestedcategory"
             value={values.nestedcategory}
             onChange={handleChange('nestedcategory')}

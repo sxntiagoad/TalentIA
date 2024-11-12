@@ -13,10 +13,30 @@ const ServicePostingProcess = () => {
     subcategory: '',
     nestedcategory: '',
     description: '',
-    price: '',
     location: '',
     availability: true,
     image: null,
+    
+    // Plan básico
+    basic_active: true,
+    basic_price: '',
+    basic_description: '',
+    basic_delivery_time: '',
+    basic_revisions: '',
+    
+    // Plan estándar
+    standard_active: false,
+    standard_price: '',
+    standard_description: '',
+    standard_delivery_time: '',
+    standard_revisions: '',
+    
+    // Plan premium
+    premium_active: false,
+    premium_price: '',
+    premium_description: '',
+    premium_delivery_time: '',
+    premium_revisions: ''
   });
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [error, setError] = useState(null);
@@ -36,7 +56,8 @@ const ServicePostingProcess = () => {
   const prevStep = () => setStep(step - 1);
 
   const handleChange = (input) => (e) => {
-    setServiceData({ ...serviceData, [input]: e.target.value });
+    const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
+    setServiceData({ ...serviceData, [input]: value });
   };
 
   const handleFileChange = (e) => {

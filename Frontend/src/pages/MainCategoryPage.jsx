@@ -4,6 +4,7 @@ import backgroundImage from "../assets/FondoCategoria.png";
 import '../index.css';
 import { Navbar } from "../components/general/Navbar";
 import { getSubcategoriesByCategory, getCategoryById } from "../api/Categories.api";
+import { FaArrowLeft } from "react-icons/fa";
 
 export function MainCategoryPage() {
   const { id } = useParams();
@@ -43,6 +44,12 @@ export function MainCategoryPage() {
       <Navbar isAuthenticated={true} />
       <div className="pt-16">
         <div className="main-category-page">
+          <div className="flex justify-between mb-4">
+            <Link to="/home" className="flex items-center text-gray-500 hover:text-gray-700 transition-colors">
+              <FaArrowLeft className="mr-2" />
+              Volver al inicio
+            </Link>
+          </div>
           <div 
             className="rounded-lg h-56 bg-cover bg-center flex items-center justify-center mx-auto max-w-4xl"
             style={{ backgroundImage: `url(${backgroundImage})` }}
@@ -50,8 +57,8 @@ export function MainCategoryPage() {
             <h1 className="text-white text-4xl font-bold">{categoryName}</h1>
           </div>
 
-          <div className="mt-8 mx-auto max-w-6xl">
-            <h2 className="text-2xl font-semibold mb-4">Subcategorías</h2>
+          <div className="mt-8 mx-auto max-w-6xl text-center">
+            <h2 className="text-2xl font-bold mb-8">Explora nuestras subcategorías</h2>
             {subcategories.length ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                 {subcategories.map((subcategory) => (

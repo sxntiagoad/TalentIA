@@ -8,12 +8,15 @@ export function ReviewSection({
   reviews, 
   onReviewSubmit, 
   isService, 
-  itemId 
+  itemId,
+  authorId
 }) {
   const [showReviewForm, setShowReviewForm] = useState(false);
   const [editingReview, setEditingReview] = useState(null);
   const [newReview, setNewReview] = useState({ content: '', rating: 5 });
   const { user } = useAuth();
+
+  const isAuthor = user && user.id === authorId;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -53,7 +56,7 @@ export function ReviewSection({
     <div className="mt-12">
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-bold text-gray-800">Reviews</h2>
-        {user && !showReviewForm && !editingReview && (
+        {user && !showReviewForm && !editingReview && !isAuthor && (
           <button
             onClick={() => setShowReviewForm(true)}
             className="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors duration-200"

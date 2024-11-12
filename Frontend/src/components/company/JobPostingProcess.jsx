@@ -13,9 +13,14 @@ const JobPostingProcess = () => {
     subcategory: '',
     nestedcategory: '',
     description: '',
+    requirements: '',
+    responsibilities: '',
+    education_level: '',
+    position: '',
+    technical_skills: '',
+    soft_skills: '',
     salary: '',
     location: '',
-    requirements: '',
     image: null,
     availability: true,
   });
@@ -93,7 +98,7 @@ const JobPostingProcess = () => {
   };
 
   return (
-    <div className="bg-white shadow-lg rounded-lg p-6 max-w-3xl mx-auto mt-10">
+    <div className="bg-white shadow-lg rounded-lg p-6 max-w-6xl mx-auto mt-10">
       <h1 className="text-3xl font-bold text-green-600 mb-6 text-center">Publicación de Trabajo</h1>
       <div className="mb-6">
         <div className="flex justify-between items-center">
