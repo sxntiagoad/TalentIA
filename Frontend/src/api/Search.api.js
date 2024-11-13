@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const SEARCH_API_URL = 'http://localhost:8000';
+const SEARCH_API_URL = 'http://35.224.34.63:8000';
 
 // Configurar interceptor para añadir el token
 const searchApi = axios.create({

@@ -14,7 +14,7 @@ class ActionProvider {
           throw new Error('No hay sesión activa');
         }
 
-        const response = await fetch('http://localhost:8000/api/chatbot/chat/', {
+        const response = await fetch('http://35.224.34.63:8000/api/chatbot/chat/', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
