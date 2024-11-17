@@ -157,6 +157,7 @@ REST_FRAMEWORK = {
 }
 
 AUTH_USER_MODEL = 'accounts.CustomUser'
+ALLOWED_HOSTS = ['35.224.34.63']
 
 # Stream Chat settings
 STREAM_API_KEY = os.getenv('STREAM_API_KEY')
