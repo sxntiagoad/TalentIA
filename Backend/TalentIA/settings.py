@@ -141,7 +141,11 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
 CORS_ALLOWED_ORIGINS = [
-    "http://35.224.34.63",
+    "http://35.224.34.63",          # Frontend sin puerto específico
+    "http://35.224.34.63:8000",     # Frontend con puerto 8000
+    "http://35.224.34.63:80",       # Frontend con puerto 80
+    "http://localhost:8000",        # Desarrollo local
+    "http://localhost:5173",  
 ]
 
 CORS_ALLOW_ALL_ORIGINS = True  # Solo para desarrollo, configura apropiadamente para producción
@@ -153,7 +157,7 @@ REST_FRAMEWORK = {
 }
 
 AUTH_USER_MODEL = 'accounts.CustomUser'
-ALLOWED_HOSTS = ['35.224.34.63']
+
 # Stream Chat settings
 STREAM_API_KEY = os.getenv('STREAM_API_KEY')
 STREAM_API_SECRET = os.getenv('STREAM_API_SECRET')
