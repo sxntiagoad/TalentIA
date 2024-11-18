@@ -203,7 +203,7 @@ const TalentSearch = () => {
                 <div className="p-6">
                   <div className="flex items-center space-x-4">
                     <img
-                      src={freelancer.freelancer_avatar ? `http://35.224.34.63:8000/${freelancer.freelancer_avatar}` : defaultAvatar}
+                      src={freelancer.freelancer_avatar ? `http://34.55.91.211:8000/${freelancer.freelancer_avatar}` : defaultAvatar}
                       alt={`${freelancer.name} ${freelancer.lastname}`}
                       className="w-16 h-16 rounded-full object-cover border-2 border-green-100"
                     />
